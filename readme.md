@@ -1,6 +1,6 @@
 ### Down Mail (work in progress)
 
-![down mail cart](https://github.com/sugarvoid/down-mail/blob/master/down_mail%5Bv0.1%5D.p8.png)
+![down mail cart](https://github.com/sugarvoid/down-mail/blob/master/down_mailv0.2.p8.png)
 
 <br>
 
