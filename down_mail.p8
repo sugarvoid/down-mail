@@ -4,17 +4,683 @@ __lua__
 --down mail
 --by sugarvoid
 
-#include main.lua
-#include player.lua
-#include letter.lua
-#include mailbox.lua
-#include rock.lua
-#include wind.lua
-#include gameover.lua
+
+cols={"b","y"}
+g_state=0
+mb_spawn=0
+avil_yx={7,16,25,34,43,52,61,70,79,88,97,106,113}
+next_mb=0
+map_y=0
+clamp = mid
+game_over_x = -10
+ending=0 
+end_spr={64,68,72,76,128,132,136,140}
+
+obj= {
+    new=function(self,tbl)
+            tbl=tbl or {}
+            setmetatable(tbl,{
+                __index=self
+            })
+            return tbl
+        end
+}
+
+objects={
+	back={},front={}
+}
+
+function update_objects()
+	for o in all(objects.front) do
+		o:update()
+	end
+	for o in all(objects.back) do
+		o:update()
+	end
+end
+
+function draw_objects()
+	for o in all(objects.back) do
+		o:draw()
+	end
+	for o in all(objects.front) do
+		o:draw()
+	end
+end
+
+
+function _init()
+	poke(0x5f5c, 255)
+	earnings=0 
+	score=0
+	combo=1
+	misses=0
+	init_wind()
+	reset_mb_timer()
+end
+
+function _update()
+	if g_state==0 then
+		if btnp(🅾️) then g_state=1 end
+	elseif g_state==1 then
+		update_play()
+	elseif g_state==2 then
+		update_gameover()
+	end
+end
+
+function _draw()
+	if g_state==0 then
+		draw_title()
+	elseif g_state==1 then
+		draw_play()
+	elseif g_state==2 then
+		draw_gameover()
+	end
+end
+
+
+
+function update_play()
+	p1:update()
+	update_objects()
+	u_letters()
+	map_y+=.2
+
+	if (flr(map_y)==17) map_y=0 --moving the map up
+
+	--update_wind()
+	if p1.life == 0 then
+		sfx(11)
+		g_state=2
+	end
+
+	mb_spawn+=1
+	if mb_spawn>=next_mb then
+		spawn_mbox("b",true)
+		spawn_rock()
+		
+		--make_letter()
+		mb_spawn=0
+		reset_mb_timer()
+	end
+	
+
+	for r in all(rocks) do 
+		r:update()
+		if is_colliding(p1, r) then
+			del(rocks, r)
+			p1:take_damage()
+		end
+	end
+
+end
+
+
+
+function draw_play()
+	cls(0)
+	for o in all(objects.back) do
+		o:draw()
+	end
+	rectfill(0,0,127,8,0)
+	rectfill(0,120,127,128,0)
+	p1:draw()
+	
+	
+	
+	for mb in all(mailboxes) do
+		mb:update()
+		if is_colliding(p1,mb) and not mb.damaged then
+			sfx(3)
+			mb.damaged=true
+			update_cash(-10)
+		end
+		
+		for l in all(letters) do
+			if l.x<=8 or l.x>=126 then 
+                misses+=1 
+				update_cash(-5)
+                del(letters,l) 
+            end
+			if is_colliding(l,mb) and not mb.damaged and mb.empty then
+				if l.col==mb.col then
+					del(letters,l)
+					mb.empty=false
+                    mb.speed=4
+					update_cash(2)
+					sfx(4)
+				else
+					del(letters,l)
+					sfx(5)
+				end
+			end
+		end
+	end
+	
+	for o in all(objects.front) do
+		o:draw()
+	end
+	
+	for mb in all(mailboxes) do
+		mb:draw()
+	end
+	for l in all(letters) do
+		l:draw()
+	end
+	for r in all(rocks) do 
+		r:draw()
+	end
+	map(0,map_y)
+	draw_gui()
+end
+
+function draw_title()
+	cls(0)
+	print("down mail", 48, 50, 3)
+	print("press 🅾️ to start", 30, 57,3)
+end
+
+
+
+
+
+function is_colliding(a,b)
+	if ((b.x >= a.x + 8) or
+	   (b.x + 8 <= a.x) or
+	   (b.y >= a.y + 8) or
+	   (b.y + 8 <= a.y)) then
+		  return false 
+	 else return true
+  end
+end
+
+function draw_gui()
+	rectfill(0, 121, 128, 128, 5)
+	print("$"..earnings, 2, 122, font_col[1])
+	print("miss:"..misses, 50, 122, font_col[1])
+	print("combo:x"..combo, 91, 122, font_col[1])
+end
+
+function update_cash(amount)
+	earnings = mid(0, earnings+amount)
+end
+
+-->8
+--player
+
+font_col={12,10}
+
+clothing=obj:new({
+	x,y=0,
+	img=nil,
+	fall_speed=3,
+	update=function(self)
+		self.y+=self.fall_speed
+  		if self.y > 130 then
+  			del(letters,self)
+  		end
+  	end,
+	draw=function(self)
+		spr(self.img, self.x, self.y)
+	end
+})
+
+function init_player()
+    --add_let_to_bag("b")
+	--add_let_to_bag("y")
+	--add_let_to_bag("p")
+end
+
+function swap(table)
+    if count(table) >= 2 then
+        sfx(9)
+        table[1], table[2] = table[2], table[1]
+    end
+end
+
+function get_input(p)
+	if btn(➡️) then p.x+=1.5 p.facing_l=false
+	elseif btn(⬅️) then p.x-=1.5 p.facing_l=true
+	end
+
+	if btnp(⬆️) then p.is_chute_open=true
+	elseif btnp(⬇️) then p.is_chute_open=false
+	end
+	
+	if btnp(🅾️) then p:throw() end
+	if btnp(❎) then 
+		p.ring=0
+		swap(font_col)
+	end
+end
+
+p1={
+	x=54,
+	y=54,
+	selected_letter=0,
+	is_alive=true,
+	sprite_a=1,
+	sprite_b=2,
+	img=nil,
+	facing_l=false,
+	is_chute_open=true,
+	chute_spr=nil,
+	chute_open_spr=7,
+	life=3,
+	thr_anmi=0,
+	ring=16,
+	draw=function(self)
+		if self.is_alive then
+			if self.ring <= 15 then
+				circ(self.x+4, self.y, self.ring, font_col[1])
+			end
+			pal(7, font_col[1])
+			spr(self.img,self.x,self.y,1,1,self.facing_l)
+			spr(self.chute_spr,self.x,self.y-8)
+			pal()
+		else
+			spr(49, self.x, self.y)
+		end
+
+		
+		
+	end,
+	
+	update=function(self) 
+		get_input(self)
+		if self.is_chute_open then
+			self.chute_spr=self.chute_open_spr
+		else
+			self.chute_spr=24
+		end
+
+		if self.is_chute_open then 
+			self.y-=1.5
+		else 
+			self.y+=2.5
+		end
+
+		if self.x <= 4 or self.x >= 118 then
+			sfx(12)
+			self.is_alive=false
+			end_text = endings[2]
+			g_state=2
+			--self.img = 49
+			--[[ 
+				TODO: add blood particales 
+				then go to game over  
+			]]--
+		end
+		if self.y >= 130 then
+			self.is_alive=false
+			end_text = endings[1]
+			g_state=2
+		end
+		if self.y <= -10 then
+			self.is_alive=false
+			end_text = endings[3]
+			g_state=2
+		end
+
+		if self.is_alive then
+			if self.thr_anmi > 0 then
+				self.thr_anmi-=1
+			end
+			if self.thr_anmi==0 then --and self.img==self.sprite_b then
+				self.img=self.sprite_a
+			else
+				self.img=self.sprite_b
+			end
+			if self.ring < 20 then
+				self.ring+=2
+			end
+		end
+	end,
+	
+	throw=function(self)
+		--self.img=02
+		self.thr_anmi=10
+		if self.facing_l then 
+			spawn_letter(-1)
+		else  
+			spawn_letter(1)
+		end
+		sfx(6)
+	end,
+	take_damage=function(self)
+		if (self.life==3) spawn_clothing(17)
+		if (self.life==2) spawn_clothing(18)
+
+		self.life-=1
+
+		self.chute_open_spr+=1
+		--self.chute = 39
+		sfx(10)
+		self.sprite_a+=2
+		self.sprite_b+=2
+		
+	end
+}
+
+function spawn_clothing(sprite)
+	new_cloth=clothing:new()
+	new_cloth.img=sprite
+	new_cloth.x=p1.x
+	new_cloth.y=p1.y
+	add(objects.front, new_cloth)
+end
+
+
+
+-->8
+--wind
+
+---wind={}
+
+wind_line={
+	x,sy,ey=0,
+	col=5,
+	t=0,
+	speed=5,
+	new=function(self,tbl)
+		tbl=tbl or {}
+		setmetatable(tbl,{
+			__index=self
+		})
+	tbl.x = 9 + rnd(125)
+  
+	tbl.sy=rnd(128)
+	tbl.ey=tbl.sy-2
+	return tbl
+	end,
+
+	update=function(self)
+		self.t = (self.t + 1) % 3
+  		move=(self.t==0)
+  	if move then
+  		self.sy-=self.speed
+  		self.ey-=self.speed
+  	end
+	if self.ey <= 0 then 
+		self.x = 9 + rnd(125)
+		self.sy=flr(rnd(128))+8
+		self.ey=self.sy-2
+	end
+  	end,
+	draw=function(self)
+		line(self.x,self.sy,self.x,self.ey,self.col)
+	end
+}
+
+function init_wind()
+	for i=0,15 do
+		add(objects.back, wind_line:new())
+	end
+end
+
+function draw_wind()
+	for w in all(wind) do
+		w:draw()
+	end
+end
+
+function update_wind()
+	for w in all(wind) do
+		w:update()
+	end
+end
+
+-->8
+--rock
+
+rocks={}
+
+danger_y=10
+
+rock=obj:new({
+	x=0,
+	y=-40,
+	col=nil,
+	facing_l=nil,
+	img=rnd({26,27,43}),
+	speed=rnd({2,3,4}),
+	danger_time=20,
+
+	update=function(self)
+		self.y+=self.speed
+		self.danger_time-=2
+		if self.y >= 130 then
+			del(rocks,self)
+		end
+		if self.x <= 5 then
+			
+		end
+  	end,
+	draw=function(self)
+		spr(self.img,self.x,self.y)
+		if self.danger_time >= 0 then
+			spr(25, self.x, danger_y)
+		end
+	end,
+    in_range=function(self, x_val)
+        return x_val >= self.x-10 and x_val <= self.x+10
+    end
+})
+
+function spawn_rock()
+
+    --get random x
+    -- make sure there isn't already a mailbox with that x 
+
+
+
+    --spawn rock higher than 0, 
+    -- show indicator 
+    -- hide indicator
+
+	new_rock = rock:new()
+	new_rock.x=rnd(avil_yx)  --flr(rnd(108))+10
+	
+	add(rocks,new_rock)
+	reset_rock_timer()
+end
+
+function reset_rock_timer()
+	next_rock=70 + rnd(10)
+end
+
+
+
+
+
+function in_range(x_val)
+    if x_val >= 1 and x_val <= 20 then
+        print 'it is!'
+    end
+end
+-->8
+--letter
+
+letters={}
+--letters_free={}
+
+letter=obj:new({
+	x,y=0,
+	col=nil,
+	t=0,
+	tossed=false,
+	t_col=0,
+	b_col=0,
+	img=32,
+	dir=0,
+	speed=3,
+
+	update=function(self)
+			if self.tossed then
+				self.x+=(self.speed*self.dir)
+				self.t = (self.t + 1) % 5
+  		turn=(self.t==0)
+  		if turn then
+  			self.img+=1
+  		end
+  		if self.img == 35 then 
+  			self.img = 32 
+  		end
+  	else
+  		self.y-=2
+  	end
+  	
+  	end,
+	draw=function(self)
+		render_letter(self)
+	end
+})
+
+function render_letter(l)
+	pal(5,l.t_col)
+	pal(6,l.b_col)
+	spr(l.img, l.x, l.y)
+	pal()
+end
+
+function spawn_letter(_dir)
+	new_letter = letter:new() 
+	
+	new_letter.dir=_dir
+	new_letter.tossed=true
+	new_letter.x=p1.x
+	new_letter.y=p1.y
+	if font_col[1] == 12 then
+		new_letter.col="b"
+	else
+		new_letter.col="y"
+	end
+	
+	set_let_val(new_letter) 
+	add(letters,new_letter)
+end
+
+function set_let_val(l)
+	if l.col=="b" then 
+		l.t_col=1
+		l.b_col=12
+	end
+	if l.col=="y" then 
+		l.t_col=9
+		l.b_col=10
+	end
+end
+
+function u_letters()
+	for l in all(letters) do
+		l:update()
+		--l:draw()
+	end
+end
+
+-->8
+--mailbox
+mailboxes={}
+
+
+
+m_box=obj:new({
+	x,y=0,
+	col=nil,
+	facing_l=nil,
+	b_col=0,
+	img=21,
+	empty=true,
+	damaged=false,
+	dir=0,
+	dx=1.3,
+	speed=rnd({0.5,0.7,0.9}),
+	--speed=0.7,
+
+	update=function(self)
+        
+		self.y-=self.speed
+			
+ 		if self.empty and not self.damaged then 
+ 			self.img=21
+ 		elseif not self.empty and not self.damaged then
+ 			self.img=20
+ 		elseif self.damaged then
+ 			self.img=22 
+ 		end
+
+		if self.y <= -16 then
+			del(mailboxes,self)
+		end
+
+  	end,
+	draw=function(self)
+		pal(6,self.b_col)
+		spr(self.img,self.x,self.y,1,1,self.facing_l)
+		pal()
+		spr(37,self.x,self.y+8)
+	end,
+	in_range=function(self, x_val)
+        return x_val >= self.x-10 and x_val <= self.x+10
+    end
+})
+
+function spawn_mbox()
+	new_mb = m_box:new()
+	new_mb.x=rnd(avil_yx)  --flr(rnd(108))+10
+	new_mb.y=128
+	new_mb.facing_l=new_mb.x>128/2
+	new_mb.col=rnd(cols)
+	if new_mb.col =="b" then
+		new_mb.b_col=12
+	elseif new_mb.col=="p"then
+		new_mb.b_col=14
+	elseif new_mb.col=="y"then
+		new_mb.b_col=10
+	end
+	add(mailboxes,new_mb)
+	reset_mb_timer()
+end
+
+function reset_mb_timer()
+	next_mb=70 + rnd(10)
+end
+
+-->8
+--gameover
+
+end_text = ""
+
+endings={
+    "local mailman goes missing",
+    "local mailman turns to red splat",
+    "local mailman missing",
+    "mailman quits, buys city",
+    "mailman fired",
+}
+
+
+function draw_gameover()
+	cls(7)
+	spr(192, 32, 8, 8,2)
+	print("$0.25", 6, 10, 5)
+	rect(4,30,124,120,5)
+	spr(end_spr[1], 80, 34, 4, 4)
+	print("game over", game_over_x, 1, 0)
+	print(end_text, 10, 40, 0)
+end
+
+function update_gameover()
+	game_over_x+=1
+	if game_over_x == 130 then
+		game_over_x = -30
+	end
+end
 __gfx__
 0000000000f00f0000f0000000f00f0000f0000000f00f0000f00000007777000077770000707000000000000000000044440000000444440000000000000000
-0000000000fccf0000fcc00000f00f0000f0000000f00f0000f00000077777700777077007070770000000000000000044400000000044440000000000000000
-0070070000ccccc000ccccc000ffff0000ffff0000ffff0000ffff00777777777077777770707007000000000000000044444000000000440000000000000000
+0000000000f77f0000f7700000f00f0000f0000000f00f0000f00000077777700777077007070770000000000000000044400000000044440000000000000000
+00700700007777700077777000ffff0000ffff0000ffff0000ffff00777777777077777770707007000000000000000044444000000000440000000000000000
 0007700000f3f30000f3f30000f3f30000f3f30000f3f30000f3f300777777777770770707770700000000000000000044440000000044440000000000000000
 0007700000ffff0000ffff0000ffff0000ffff0000ffff0000ffff00700000077000000770000007000000000000000044440000000444440000000000000000
 0070070000888800008888ff00888800008888ff00ffff0000ffffff040000400400004004000040000000000000000044444000000004440000000000000000
@@ -23,8 +689,8 @@ __gfx__
 77777777000000000000000000000000000080000000000000000000000000000007700000000000044444400000000044440000000044440000000000000000
 700000070000000000000000000000000000800000000000000000000000000000077000000aa000004444000000400044444000000044440000000000000000
 70000007000000000000000000040004066686000688860000080000000000000007700000aaaa00000444000450540044440000000004440000000000000000
-70000007000cc0000088880004440004066666000666660006868000000000000077770000a88a00000444000455544044440000000044440000000000000000
-7000000700ccccc0001111000404455006666600066666600666660000000000077007700aa88aa0000444000444444044400000000004440000000000000000
+70000007000770000088880004440004066666000666660006868000000000000077770000a88a00000444000455544044440000000044440000000000000000
+7000000700777770001111000404455006666600066666600666660000000000077007700aa88aa0000444000444444044400000000004440000000000000000
 7000000700000000000000000444445000040000000400000604660000000000040000400aaaaaa0000044000044054044444000000004440000000000000000
 700000070000000000000000000400400004000000040000004006000000000000400400aaa88aaa000004000004000044440000000044440000000000000000
 777777770000000000000000000400400004000000040000000400000000000000044000aaaaaaaa000000000000000044440000000004440000000000000000
@@ -304,6 +970,7 @@ __sfx__
 000600000b3500b3500b3500030000300003000030000300003000030000300003000030000300003000030000300003000030000300003000030000300003000030000300003000030000300003000030000300
 00100000280502605023050210501f0501c0501905016050120502500004050040501d0001a000180001500013000000000000000000000000000000000000000000000000000000000000000000000000000000
 00100000130500f0501b0001c0001c0001d0001d000000001d0001d0001c0001c0001c0001c0001b0001b00000000000000000000000000000000000000000000000000000000000000000000000000000000000
+0007000014050140500e000140501405000000000002e0502c050290502705024050220501f0501c0501a05017050160501405012050110500e0500c050090500705005050030500105000050000500000000000
 __music__
 00 03424344
 

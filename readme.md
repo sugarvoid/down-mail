@@ -1,11 +1,8 @@
 ### Down Mail (work in progress)
 
-![down mail cart](https://github.com/sugarvoid/pico8-projects/blob/master/games/down_mail/down_mail%5Bv0.1%5D.p8.png)
+![down mail cart](https://github.com/sugarvoid/down-mail/blob/master/down_mail%5Bv0.1%5D.p8.png)
 
 <br>
-
-[Play on Itch](https://sugarvoid.itch.io/down-mail) <br>
-Password: `game`
 
 ### Goal :dart:
 
