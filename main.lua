@@ -4,7 +4,7 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 
 
 require("player")
-local push = require("lib.push")
+--local push = require("lib.push")
 anim8 = require("lib.anim8")
 flux = require("lib.flux")
 
@@ -28,34 +28,71 @@ function love.load()
     font = love.graphics.newFont("monogram.ttf", 32)
     font:setFilter("nearest")
     love.graphics.setFont(font)
-    push:setupScreen(128, 128, 128 * 4, 128 * 4, { fullscreen = false, vsync = false, resizable = true })
+    
+    -- if your code was optimized for fullHD:
+	window = {translateX = 0, translateY = 0, scale = 4, width = 128, height = 128}
+	width, height = love.graphics.getDimensions()
+	love.window.setMode (width, height, {resizable=true, borderless=false})
+	resize (width, height) -- update new translation and scale
+
 end
 
 function love.update(dt)
     flux.update(dt)
-    local x, y = love.mouse.getPosition() -- get the position of the mouse
-    print(x, y) -- draw the custom mouse image
+    if love.keyboard.isDown('d') then
+        player.x = player.x + 1.5
+    end
+    if love.keyboard.isDown('a') then
+        player.x = player.x - 1.5
+    end
+    player:update(dt)
+    -- mouse position with applied translate and scale:
+	local mx = math.floor ((love.mouse.getX()-window.translateX)/window.scale+0.5)
+	local my = math.floor ((love.mouse.getY()-window.translateY)/window.scale+0.5)
+	-- your code here, use mx and my as mouse X and Y positions
+	print(mx, my)
 end
 
+function love.keypressed( key, scancode, isrepeat )
+    --local dx, dy = 0, 0
+    if scancode == "d" then -- move right
+       player.x = player.x + 1
+    elseif scancode == "a" then -- move left
+       player.x = player.x + -1
+    elseif scancode == "s" then -- move down
+       player.y = player.y + 1
+    elseif scancode == "w" then -- move up
+       player.y = player.y + -1
+    end
+ end
+
 function love.draw()
-    push:start()
+    -- first translate, then scale
+	love.graphics.translate (window.translateX, window.translateY)
+	love.graphics.scale (window.scale)
+	-- your graphics code here, optimized for fullHD
+	love.graphics.rectangle('line', 0, 0, 128, 128)
+	love.graphics.rectangle("line", player.x, player.y, 8, 8)
     
-    love.graphics.push("all")
-    love.graphics.setColor(love.math.colorFromBytes(0, 0, 0))
-    love.graphics.rectangle("fill", 0, 0, 128, 128)
-    love.graphics.pop()
+    --love.graphics.push("all")
+   -- love.graphics.setColor(love.math.colorFromBytes(0, 0, 0))
+    --love.graphics.rectangle("fill", 0, 0, 128, 128)
+    --love.graphics.pop()
 
 
     --start of draw_play()
     player:draw()
 
-
-    push:finish()
-
 end
 
-function love.resize(w, h)
-    push:resize(w, h)
+function resize (w, h) -- update new translation and scale:
+	local w1, h1 = window.width, window.height -- target rendering resolution
+	local scale = math.min (w/w1, h/h1)
+	window.translateX, window.translateY, window.scale = (w-w1*scale)/2, (h-h1*scale)/2, scale
+end
+
+function love.resize (w, h)
+	resize (w, h) -- update new translation and scale
 end
 
 function love.keypressed(key, scancode, isrepeat)

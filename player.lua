@@ -10,5 +10,8 @@ function Player:draw()
     
     love.graphics.draw(SPRITESHEET, self.img, self.x, self.y) --, 0, self.facing_dir, self.scale_y, self.origin.x, self.origin.y) 
     love.graphics.rectangle("line", self.x, self.y, 8, 8)
-    love.graphics.line(20, 20, 50, 50)
+end
+
+function Player:update(dt)
+  
 end
