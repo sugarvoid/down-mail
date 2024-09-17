@@ -15,6 +15,9 @@ SPRITESHEET = love.graphics.newImage("full_sheet.png")
 slots = { 2, 20, 38, 56, 74, 92, 110 }
 
 
+all_windlines = {}
+
+
 
 WINDOW_W, WINDOW_H = love.window.getDesktopDimensions()
 WINDOW_W, WINDOW_H = WINDOW_W * 0.8, WINDOW_H * 0.8
@@ -34,7 +37,6 @@ function love.load()
 	width, height = love.graphics.getDimensions()
 	love.window.setMode (width, height, {resizable=true, borderless=false})
 	resize (width, height) -- update new translation and scale
-
 end
 
 function love.update(dt)
@@ -44,6 +46,14 @@ function love.update(dt)
     end
     if love.keyboard.isDown('a') then
         player.x = player.x - 1.5
+    end
+    if love.keyboard.isDown('w') then
+        player.is_chute_open = true
+        player.chute_img = player.chute_open
+    end
+    if love.keyboard.isDown('s') then
+        player.is_chute_open = false
+        player.chute_img = player.chute_closed
     end
     player:update(dt)
     -- mouse position with applied translate and scale:
