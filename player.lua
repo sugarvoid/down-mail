@@ -24,7 +24,7 @@ function Player:draw()
     
     love.graphics.rectangle("line", self.x, self.y, 8, 8)
 
-    love.graphics.rectangle("line", 140, 50, 8, 8)
+    --love.graphics.rectangle("line", 140, 50, 8, 8)
 end
 
 function Player:update(dt)
