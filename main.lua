@@ -19,8 +19,8 @@ all_windlines = {}
 
 
 
-WINDOW_W, WINDOW_H = love.window.getDesktopDimensions()
-WINDOW_W, WINDOW_H = WINDOW_W * 0.8, WINDOW_H * 0.8
+--WINDOW_W, WINDOW_H = love.window.getDesktopDimensions()
+--WINDOW_W, WINDOW_H = WINDOW_W * 0.8, WINDOW_H * 0.8
 
 local player = Player(30,30)
 
@@ -42,10 +42,12 @@ end
 function love.update(dt)
     flux.update(dt)
     if love.keyboard.isDown('d') then
-        player.x = player.x + 1.5
+        player.x = player.x + 1
+        player.facing_dir = 1
     end
     if love.keyboard.isDown('a') then
-        player.x = player.x - 1.5
+        player.x = player.x - 1
+        player.facing_dir = -1
     end
     if love.keyboard.isDown('w') then
         player.is_chute_open = true
@@ -60,21 +62,10 @@ function love.update(dt)
 	local mx = math.floor ((love.mouse.getX()-window.translateX)/window.scale+0.5)
 	local my = math.floor ((love.mouse.getY()-window.translateY)/window.scale+0.5)
 	-- your code here, use mx and my as mouse X and Y positions
-	print(mx, my)
+	--print(mx, my)
 end
 
-function love.keypressed( key, scancode, isrepeat )
-    --local dx, dy = 0, 0
-    if scancode == "d" then -- move right
-       player.x = player.x + 1
-    elseif scancode == "a" then -- move left
-       player.x = player.x + -1
-    elseif scancode == "s" then -- move down
-       player.y = player.y + 1
-    elseif scancode == "w" then -- move up
-       player.y = player.y + -1
-    end
- end
+
 
 function love.draw()
     -- first translate, then scale
@@ -106,8 +97,15 @@ function love.resize (w, h)
 end
 
 function love.keypressed(key, scancode, isrepeat)
+
+    --print(isrepeat)
     if key == "escape" then
         love.event.quit()
+    end
+    if key == "left" then -- move right
+        print("left")
+    elseif key == "right" then
+        print("right")
     end
     if key == "z" then 
 
@@ -173,4 +171,17 @@ end
 
 function draw_gameover()
 
+end
+
+---Check if an object is on screen
+---@param obj table
+---@param rect table with screen data {x=0,y=0,w=0,h=0}
+function is_on_screen(obj, rect)
+    if ((obj.x >= rect.x + rect.w) or
+           (obj.x + obj.w <= rect.x) or
+           (obj.y >= rect.y + rect.h) or
+           (obj.y + obj.h <= rect.y)) then
+              return false 
+    else return true
+    end
 end
