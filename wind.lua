@@ -1,5 +1,5 @@
 
-WindLine = Object:extend()
+--WindLine = Object:extend()
 
 WindLine = {}
 WindLine.__index = WindLine
@@ -7,6 +7,8 @@ WindLine.__index = WindLine
 
 all_windlines = {}
 local spriteBatch
+
+local image = love.graphics.newImage("wind.png")
 
 function WindLine:new(x, y)
 	local _wind = setmetatable({}, WindLine)
@@ -23,9 +25,9 @@ function WindLine:new(x, y)
 end
 
 function init_wind()
-	local image = love.graphics.newImage("wind.png")
-	quad = love.graphics.newQuad(0, 0, 1, 3, image)
-	spriteBatch = love.graphics.newSpriteBatch(image)
+	
+	--quad = love.graphics.newQuad(0, 0, 1, 3, image)
+	--spriteBatch = love.graphics.newSpriteBatch(image)
 
 	for i=1, 10 do 
 		local ran_x = math.random(1, 127)
@@ -37,12 +39,12 @@ end
 
 
 function WindLine:draw()
-	love.graphics.line(self.x, self.y, self.x, self.ey)
-	spriteBatch:clear()
-	for _, entity in ipairs(all_windlines) do
-		spriteBatch:add(quad, math.floor(entity.x), math.floor(entity.y))
-	end
-	love.graphics.draw(spriteBatch)
+	--love.graphics.line(self.x, self.y, self.x, self.ey)
+	--spriteBatch:clear()
+	--for _, entity in ipairs(all_windlines) do
+		--spriteBatch:add(quad, math.floor(entity.x), math.floor(entity.y))
+	--end
+	love.graphics.draw(image, self.x, self.y)
 end
 
 function WindLine:update(dt)

@@ -23,12 +23,14 @@ function Letter:new(x, y, dir)
 	local _mailbox = setmetatable({}, Letter)
 	_mailbox.x = x 
 	_mailbox.y = y 
+    _mailbox.dir = dir
     _mailbox.img_inx = 1
     _mailbox.frame_time = 0.2
     _mailbox.elapsed_time = 0
     _mailbox.facing_dir = 1
     _mailbox.img = ani_frames[1]
 	--self.sy = x
+    _mailbox.moving_dir = 2 * dir
 	
 	return _mailbox
 
@@ -41,7 +43,7 @@ function Letter:draw()
 end
 
 function Letter:update(dt)
-   ------- self.x = (self.x + 2) * self.dir
+    self.x = self.x + self.moving_dir
 	--self.y = self.y + 1
  	--self.ey = self.y + self.length --* dt
 	--if self.y == 128+3 then

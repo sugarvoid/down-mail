@@ -1,5 +1,15 @@
-Object = require "lib.classic"
-class = require 'lib.middleclass'
+--Object = require "lib.classic"
+--class = require 'lib.middleclass'
+
+is_debug_on = true
+
+if is_debug_on then
+    love.profiler = require('lib.profile')
+end
+
+love = require("love")
+logger = require("lib.log")
+
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 
@@ -30,6 +40,14 @@ local player = Player:new(30,30)
 print(player.x)
 
 function love.load()
+    if is_debug_on then
+        logger.level = logger.Level.DEBUG
+        logger.debug("Entering debug mode")
+        love.profiler.start()
+    else
+        logger.level = logger.Level.INFO
+        logger.info("logger in INFO mode")
+    end
     math.randomseed(os.time())
     --love.math.setRandomSeed(love.timer.getTime())
     font = love.graphics.newFont("monogram.ttf", 32)
@@ -46,8 +64,17 @@ function love.load()
     make_mailbox()
 
 
-    test_letter = Letter:new(20,20)
 
+
+end
+
+function love.quit()
+    logger.info("The application is closing.")
+    -- Perform your cleanup tasks here.
+    if is_debug_on then
+        love.profiler.stop()
+        print(love.profiler.report(30))
+    end
 end
 
 function love.update(dt)
@@ -80,8 +107,11 @@ function love.update(dt)
     for _, mb in ipairs(all_mailboxes) do
         mb:update(dt)
     end
+    for _, l in ipairs(all_letters) do
+        l:update(dt)
+    end
 
-    test_letter:update(dt)
+  
 end
 
 
@@ -94,10 +124,10 @@ function love.draw()
 	love.graphics.rectangle('line', 0, 0, 128, 128)
 	love.graphics.rectangle("line", player.x, player.y, 8, 8)
     
-    --love.graphics.push("all")
-   -- love.graphics.setColor(love.math.colorFromBytes(0, 0, 0))
-    --love.graphics.rectangle("fill", 0, 0, 128, 128)
-    --love.graphics.pop()
+    love.graphics.push("all")
+   love.graphics.setColor(love.math.colorFromBytes(0, 0, 0))
+    love.graphics.rectangle("fill", 0, 0, 128, 128)
+    love.graphics.pop()
 
  
 
@@ -107,8 +137,11 @@ function love.draw()
     for _, mb in ipairs(all_mailboxes) do
         mb:draw()
     end
+    for _, l in ipairs(all_letters) do
+        l:draw()
+    end
 
-    test_letter:draw()
+    
 
     --start of draw_play()
     player:draw()
@@ -151,6 +184,7 @@ end
 
 function do_action()
     print("action")
+    player:throw_letter()
 end
 
 

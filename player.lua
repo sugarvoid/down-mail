@@ -40,5 +40,6 @@ function Player:update(dt)
 end
 
 function Player:throw_letter()
-
+  local new_letter = Letter:new(self.x, self.y-2, self.facing_dir)
+  table.insert(all_letters, new_letter)
 end
