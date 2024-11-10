@@ -3,31 +3,35 @@ class = require 'lib.middleclass'
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 
+SPRITESHEET = love.graphics.newImage("full_sheet.png")
 require("player")
+require("wind")
+require("mailbox")
+require("letter")
 --local push = require("lib.push")
 anim8 = require("lib.anim8")
 flux = require("lib.flux")
 
 
 
-SPRITESHEET = love.graphics.newImage("full_sheet.png")
 
 slots = { 2, 20, 38, 56, 74, 92, 110 }
 
 
-all_windlines = {}
+
 
 
 
 --WINDOW_W, WINDOW_H = love.window.getDesktopDimensions()
 --WINDOW_W, WINDOW_H = WINDOW_W * 0.8, WINDOW_H * 0.8
 
-local player = Player(30,30)
+local player = Player:new(30,30)
 
 print(player.x)
 
 function love.load()
     math.randomseed(os.time())
+    --love.math.setRandomSeed(love.timer.getTime())
     font = love.graphics.newFont("monogram.ttf", 32)
     font:setFilter("nearest")
     love.graphics.setFont(font)
@@ -37,6 +41,13 @@ function love.load()
 	width, height = love.graphics.getDimensions()
 	love.window.setMode (width, height, {resizable=true, borderless=false})
 	resize (width, height) -- update new translation and scale
+    init_wind()
+
+    make_mailbox()
+
+
+    test_letter = Letter:new(20,20)
+
 end
 
 function love.update(dt)
@@ -63,6 +74,14 @@ function love.update(dt)
 	local my = math.floor ((love.mouse.getY()-window.translateY)/window.scale+0.5)
 	-- your code here, use mx and my as mouse X and Y positions
 	--print(mx, my)
+    for _, c in ipairs(all_windlines) do
+        c:update(dt)
+    end
+    for _, mb in ipairs(all_mailboxes) do
+        mb:update(dt)
+    end
+
+    test_letter:update(dt)
 end
 
 
@@ -80,9 +99,21 @@ function love.draw()
     --love.graphics.rectangle("fill", 0, 0, 128, 128)
     --love.graphics.pop()
 
+ 
+
+    for _, c in ipairs(all_windlines) do
+        c:draw()
+    end
+    for _, mb in ipairs(all_mailboxes) do
+        mb:draw()
+    end
+
+    test_letter:draw()
 
     --start of draw_play()
     player:draw()
+
+
 
 end
 
