@@ -121,13 +121,16 @@ function love.draw()
 	love.graphics.translate (window.translateX, window.translateY)
 	love.graphics.scale (window.scale)
 	-- your graphics code here, optimized for fullHD
-	love.graphics.rectangle('line', 0, 0, 128, 128)
-	love.graphics.rectangle("line", player.x, player.y, 8, 8)
-    
+
     love.graphics.push("all")
    love.graphics.setColor(love.math.colorFromBytes(0, 0, 0))
     love.graphics.rectangle("fill", 0, 0, 128, 128)
     love.graphics.pop()
+
+	love.graphics.rectangle('line', 0, 0, 127, 127)
+	love.graphics.rectangle("line", player.x, player.y, 8, 8)
+    
+    
 
  
 
