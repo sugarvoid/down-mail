@@ -1,5 +1,7 @@
 # Down Mail
 <br>
+### Project Status
+Abandoned 
 
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)
 <br>
