@@ -1,7 +1,7 @@
 # Down Mail
 
 ### Project Status
-- Work in progress 
+- Moved to Love2D. The constraints were no longer fun.  
 
 ### Gameplay
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)

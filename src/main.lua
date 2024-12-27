@@ -72,6 +72,8 @@ function _draw()
     elseif g_state==2 then
         draw_gameover()
     end
+    print("mem: "..stat(0), 0, 0)
+    print("cpu: "..stat(1), 0, 8)
 end
 
 function update_play()
