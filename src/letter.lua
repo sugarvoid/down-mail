@@ -30,6 +30,18 @@ function letter:update()
         if self.img==35 then
             self.img=32
         end
+
+
+        if self.x<=8 or self.x>=120 then
+            --TODO: spawn dog
+            spawn_dog(self.x,self.y)
+            sfx(14)
+            misses+=1
+            explode(self.x,self.y,3,4,4)
+            update_cash(-5)
+            del(letters,self)
+        end
+
     else
         self.y-=2
     end

@@ -1,11 +1,13 @@
 # Down Mail
 
 ### Project Status
-- Abandoned 
+- Work in progress 
 
+#### Gameplay
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)
 <br>
 
+#### Cart
 ![cart](https://github.com/sugarvoid/down-mail/blob/master/down_mail.p8.png)
 
 

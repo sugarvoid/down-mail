@@ -3,10 +3,11 @@ dogs={}
 dog={}
 dog.__index=dog
 
-function dog:new(x,y)
+function spawn_dog(x,y)
     local _d=setmetatable({},dog)
-    _d.x=0
-    _d.y=0
+    printh('debug: pos='..x..":"..y, 'debug.txt')
+    _d.x=x
+    _d.y=y
     _d.timer=150
     _d.target=p1
     _d.facing_l=nil
@@ -15,7 +16,7 @@ function dog:new(x,y)
     _d.speed=1.5
     _d.prox=0.2
     add(objects.front, _d)
-    return _d
+    --return _d
 end
 
 function dog:set_target(obj)

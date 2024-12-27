@@ -52,7 +52,6 @@ function _init()
     misses=0
     init_wind()
     reset_mb_timer()
-    test_dog = dog:new(30,30)
 end
 
 function _update()
@@ -90,6 +89,53 @@ function update_play()
         g_state=2
     end
 
+    for mb in all(mailboxes) do
+        --TODO: move to update function
+        mb:update()
+        if is_colliding(p1,mb) and not mb.damaged then
+            sfx(3)
+            mb.damaged=true
+            damaged_mb+=1
+            if damaged_mb==3 then
+                end_text=endings[4]
+                g_state=2
+            end
+            update_cash(-10)
+        end
+
+        for l in all(letters) do
+            -- if l.x<=8 or l.x>=126 then
+            --     --TODO: spawn dog
+            --     spawn_dog(l.x,l.y)
+            --     misses+=1
+            --     explode(l.x,l.y,3,4,7)
+            --     update_cash(-5)
+            --     del(letters,l)
+            -- end
+            if is_colliding(l,mb) and not mb.damaged and mb.empty then
+                if l.col==mb.col then
+                    local _c
+                    if mb.col=="b" then
+                        _c=12
+                    elseif mb.col=="y" then
+                        _c=10
+                    end
+
+                    explode(mb.x, mb.y, 2, 6,_c)
+                    del(letters,l)
+                    mb.empty=false
+                    
+                    mb.speed=4
+                    update_cash(2)
+                    sfx(4)
+                else
+                    del(letters,l)
+                    sfx(5)
+                end
+            end
+        end
+    end
+
     mb_spawn+=1
     if mb_spawn>=next_mb then
         spawn_mbox("b",true)
@@ -119,50 +165,7 @@ function draw_play()
     p1:draw()
     
 
-    for mb in all(mailboxes) do
-        --TODO: move to update function
-        mb:update()
-        if is_colliding(p1,mb) and not mb.damaged then
-            sfx(3)
-            mb.damaged=true
-            damaged_mb+=1
-            if damaged_mb==3 then
-                end_text=endings[4]
-                g_state=2
-            end
-            update_cash(-10)
-        end
-
-        for l in all(letters) do
-            if l.x<=8 or l.x>=126 then
-                --TODO: spawn dog
-                misses+=1
-                update_cash(-5)
-                del(letters,l)
-            end
-            if is_colliding(l,mb) and not mb.damaged and mb.empty then
-                if l.col==mb.col then
-                    local _c
-                    if mb.col=="b" then
-                        _c=12
-                    elseif mb.col=="y" then
-                        _c=10
-                    end
-
-                    explode(mb.x, mb.y, 2, 6,_c)
-                    del(letters,l)
-                    mb.empty=false
-                    
-                    mb.speed=4
-                    update_cash(2)
-                    sfx(4)
-                else
-                    del(letters,l)
-                    sfx(5)
-                end
-            end
-        end
-    end
+    
 
     draw_particles()
 
