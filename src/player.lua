@@ -68,16 +68,17 @@ function get_input(p)
 
     if btnp(🅾️) then 
         p:throw() 
+        --explode(p.x,p.y,3,4,7)
 
         end
     if btnp(❎) then
         p.ring=0
-        spawn_bone()
         swap(font_col)
     end
 end
 
 p1={
+    type="player",
     x=54,
     y=54,
     selected_letter=0,

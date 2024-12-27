@@ -5,6 +5,7 @@ bone.__index=bone
 
 function bone:new(x,y)
     local _b=setmetatable({},bone)
+    _b.type="bone"
     _b.x=x
     _b.y=y
     _b.facing_l=nil
@@ -14,8 +15,12 @@ function bone:new(x,y)
     return _b
 end
 
-function spawn_bone()
+function spawn_bone(dog)
     local _b = bone:new(rnd(avil_yx), 128)
+    dog.speed = 3
+    dog.target = _b
+    dog.prox=0.8
+    
     add(objects.front, _b)
 end
 

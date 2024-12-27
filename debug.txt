@@ -1,0 +1,4 @@
+debug: color=b
+debug: color=b
+debug: color=b
+debug: color=y

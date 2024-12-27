@@ -1,4 +1,5 @@
-end_text=""
+end_text_l1=""
+end_text_l2=""
 
 endings={
     "local mailman goes missing",
@@ -16,7 +17,7 @@ function draw_gameover()
     rect(4,30,124,120,5)
     spr(end_spr[1],80,34,4,4)
     print("game over",game_over_x,1,0)
-    print(end_text,10,40,0)
+    print(end_text_l1,10,40,0)
 end
 
 function update_gameover()

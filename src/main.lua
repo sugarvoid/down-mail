@@ -77,7 +77,7 @@ end
 
 function update_play()
     p1:update()
-    test_dog:update()
+    update_particles()
     update_objects()
     u_letters()
     map_y+=.2
@@ -117,9 +117,10 @@ function draw_play()
     rectfill(0,0,127,8,0)
     rectfill(0,120,127,128,0)
     p1:draw()
-    test_dog:draw()
+    
 
     for mb in all(mailboxes) do
+        --TODO: move to update function
         mb:update()
         if is_colliding(p1,mb) and not mb.damaged then
             sfx(3)
@@ -134,14 +135,24 @@ function draw_play()
 
         for l in all(letters) do
             if l.x<=8 or l.x>=126 then
+                --TODO: spawn dog
                 misses+=1
                 update_cash(-5)
                 del(letters,l)
             end
             if is_colliding(l,mb) and not mb.damaged and mb.empty then
                 if l.col==mb.col then
+                    local _c
+                    if mb.col=="b" then
+                        _c=12
+                    elseif mb.col=="y" then
+                        _c=10
+                    end
+
+                    explode(mb.x, mb.y, 2, 6,_c)
                     del(letters,l)
                     mb.empty=false
+                    
                     mb.speed=4
                     update_cash(2)
                     sfx(4)
@@ -152,6 +163,8 @@ function draw_play()
             end
         end
     end
+
+    draw_particles()
 
     for o in all(objects.front) do
         o:draw()
