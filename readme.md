@@ -3,11 +3,11 @@
 ### Project Status
 - Work in progress 
 
-#### Gameplay
+### Gameplay
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)
 <br>
 
-#### Cart
+### Cart
 ![cart](https://github.com/sugarvoid/down-mail/blob/master/down_mail.p8.png)
 
 

@@ -228,3 +228,7 @@ function angle_lerp(angle1, angle2, t)
 
     return ((1-t)*angle1+t*angle2)%1
 end
+
+function print_debug(str)
+    printh("debug: " .. str, 'debug.txt')
+end
