@@ -28,6 +28,7 @@ function mailbox:update()
         self.img=20
     elseif self.damaged then
         self.img=22
+        self.speed=-2
     end
 
     if self.y<=-16 then
