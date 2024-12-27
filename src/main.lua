@@ -24,6 +24,8 @@ end_spr={64,68,72,76,128,132,136,140}
 objects={
 back={},front={}}
 
+
+
 function update_objects()
     for o in all(objects.front) do
         o:update()
@@ -50,6 +52,7 @@ function _init()
     misses=0
     init_wind()
     reset_mb_timer()
+    test_dog = dog:new(30,30)
 end
 
 function _update()
@@ -74,6 +77,7 @@ end
 
 function update_play()
     p1:update()
+    test_dog:update()
     update_objects()
     u_letters()
     map_y+=.2
@@ -113,6 +117,7 @@ function draw_play()
     rectfill(0,0,127,8,0)
     rectfill(0,120,127,128,0)
     p1:draw()
+    test_dog:draw()
 
     for mb in all(mailboxes) do
         mb:update()
@@ -191,4 +196,19 @@ end
 
 function update_cash(amount)
     earnings=mid(0,earnings+amount)
+end
+
+function angle_lerp(angle1, angle2, t)
+    angle1=angle1%1
+    angle2=angle2%1
+
+    if abs(angle1-angle2)>0.5 then
+      if angle1>angle2 then
+       angle2+=1
+      else
+       angle1+=1
+      end
+    end
+
+    return ((1-t)*angle1+t*angle2)%1
 end

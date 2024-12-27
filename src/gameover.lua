@@ -4,6 +4,7 @@ endings={
     "local mailman goes missing",
     "local mailman turns to red splat",
     "local mailman missing",
+    "dog claims mailman's life",
     "mailman fired",
     "mailman quits, buys city",
 }

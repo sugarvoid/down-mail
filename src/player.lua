@@ -66,9 +66,13 @@ function get_input(p)
         p.is_chute_open=false
     end
 
-    if btnp(🅾️) then p:throw() end
+    if btnp(🅾️) then 
+        p:throw() 
+
+        end
     if btnp(❎) then
         p.ring=0
+        spawn_bone()
         swap(font_col)
     end
 end

@@ -20,4 +20,4 @@
 | :----: | :--------: |
 | Arrows |    Move    |
 |   O    | Throw Mail |
-|   X    | Swap Color |
+|   X    | Toggle Color |
