@@ -8,7 +8,7 @@ function letter:new()
     local _l=setmetatable({},letter)
     _l.x=0
     _l.y=0
-    _l.col=nil
+    --_l.col=nil
     _l.t=0
     _l.score_mul=1
     _l.tossed=false
@@ -39,7 +39,6 @@ function letter:update()
             --     spawn_dog(l.x,l.y)
             --     misses+=1
             --     explode(l.x,l.y,3,4,7)
-            --     update_cash(-5)
             --     del(letters,l)
             -- end
             if is_colliding(self,mb) and not mb.damaged and mb.empty  then
@@ -58,7 +57,6 @@ function letter:update()
                     explode(mb.x, mb.y, 2, 6,mb.b_col)
                     mb.empty=false
                     mb.speed=4
-                    update_cash(2)
                     sfx(4)
                 else
                     
@@ -76,7 +74,6 @@ function letter:update()
             sfx(14)
             misses+=1
             explode(self.x,self.y,3,4,4)
-            update_cash(-5)
             del(letters,self)
         end
 
@@ -137,11 +134,6 @@ function spawn_letter(_dir)
     new_letter.tossed=true
     new_letter.x=p1.x
     new_letter.y=p1.y
-    if font_col[1]==12 then
-        new_letter.col="b"
-    else
-        new_letter.col="y"
-    end
 
     set_let_val(new_letter)
     add(letters,new_letter)

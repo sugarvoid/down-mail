@@ -1,4 +1,4 @@
-font_col={12,10}
+--font_col={12,10}
 
 clothing={}
 clothing.__index=clothing
@@ -74,7 +74,7 @@ function get_input(p)
     if btnp(❎) then
         p.ring=0
         p.letters+=1
-        swap(font_col)
+        --swap(font_col)
     end
 end
 

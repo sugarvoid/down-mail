@@ -1,31 +1,17 @@
-cols={"b","y"}
+cols={12,14,10,11,9,6} --"b","y","p","g"}
+customers={}
+non_customers={}
 g_state=0
 mb_spawn=0
 avil_yx={7,16,25,34,43,52,61,70,79,88,97,106,113}
 next_mb=0
 map_y=0
-clamp=mid
 damaged_mb=0
 game_over_x=-10
 max_letter=12
 ending=0
 end_spr={64,68,72,76,128,132,136,140}
-
--- obj2={
---     new=function(self,tbl)
---         tbl=tbl or {}
---         setmetatable(
---             tbl,{
---                 __index=self
---             })
---             return tbl
---         end
---     }
-
-objects={
-back={},front={}}
-
-
+objects={back={},front={}}
 
 function update_objects()
     for o in all(objects.front) do
@@ -47,9 +33,7 @@ end
 
 function _init()
     poke(0x5f5c,255)
-    earnings=0
     score=0
-    combo=1
     misses=0
     init_wind()
     reset_mb_timer()
@@ -84,7 +68,9 @@ function update_play()
     u_letters()
     map_y+=.2
 
-    if (flr(map_y)==17) then map_y=0 end
+    if flr(map_y)==17 then
+        map_y=0
+    end
     --moving the map up
     --update_wind()
     if p1.life==0 then
@@ -93,19 +79,13 @@ function update_play()
     end
 
     for mb in all(mailboxes) do
-        --TODO: move to update function
         mb:update()
-        
-
-        
     end
 
     mb_spawn+=1
     if mb_spawn>=next_mb then
-        spawn_mbox("b",true)
+        spawn_mbox()
         spawn_rock()
-
-        --make_letter()
         mb_spawn=0
         reset_mb_timer()
     end
@@ -178,12 +158,6 @@ function draw_gui()
         pset(70+(2*i), 124, 7)
         pset(70+(2*i), 125, 7)
       end
-    --print("miss:"..misses,50,122,font_col[1])
-    --print("combo:x"..combo,91,122,font_col[1])
-end
-
-function update_cash(amount)
-    earnings=mid(0,earnings+amount)
 end
 
 function angle_lerp(angle1, angle2, t)
