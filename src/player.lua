@@ -73,6 +73,7 @@ function get_input(p)
         end
     if btnp(❎) then
         p.ring=0
+        p.letters+=1
         swap(font_col)
     end
 end
@@ -81,6 +82,8 @@ p1={
     type="player",
     x=54,
     y=54,
+    score=0,
+    letters = 5,
     selected_letter=0,
     is_alive=true,
     sprite_a=1,
@@ -92,16 +95,16 @@ p1={
     chute_open_spr=7,
     life=3,
     thr_anmi=0,
-    ring=16,
+    --ring=16,
     draw=function(self)
         if self.is_alive then
-            if self.ring<=15 then
-                circ(self.x+4,self.y,self.ring,font_col[1])
-            end
-            pal(7,font_col[1])
+            --if self.ring<=15 then
+                --circ(self.x+4,self.y,self.ring,font_col[1])
+            --end
+            --pal(7,font_col[1])
             spr(self.img,self.x,self.y,1,1,self.facing_l)
             spr(self.chute_spr,self.x,self.y-8)
-            pal()
+            --pal()
         else
             spr(49,self.x,self.y)
         end
@@ -155,14 +158,16 @@ then go to game over
             else
                 self.img=self.sprite_b
             end
-            if self.ring<20 then
-                self.ring+=2
-            end
+            --if self.ring<20 then
+            --    self.ring+=2
+            --end
         end
     end,
 
     throw=function(self)
-        --self.img=02
+        if self.letters > 0 then
+            --self.img=02
+        self.letters = mid(0,self.letters - 1,max_letter)
         self.thr_anmi=10
         if self.facing_l then
             spawn_letter(-1)
@@ -170,6 +175,8 @@ then go to game over
             spawn_letter(1)
         end
         sfx(6)
+        end
+        
     end,
     take_damage=function(self)
         if (self.life==3) then spawn_clothing(17) end

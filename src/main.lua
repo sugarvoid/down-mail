@@ -7,6 +7,7 @@ map_y=0
 clamp=mid
 damaged_mb=0
 game_over_x=-10
+max_letter=12
 ending=0
 end_spr={64,68,72,76,128,132,136,140}
 
@@ -73,7 +74,7 @@ function _draw()
         draw_gameover()
     end
     print("mem: "..stat(0), 0, 0)
-    print("cpu: "..stat(1), 0, 8)
+    print("fps: "..stat(7), 0, 8)
 end
 
 function update_play()
@@ -94,48 +95,9 @@ function update_play()
     for mb in all(mailboxes) do
         --TODO: move to update function
         mb:update()
-        if is_colliding(p1,mb) and not mb.damaged then
-            sfx(3)
-            mb.damaged=true
-            damaged_mb+=1
-            if damaged_mb==3 then
-                end_text=endings[4]
-                g_state=2
-            end
-            update_cash(-10)
-        end
+        
 
-        for l in all(letters) do
-            -- if l.x<=8 or l.x>=126 then
-            --     --TODO: spawn dog
-            --     spawn_dog(l.x,l.y)
-            --     misses+=1
-            --     explode(l.x,l.y,3,4,7)
-            --     update_cash(-5)
-            --     del(letters,l)
-            -- end
-            if is_colliding(l,mb) and not mb.damaged and mb.empty then
-                if l.col==mb.col then
-                    local _c
-                    if mb.col=="b" then
-                        _c=12
-                    elseif mb.col=="y" then
-                        _c=10
-                    end
-
-                    explode(mb.x, mb.y, 2, 6,_c)
-                    del(letters,l)
-                    mb.empty=false
-                    
-                    mb.speed=4
-                    update_cash(2)
-                    sfx(4)
-                else
-                    del(letters,l)
-                    sfx(5)
-                end
-            end
-        end
+        
     end
 
     mb_spawn+=1
@@ -206,10 +168,18 @@ function is_colliding(a,b)
 end
 
 function draw_gui()
-    rectfill(0,121,128,128,5)
-    print("$"..earnings,2,122,font_col[1])
-    print("miss:"..misses,50,122,font_col[1])
-    print("combo:x"..combo,91,122,font_col[1])
+    rectfill(0,121,128,128,0)
+    print("score: "..p1.score,2,123,7)
+    for i=1,max_letter,1 do
+        pset(70+(2*i), 124, 5)
+        pset(70+(2*i), 125, 5)
+      end
+      for i=1,p1.letters,1 do
+        pset(70+(2*i), 124, 7)
+        pset(70+(2*i), 125, 7)
+      end
+    --print("miss:"..misses,50,122,font_col[1])
+    --print("combo:x"..combo,91,122,font_col[1])
 end
 
 function update_cash(amount)

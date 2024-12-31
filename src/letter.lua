@@ -10,6 +10,7 @@ function letter:new()
     _l.y=0
     _l.col=nil
     _l.t=0
+    _l.score_mul=1
     _l.tossed=false
     _l.t_col=0
     _l.b_col=0
@@ -21,6 +22,7 @@ end
 
 function letter:update()
     if self.tossed then
+        self.score_mul+=0.2
         self.x+=self.speed*self.dir
         self.t=(self.t+1)%5
         turn=self.t==0
@@ -29,6 +31,42 @@ function letter:update()
         end
         if self.img==35 then
             self.img=32
+        end
+
+        for mb in all(mailboxes) do
+            -- if l.x<=8 or l.x>=126 then
+            --     --TODO: spawn dog
+            --     spawn_dog(l.x,l.y)
+            --     misses+=1
+            --     explode(l.x,l.y,3,4,7)
+            --     update_cash(-5)
+            --     del(letters,l)
+            -- end
+            if is_colliding(self,mb) and not mb.damaged and mb.empty  then
+                if mb.customer then
+                    local _c
+                    if mb.col=="b" then
+                        _c=12
+                    elseif mb.col=="y" then
+                        _c=10
+                    end
+
+                    p1.score+=(10 * flr(self.score_mul))
+
+                    --print_debug(flr(self.score_mul))
+
+                    explode(mb.x, mb.y, 2, 6,mb.b_col)
+                    mb.empty=false
+                    mb.speed=4
+                    update_cash(2)
+                    sfx(4)
+                else
+                    
+                    sfx(5)
+                end
+
+                del(letters,self)
+            end
         end
 
 
@@ -48,10 +86,10 @@ function letter:update()
 end
 
 function letter:draw()
-    pal(5,self.t_col)
-    pal(6,self.b_col)
+    --pal(5,self.t_col)
+    --pal(6,self.b_col)
     spr(self.img,self.x,self.y)
-    pal()
+    --pal()
 end
 
 -- letter=obj:new({

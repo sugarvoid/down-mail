@@ -8,6 +8,7 @@ function mailbox:new()
     _m.x=0
     _m.y=0
     _m.col=nil
+    _m.customer=true
     _m.facing_l=nil
     _m.b_col=0
     _m.img=21
@@ -33,6 +34,17 @@ function mailbox:update()
 
     if self.y<=-16 then
         del(mailboxes,self)
+    end
+
+    if is_colliding(p1,self) and not self.damaged then
+        sfx(3)
+        self.damaged=true
+        damaged_mb+=1
+        if damaged_mb==3 then
+            end_text=endings[4]
+            g_state=2
+        end
+        update_cash(-10)
     end
 end
 
