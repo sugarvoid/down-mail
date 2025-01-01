@@ -1,7 +1,10 @@
+
+
+
 cols={12,14,10,11,9,6} --"b","y","p","g"}
-customers={}
-non_customers={}
-g_state=0
+customers={12,14}
+non_customers={10,11,9,6}
+
 mb_spawn=0
 avil_yx={7,16,25,34,43,52,61,70,79,88,97,106,113}
 next_mb=0
@@ -12,6 +15,19 @@ max_letter=12
 ending=0
 end_spr={64,68,72,76,128,132,136,140}
 objects={back={},front={}}
+day=1
+days={"monday","tuesday","wednesday","thursday", "friday", "saturday", "sunday"}
+intro_t=60
+day_t=60
+gamestates = {
+    title = "t",
+    day_intro = "di",
+    day_title = "dt",
+    game = "g",
+    gameover = "go"
+}
+g_state=gamestates.title
+
 
 function update_objects()
     for o in all(objects.front) do
@@ -40,21 +56,34 @@ function _init()
 end
 
 function _update()
-    if g_state==0 then
-        if btnp(🅾️) then g_state=1 end
-    elseif g_state==1 then
+    if g_state==gamestates.title then
+        if btnp(🅾️) then
+            --g_state=1 
+            g_state=gamestates.day_intro
+            end
+        elseif g_state==gamestates.day_intro then
+            update_intro()
+        elseif g_state==gamestates.day_title then
+            update_day()
+    elseif g_state==gamestates.game  then
         update_play()
-    elseif g_state==2 then
+    elseif g_state==gamestates.gameover  then
         update_gameover()
     end
 end
 
 function _draw()
-    if g_state==0 then
+    if g_state==gamestates.title then
         draw_title()
-    elseif g_state==1 then
+        --draw_day()
+        --draw_intro()
+        elseif g_state==gamestates.day_intro then
+            draw_intro()
+        elseif g_state==gamestates.day_title then
+            draw_day()
+    elseif g_state==gamestates.game then
         draw_play()
-    elseif g_state==2 then
+    elseif g_state==gamestates.gameover  then
         draw_gameover()
     end
     print("mem: "..flr(stat(0)).."kb", 0, 0, 8)
@@ -99,6 +128,20 @@ function update_play()
     end
 end
 
+function update_intro()
+    intro_t-=1
+    if intro_t <= 0 then
+        g_state=gamestates.day_title
+    end
+end
+
+function update_day()
+    day_t-=1
+    if day_t <= 0 then
+        g_state=gamestates.game
+    end
+end
+
 function draw_play()
     cls(0)
     for o in all(objects.back) do
@@ -131,9 +174,34 @@ function draw_play()
 end
 
 function draw_title()
+    cls(7)
+    print("down mail",hcenter("down mail"),50,0)
+    print("press 🅾️ to play",hcenter("press 🅾️ to play"),75,0)
+end
+
+function draw_intro()
+    cls()
+    print("customers",hcenter("customers"),45,7)
+    print("non-customers",hcenter("non-customers"),80,7)
+    --TODO: figure out how to center sprites
+    for k,v in pairs(customers) do
+        pal(6, v)
+        sspr(32, 8, 8, 8, 30+(16*k), 52, 16, 16)
+        --spr(20, 30+(8*k), 52)
+        pal()
+    end
+
+    for k,v in pairs(non_customers) do
+        pal(6, v)
+        sspr(32, 8, 8, 8, 30+(16*k), 88, 16, 16)
+        --spr(20, 30+(8*k), 88)
+        pal()
+    end
+end
+
+function draw_day()
     cls(0)
-    print("down mail",48,50,3)
-    print("press 🅾️ to start",30,57,3)
+    print(days[day],hcenter(days[day]),vcenter(days[day]),7)
 end
 
 function is_colliding(a,b)
@@ -178,3 +246,18 @@ end
 function print_debug(str)
     printh("debug: " .. str, 'debug.txt')
 end
+
+function hcenter(s)
+    -- screen center minus the
+    -- string length times the 
+    -- pixels in a char's width,
+    -- cut in half
+    return 64-#s*2
+  end
+  
+  function vcenter(s)
+    -- screen center minus the
+    -- string height in pixels,
+    -- cut in half
+    return 61
+  end

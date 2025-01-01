@@ -10,8 +10,6 @@ function rock:new()
     local _r=setmetatable({},rock)
     _r.x=0
     _r.y=-40
-    _r.col=nil
-    _r.facing_l=nil
     _r.img=rnd({26,27,43})
     _r.speed=rnd({2,3,4})
     _r.danger_time=20
