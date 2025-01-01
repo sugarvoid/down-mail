@@ -57,8 +57,8 @@ function _draw()
     elseif g_state==2 then
         draw_gameover()
     end
-    print("mem: "..stat(0), 0, 0)
-    print("fps: "..stat(7), 0, 8)
+    print("mem: "..flr(stat(0)).."kb", 0, 0, 8)
+    print("cpu: "..stat(1).. "%", 0, 8, 8)
 end
 
 function update_play()
