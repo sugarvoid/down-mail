@@ -16,19 +16,19 @@ function bone:new(x,y)
 end
 
 function spawn_bone(dog)
-    local _b = bone:new(rnd(avil_yx), 128)
-    dog.speed = 3
-    dog.target = _b
+    local _b=bone:new(rnd(avil_yx),128)
+    dog.speed=3
+    dog.target=_b
     dog.prox=0.8
-    
-    add(objects.front, _b)
+
+    add(objects.front,_b)
 end
 
 function bone:update()
     if not self.collected then
         self.y-=self.speed
     else
-        del(objects.front, self)
+        del(objects.front,self)
     end
 end
 
