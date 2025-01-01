@@ -1,7 +1,7 @@
 # Down Mail
 
 ### Project Status
-- Moved to Love2D. The constraints were no longer fun. [link](https://github.com/sugarvoid/down-mail-love2d)
+- Currently working on this.
 
 ### Gameplay
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)
@@ -13,7 +13,7 @@
 
 ### Goal :dart:
 
--   Deliver mail to correct mailbox
+-   Deliver mail to correct mailboxes
 -   Avoid falling objects
 
 ### Controls :joystick:
@@ -22,4 +22,3 @@
 | :----: | :--------: |
 | Arrows |    Move    |
 |   O    | Throw Mail |
-|   X    | Toggle Color |

@@ -2,9 +2,9 @@
 
 
 cols={12,14,10,11,9,6} --"b","y","p","g"}
-customers={12,14}
-non_customers={10,11,9,6}
-
+customers={}
+non_customers={}
+reminder=false
 mb_spawn=0
 avil_yx={7,16,25,34,43,52,61,70,79,88,97,106,113}
 next_mb=0
@@ -20,11 +20,12 @@ days={"monday","tuesday","wednesday","thursday", "friday", "saturday", "sunday"}
 intro_t=60
 day_t=60
 gamestates = {
-    title = "t",
-    day_intro = "di",
-    day_title = "dt",
-    game = "g",
-    gameover = "go"
+    title = 0,
+    day_intro = 1,
+    day_title = 2,
+    game = 3,
+    bonus= 4,
+    gameover = 5
 }
 g_state=gamestates.title
 
@@ -49,6 +50,7 @@ end
 
 function _init()
     poke(0x5f5c,255)
+    set_customers()
     score=0
     misses=0
     init_wind()
@@ -186,14 +188,14 @@ function draw_intro()
     --TODO: figure out how to center sprites
     for k,v in pairs(customers) do
         pal(6, v)
-        sspr(32, 8, 8, 8, 30+(16*k), 52, 16, 16)
+        sspr(32, 8, 8, 8, 25+(16*k), 52, 16, 16)
         --spr(20, 30+(8*k), 52)
         pal()
     end
 
     for k,v in pairs(non_customers) do
         pal(6, v)
-        sspr(32, 8, 8, 8, 30+(16*k), 88, 16, 16)
+        sspr(32, 8, 8, 8, 25+(16*k), 88, 16, 16)
         --spr(20, 30+(8*k), 88)
         pal()
     end
@@ -226,6 +228,27 @@ function draw_gui()
         pset(70+(2*i), 124, 7)
         pset(70+(2*i), 125, 7)
       end
+      if reminder then
+      for k,v in pairs(customers) do
+        pal(6, v)
+        --sspr(32, 8, 8, 8, 25+(4*k), 88, 4, 4)
+        spr(21, 30+(8*k), 122)
+        pal()
+      end
+    end
+    --   for i=1,#customers,1 do
+    --     pset(30+(2*i), 126, customers[i])
+    --     pset(30+(2*i), 126, customers[i])
+    --     pset(30+(2*i), 126, customers[i])
+    --   end
+end
+
+function set_customers()
+
+    shuffle(cols)
+
+    customers={cols[1],cols[2],cols[3]}
+    non_customers={cols[4],cols[5],cols[6]}
 end
 
 function angle_lerp(angle1, angle2, t)
@@ -260,4 +283,12 @@ function hcenter(s)
     -- string height in pixels,
     -- cut in half
     return 61
+  end
+
+  function shuffle(t)
+    -- do a fisher-yates shuffle
+    for i = #t, 1, -1 do
+      local j = flr(rnd(i)) + 1
+      t[i], t[j] = t[j], t[i]
+    end
   end
