@@ -51,4 +51,5 @@
 - [ ] Figure out some sort of boss... Maybe
 - [ ] Make skulls go until hit wall (or go off screen)
 - [ ] Make demons throw skulls
+- [ ] Add branch to hazard table?
  
