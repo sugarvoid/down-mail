@@ -79,40 +79,4 @@ function in_range(x_val)
     end
 end
 
-function new_spawner()
-    local _spawner={
-        rock_1=randi_rang(3,10),
-        rock_2=randi_rang(3,10),
-        mail_box=140,
-        demon=140,
 
-        update=function(self)
-            self.rock_1=self.rock_1-1
-            self.rock_2=self.rock_2-1
-            self.mail_box=self.mail_box-1
-            self.demon=self.demon-1
-
-            if self.rock_1<=0 then
-                spawn_rock()
-                self.rock_1=math.floor(randi_rang(3,10))
-            end
-
-            if self.rock_2<=0 then
-                spawn_rock()
-                self.rock_2=math.floor(randi_rang(3,10))
-            end
-
-            if self.mail_box<=0 then
-                spawn_mailbox()
-                self.mail_box=math.floor(randi_rang(2,4))
-            end
-
-            if self.demon<=0 then
-                self.demon=math.floor(randi_rang(9,20))
-                spawn_thing()
-            end
-        end
-    }
-
-    return _spawner
-end
