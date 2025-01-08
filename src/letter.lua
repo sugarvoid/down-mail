@@ -51,6 +51,7 @@ function letter:update()
                     end
 
                     p1.score+=(10 * flr(self.score_mul))
+                    deliveries_left-=1
 
                     --print_debug(flr(self.score_mul))
 

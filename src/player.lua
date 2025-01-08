@@ -1,16 +1,6 @@
---font_col={12,10}
 
 clothing={}
 clothing.__index=clothing
-
-function clothing:new()
-    local _c=setmetatable({},clothing)
-    _c.x=0
-    _c.y=0
-    _c.img=nil
-    _c.fall_speed=3
-    return _c
-end
 
 function clothing:draw()
     spr(self.img,self.x,self.y)
@@ -19,36 +9,21 @@ end
 function clothing:update()
     self.y+=self.fall_speed
     if self.y>130 then
-        del(letters,self)
+        del(objects.front,self)
     end
 end
 
--- clothing=obj:new({
---     x,y=0,
---     img=nil,
---     fall_speed=3,
---     update=function(self)
---         self.y+=self.fall_speed
---         if self.y>130 then
---             del(letters,self)
---         end
---     end,
---     draw=function(self)
---         spr(self.img,self.x,self.y)
---     end
--- })
+function spawn_clothing(sprite)
+    local _c=setmetatable({},clothing)
+    _c.img=sprite
+    _c.x=p1.x
+    _c.y=p1.y
+    _c.fall_speed=2
+    add(objects.front,_c)
+end
 
 function init_player()
-    --add_let_to_bag("b")
-    --add_let_to_bag("y")
-    --add_let_to_bag("p")
-end
 
-function swap(table)
-    if count(table)>=2 then
-        sfx(9)
-        table[1],table[2]=table[2],table[1]
-    end
 end
 
 function get_input(p)
@@ -137,6 +112,7 @@ TODO: add blood particales
 then go to game over
 ]]
         end
+        --TODO: user goto_gameover funciton
         if self.y>=130 then
             self.is_alive=false
             end_text=endings[1]
@@ -194,10 +170,4 @@ then go to game over
     end
 }
 
-function spawn_clothing(sprite)
-    new_cloth=clothing:new()
-    new_cloth.img=sprite
-    new_cloth.x=p1.x
-    new_cloth.y=p1.y
-    add(objects.front,new_cloth)
-end
+

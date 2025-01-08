@@ -1,7 +1,7 @@
 spawner = {
     rock_1 = randsec_rang(3, 10),
     rock_2 = randsec_rang(3, 10),
-    branch = randsec_rang(3, 10),
+    pool = randsec_rang(3, 10),
     mail_box = 140,
     demon = 140,
 
@@ -10,7 +10,7 @@ spawner = {
         --self.rock_2 -= 1
         self.mail_box -=  1
         self.demon -=  1
-        self.branch -=  1
+        self.pool -=  1
 
         if self.rock_1 <= 0 then
             spawn_rock()
@@ -24,9 +24,9 @@ spawner = {
             --self.rock_2 = randsec_rang(3, 10)
         --end
 
-        if self.branch <= 0 then
-            spawn_branch()
-            self.branch = randsec_rang(3, 10)
+        if self.pool <= 0 then
+            spawn_pool()
+            self.pool = randsec_rang(3, 10)
         end
 
         if self.mail_box <= 0 then
