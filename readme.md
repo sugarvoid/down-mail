@@ -31,8 +31,8 @@
 - [ ] Maker spawner class to handle hazards and mailboxes
 - [ ] Refactor input function. Group by input, not gamestate
 - [ ] Add floating numbers when getting score increase
-- [ ] Make intro screen, showing customers for the day
-- [ ] Make day of week screen (after the customer screen)
+- [x] Make intro screen, showing customers for the day
+- [x] Make day of week screen (after the customer screen)
 - [x] Add letter "ammo"
 - [x] Create way to add to letters
 - [ ] Add customer feature
@@ -47,10 +47,10 @@
 - [ ] Finish making Thing sprites
 - [ ] Make player lose clothes when hit by skull or dog
 - [ ] Make chute tear apart after hit by all hazards
-- [ ] Increase base score based on distance the letter travels 
+- [x] Increase base score based on distance the letter travels 
 - [ ] Figure out some sort of boss... Maybe
 - [ ] Make skulls go until hit wall (or go off screen)
 - [ ] Make demons throw skulls
 - [ ] Add branch to hazard table?
-- [ ] Turn brach into pool
+- [x] Turn brach into pool
  
