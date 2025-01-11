@@ -24,7 +24,7 @@ function demon:new(side)
     _demon.timer = 150
     _demon.time_on_screen = nil -- TODO: longer on screen, throw more often
     _demon.in_play = false
-    _demon.w = 16
+    _demon.w = 8
     _demon.h = 24
     _demon.y = off_screen_y
     _demon.curr_animation = _demon.animations["idle"]
@@ -56,7 +56,7 @@ function demon:draw()
     
 end
 
-function demon:update(dt)
+function demon:update()
     for a in all(self.curr_animation.f) do
         
     end
@@ -85,9 +85,10 @@ function demon:update(dt)
             self:throw_skull()
         end
 
-        for _, l in ipairs(all_letters) do
+        for l in all(letters) do
             if is_colliding(l, self) then
-                del(all_letters, l)
+                sfx(10)
+                del(letters, l)
                 self:die()
             end
         end
@@ -124,16 +125,16 @@ function demon:crawl_on_screen()
 end
 
 function demon:die()
+    del(demons, self)
     self.in_play = false
-    self.curr_animation = self.animations["climb"]
+    --self.curr_animation = self.animations["climb"]
     --FIXME: Sometimes the "thing" will not slide down, it just disappears.
-
-   
-            thing_on_left = false
-            thing_on_right = false
-            del(demons, self)
-            self.tmr_move = -1
-            self.tmr_throw = -1
+    print_debug("demon hit!")
+    thing_on_left = false
+    thing_on_right = false
+    
+    self.tmr_move = -1
+    self.tmr_throw = -1
    
 end
 
@@ -175,6 +176,7 @@ function init_demons()
 end
 
 function update_demons()
+    print_debug(#demons)
     for d in all(demons) do
         d:update()
     end

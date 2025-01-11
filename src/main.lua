@@ -56,9 +56,7 @@ function _init()
     misses = 0
     init_wind()
     reset_mb_timer()
-    for i = 0, 150 do
-        print_debug(randi_rang(2, 7))
-    end
+    
 end
 
 function _update()

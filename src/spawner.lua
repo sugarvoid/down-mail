@@ -16,7 +16,6 @@ spawner = {
             spawn_rock()
             --self.rock_1 = randi_rang(3, 10)
             self.rock_1 = randsec_rang(3, 10)
-            print_debug(self.rock_1)
         end
 
         --if self.rock_2 <= 0 then
