@@ -121,6 +121,7 @@ function update_play()
     p1:update()
     update_particles()
     update_objects()
+    update_demons()
     u_letters()
     map_y += .2
 
@@ -181,6 +182,7 @@ function draw_play()
     p1:draw()
 
     draw_particles()
+    
 
     for o in all(objects.front) do
         o:draw()
@@ -195,8 +197,10 @@ function draw_play()
     for r in all(rocks) do
         r:draw()
     end
+    
     map(0, map_y)
     draw_gui()
+    draw_demons()
 end
 
 function draw_title()
@@ -224,12 +228,17 @@ function draw_intro()
         pal()
     end
 
-    print("🅾️ to skip", 80, 2)
+    draw_skip()
 end
 
 function draw_day()
     cls(0)
     print(days[day], hcenter(days[day]), vcenter(days[day]), 7)
+    draw_skip()
+end
+
+function draw_skip()
+    print("🅾️ to skip", 80, 2)
 end
 
 function is_colliding(a, b)

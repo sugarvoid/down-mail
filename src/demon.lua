@@ -4,7 +4,7 @@ demon.__index = demon
 local next_demon = 70
 local y_range = { 10, 90 }
 local off_screen_y = 138
-local things = {}
+local demons = {}
 
 local thing_on_left = false
 local thing_on_right = false
@@ -20,7 +20,7 @@ function demon:new(side)
     _demon.img=14
     _demon.next_y = 50
     _demon.tmr_move = -1
-    _demon.tmr_throw = -1
+    _demon.tmr_throw = 100
     _demon.timer = 150
     _demon.time_on_screen = nil -- TODO: longer on screen, throw more often
     _demon.in_play = false
@@ -29,15 +29,16 @@ function demon:new(side)
     _demon.y = off_screen_y
     _demon.curr_animation = _demon.animations["idle"]
 
+    _demon.facing_r = false
+
     if side == "right" then
-        _demon.x = 208
-        _demon.facing_dir = 1
+        _demon.x = 117
+        _demon.facing_r = true
+        _demon.facing_dir = -1
     elseif side == "left" then
         _demon.x = 3
-        _demon.facing_dir = -1
-        for _, a in pairs(_demon.animations) do
-            a:flipH()
-        end
+        _demon.facing_r = false
+        _demon.facing_dir = 1
     end
 
     return _demon
@@ -48,7 +49,7 @@ function demon:draw()
     --x = get_distance()
     --if is_debug_on then
      --   draw_hitbox(self)
-     spr(self.img, self.x, self.y)
+     sspr(96, 72, 8, 24, self.x, self.y, 8, 24, self.facing_r)
     --end
     --love.graphics.draw(image, self.x, self.y, 0, self.facing_dir, 1, 4, 1)
     --self.curr_animation:draw(thing_sheet, self.x, self.y, 0, self.facing_dir, 1, 16)
@@ -57,7 +58,7 @@ end
 
 function demon:update(dt)
     for a in all(self.curr_animation.f) do
-        self.img=a
+        
     end
 
     if self.curr_animation == self.animations["throw"] and self.curr_animation.done then
@@ -77,7 +78,7 @@ function demon:update(dt)
         self.tmr_move -= 1 -- math.clamp(0, self.tmr_move - 1, 90)
         self.tmr_throw -= 1 --math.clamp(0, self.tmr_throw - 1, 90)
         if self.tmr_move == 0 then
-            self:move(math.random(y_range[1], y_range[2]))
+            self:move( randi_rang(y_range[1], y_range[2]))
         end
 
         if self.tmr_throw == 0 then
@@ -86,7 +87,7 @@ function demon:update(dt)
 
         for _, l in ipairs(all_letters) do
             if is_colliding(l, self) then
-                table.remove_item(all_letters, l)
+                del(all_letters, l)
                 self:die()
             end
         end
@@ -111,6 +112,7 @@ function demon:crawl_on_screen()
     self.in_play = true
     self.curr_animation = self.animations["climb"]
     local _y = rnd({y_range[1], y_range[2]})
+    self.y = _y
     -- flux.to(self, 1, { y = _y }):ease("linear"):oncomplete(
     --     function()
     --         --self:move_up()
@@ -126,22 +128,20 @@ function demon:die()
     self.curr_animation = self.animations["climb"]
     --FIXME: Sometimes the "thing" will not slide down, it just disappears.
 
-    self.twn_move = flux.to(self, 0.5, { y = off_screen_y }):ease("linear"):oncomplete(
-        function()
+   
             thing_on_left = false
             thing_on_right = false
-            del(things, self)
+            del(demons, self)
             self.tmr_move = -1
             self.tmr_throw = -1
-        end
-    )
+   
 end
 
 function demon:throw_skull()
     self.curr_animation = self.animations["throw"]
     self.tmr_throw = 60
     --sfx_skull:play()
-    --spawn_skull(self.x-(17*self.facing_dir), self.y+7, player, self.facing_dir)
+    spawn_skull(self.x-(5*self.facing_dir), self.y, p1, self.facing_r)
 end
 
 function update_demon_spawner()
@@ -163,7 +163,7 @@ function spawn_demon()
         end
 
         local _demon = demon:new(_side)
-        table.insert(things, _demon)
+        add(demons, _demon)
         _demon:crawl_on_screen()
     else
         print_debug("there was already a thing on screen")
@@ -175,13 +175,13 @@ function init_demons()
 end
 
 function update_demons()
-    for d in all(things) do
+    for d in all(demons) do
         d:update()
     end
 end
 
 function draw_demons()
-    for d in all(things) do
+    for d in all(demons) do
         d:draw()
     end
 end

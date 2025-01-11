@@ -36,7 +36,10 @@ spawner = {
 
         if self.demon <= 0 then
             self.demon = randsec_rang(9, 20)
-            --spawn_thing()
+            spawn_demon()
         end
+
+
+        
     end
 }
