@@ -12,6 +12,7 @@ max_letter = 12
 ending = 0
 end_spr = { 64, 68, 72, 76, 128, 132, 136, 140 }
 objects = { back = {}, front = {} }
+
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
 intro_t = 60
@@ -38,13 +39,15 @@ function update_objects()
 end
 
 function draw_objects()
-    for o in all(objects.back) do
-        o:draw()
-    end
+    -- for o in all(objects.back) do
+    --     o:draw()
+    -- end
     for o in all(objects.front) do
         o:draw()
     end
 end
+
+
 
 function _init()
     poke(0x5f5c, 255)
@@ -177,6 +180,7 @@ function draw_play()
     for o in all(objects.back) do
         o:draw()
     end
+    --draw_wind()
     rectfill(0, 0, 127, 8, 0)
     rectfill(0, 120, 127, 128, 0)
     p1:draw()
@@ -280,6 +284,7 @@ end
 
 function advance_day()
     -- TODO: Set customer tables
+    set_customers()
     -- TODO: Reset player's health, position and letter stock
     deliveries_left = 10 --TODO: Maybe increase as the week goes on
     day += 1

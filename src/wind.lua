@@ -4,10 +4,6 @@ wind_line.__index=wind_line
 
 function wind_line:new()
     local _w=setmetatable({},wind_line)
-    --_w.x=0
-    --_w.sy=0
-    --_w.ey=0
-    --_w.t=0
     _w.speed=randi_rang(2,5)
     _w:reset()
     return _w
@@ -42,14 +38,3 @@ function init_wind()
     end
 end
 
-function draw_wind()
-    for w in all(wind) do
-        w:draw()
-    end
-end
-
-function update_wind()
-    for w in all(wind) do
-        w:update()
-    end
-end
