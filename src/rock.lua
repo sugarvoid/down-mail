@@ -22,6 +22,10 @@ function rock:update()
     if self.y>=130 then
         del(rocks,self)
     end
+    if is_colliding(p1, self) then
+        del(rocks, self)
+        p1:take_damage()
+    end
     if self.x<=5 then
     end
 end

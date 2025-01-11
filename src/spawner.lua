@@ -7,7 +7,7 @@ spawner = {
 
     update = function(self)
         self.rock_1 -= 1
-        --self.rock_2 -= 1
+        self.rock_2 -= 1
         self.mail_box -=  1
         self.demon -=  1
         self.pool -=  1
@@ -18,10 +18,10 @@ spawner = {
             self.rock_1 = randsec_rang(3, 10)
         end
 
-        --if self.rock_2 <= 0 then
-            --spawn_rock()
-            --self.rock_2 = randsec_rang(3, 10)
-        --end
+        if self.rock_2 <= 0 then
+            spawn_rock()
+            self.rock_2 = randsec_rang(3, 10)
+        end
 
         if self.pool <= 0 then
             spawn_pool()
@@ -39,6 +39,12 @@ spawner = {
         end
 
 
-        
+        -- update objects
+        for mb in all(mailboxes) do
+            mb:update()
+        end
+        for r in all(rocks) do
+            r:update()
+        end
     end
 }

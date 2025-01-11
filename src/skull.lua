@@ -1,4 +1,4 @@
-skulls={}
+--skulls={}
 
 skull={}
 skull.__index=skull
@@ -33,6 +33,11 @@ function skull:update()
     self.angle = angle_lerp(self.angle, _newangle, self.prox)
     self.x += self.speed * cos(self.angle)
     self.y += self.speed * sin(self.angle)
+
+    if is_colliding(p1, self) then
+        del(objects.front, self)
+        p1:take_damage()
+    end
     
 end
 

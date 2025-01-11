@@ -61,19 +61,9 @@ end
 function spawn_mbox()
     new_mb=mailbox:new()
     new_mb.x=rnd(avil_yx)
-    --flr(rnd(108))+10
     new_mb.y=128
     new_mb.facing_l=new_mb.x>128/2
     new_mb.b_col=rnd(cols)
-    -- if new_mb.col=="b" then
-    --     new_mb.b_col=12
-    -- elseif new_mb.col=="p" then
-    --     new_mb.b_col=14
-    -- elseif new_mb.col=="y" then
-    --     new_mb.b_col=10
-    -- elseif new_mb.col=="g" then
-    --     new_mb.b_col=11
-    -- end
     add(mailboxes,new_mb)
     reset_mb_timer()
 end

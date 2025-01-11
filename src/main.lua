@@ -136,25 +136,17 @@ function update_play()
         change_state(gamestates.gameover)
     end
 
-    for mb in all(mailboxes) do
-        mb:update()
-    end
+    
 
-    mb_spawn += 1
-    if mb_spawn >= next_mb then
-        spawn_mbox()
-        spawn_rock()
-        mb_spawn = 0
-        reset_mb_timer()
-    end
+    -- mb_spawn += 1
+    -- if mb_spawn >= next_mb then
+    --     spawn_mbox()
+    --     spawn_rock()
+    --     mb_spawn = 0
+    --     reset_mb_timer()
+    -- end
 
-    for r in all(rocks) do
-        r:update()
-        if is_colliding(p1, r) then
-            del(rocks, r)
-            p1:take_damage()
-        end
-    end
+    
     spawner:update()
 end
 
@@ -260,10 +252,12 @@ function draw_gui()
     for i = 1, max_letter, 1 do
         pset(70 + (2 * i), 124, 5)
         pset(70 + (2 * i), 125, 5)
+        pset(70 + (2 * i), 126, 5)
     end
     for i = 1, p1.letters, 1 do
         pset(70 + (2 * i), 124, 7)
         pset(70 + (2 * i), 125, 7)
+        pset(70 + (2 * i), 126, 7)
     end
     if reminder then
         for k, v in pairs(customers) do
