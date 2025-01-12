@@ -157,3 +157,9 @@ function u_letters()
         --l:draw()
     end
 end
+
+function draw_letters()
+    for l in all(letters) do
+        l:draw()
+    end
+end

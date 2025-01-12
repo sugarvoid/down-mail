@@ -8,7 +8,7 @@ next_mb = 0
 map_y = 0
 damaged_mb = 0
 game_over_x = -10
-max_letter = 12
+
 ending = 0
 end_spr = { 64, 68, 72, 76, 128, 132, 136, 140 }
 objects = { back = {}, front = {} }
@@ -56,6 +56,7 @@ function _init()
     misses = 0
     init_wind()
     reset_mb_timer()
+    p1 = init_player()
     
 end
 
@@ -95,6 +96,8 @@ function _update()
         update_day()
     elseif g_state == gamestates.game then
         update_play()
+    elseif g_state == gamestates.bonus then
+        update_bonus()
     elseif g_state == gamestates.gameover then
         update_gameover()
     end
@@ -111,6 +114,8 @@ function _draw()
         draw_day()
     elseif g_state == gamestates.game then
         draw_play()
+    elseif g_state == gamestates.bonus then
+        draw_bonus()
     elseif g_state == gamestates.gameover then
         draw_gameover()
     end
@@ -165,6 +170,13 @@ function update_day()
     end
 end
 
+function update_bonus()
+    p1:update()
+    u_letters()
+    update_rings()
+    spawner:update()
+end
+
 function draw_play()
     cls(0)
     for o in all(objects.back) do
@@ -185,9 +197,7 @@ function draw_play()
     for mb in all(mailboxes) do
         mb:draw()
     end
-    for l in all(letters) do
-        l:draw()
-    end
+    draw_letters()
     for r in all(rocks) do
         r:draw()
     end
@@ -225,6 +235,19 @@ function draw_intro()
     draw_skip()
 end
 
+function draw_bonus()
+    cls(0)
+    map(0, map_y)
+    p1:draw()
+    draw_rings()
+    
+
+    draw_letters()
+
+    
+    draw_gui()
+end
+
 function draw_day()
     cls(0)
     print(days[day], hcenter(days[day]), vcenter(days[day]), 7)
@@ -249,7 +272,7 @@ end
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
     print("score: " .. p1.score, 2, 123, 7)
-    for i = 1, max_letter, 1 do
+    for i = 1, p1.max_letter, 1 do
         pset(70 + (2 * i), 124, 5)
         pset(70 + (2 * i), 125, 5)
         pset(70 + (2 * i), 126, 5)

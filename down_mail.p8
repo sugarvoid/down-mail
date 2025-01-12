@@ -6,6 +6,7 @@ __lua__
 --by sugarvoid
 
 #include src/main.lua
+#include src/clothing.lua
 #include src/player.lua
 #include src/dog.lua
 #include src/wind.lua
@@ -25,6 +26,7 @@ __lua__
 #include src/hazard.lua
 #include src/spawner.lua
 #include src/skull.lua
+#include src/ring.lua
 
 __gfx__
 0000000000f00f0000f0000000f00f0000f0000000f00f0000f00000007777000077770000707000000000000000000044440000000444440000000000000000
