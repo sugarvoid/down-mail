@@ -28,17 +28,20 @@ function demon:new(side)
     _demon.h = 24
     _demon.y = off_screen_y
     _demon.curr_animation = _demon.animations["idle"]
+    _demon.skull_x=0
 
     _demon.facing_r = false
 
     if side == "right" then
         _demon.x = 117
         _demon.facing_r = true
-        _demon.facing_dir = -1
+        --_demon.facing_dir = -1
+        _demon.skull_x=117
     elseif side == "left" then
         _demon.x = 3
         _demon.facing_r = false
-        _demon.facing_dir = 1
+        --_demon.facing_dir = 1
+        _demon.skull_x=11
     end
 
     return _demon
@@ -54,6 +57,7 @@ function demon:draw()
     --love.graphics.draw(image, self.x, self.y, 0, self.facing_dir, 1, 4, 1)
     --self.curr_animation:draw(thing_sheet, self.x, self.y, 0, self.facing_dir, 1, 16)
     draw_hitbox(self)
+    pset(self.skull_x, self.y, 3) -- p1, self.facing_r))
 end
 
 function demon:update()
@@ -142,7 +146,7 @@ function demon:throw_skull()
     self.curr_animation = self.animations["throw"]
     self.tmr_throw = 60
     --sfx_skull:play()
-    spawn_skull(self.x-(5*self.facing_dir), self.y, p1, self.facing_r)
+    spawn_skull(self.skull_x, self.y, p1, self.facing_r)
 end
 
 function update_demon_spawner()

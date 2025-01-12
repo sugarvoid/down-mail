@@ -47,8 +47,6 @@ function draw_objects()
     end
 end
 
-
-
 function _init()
     poke(0x5f5c, 255)
     set_customers()
@@ -57,7 +55,6 @@ function _init()
     init_wind()
     reset_mb_timer()
     p1 = init_player()
-    
 end
 
 function _update()
@@ -65,9 +62,9 @@ function _update()
         if g_state == gamestates.title then
             g_state = gamestates.day_intro
         elseif g_state == gamestates.day_intro then
-            intro_t=0
+            intro_t = 0
         elseif g_state == gamestates.day_title then
-            day_t=0
+            day_t = 0
         elseif g_state == gamestates.game then
 
         elseif g_state == gamestates.gameover then
@@ -78,9 +75,9 @@ function _update()
         if g_state == gamestates.title then
 
         elseif g_state == gamestates.day_intro then
-            
+
         elseif g_state == gamestates.day_title then
-            
+
         elseif g_state == gamestates.game then
 
         elseif g_state == gamestates.gameover then
@@ -141,7 +138,7 @@ function update_play()
         change_state(gamestates.gameover)
     end
 
-    
+
 
     -- mb_spawn += 1
     -- if mb_spawn >= next_mb then
@@ -151,7 +148,7 @@ function update_play()
     --     reset_mb_timer()
     -- end
 
-    
+
     spawner:update()
 end
 
@@ -188,7 +185,7 @@ function draw_play()
     p1:draw()
 
     draw_particles()
-    
+
 
     for o in all(objects.front) do
         o:draw()
@@ -201,7 +198,7 @@ function draw_play()
     for r in all(rocks) do
         r:draw()
     end
-    
+
     map(0, map_y)
     draw_gui()
     draw_demons()
@@ -240,11 +237,11 @@ function draw_bonus()
     map(0, map_y)
     p1:draw()
     draw_rings()
-    
+
 
     draw_letters()
 
-    
+
     draw_gui()
 end
 
@@ -271,9 +268,9 @@ end
 
 function is_colliding_pro(a, b)
     if a.x < b.x + b.w and
-    a.x + a.w > b.x and
-    a.y < b.y + b.h and
-    a.y + a.h > b.y then
+        a.x + a.w > b.x and
+        a.y < b.y + b.h and
+        a.y + a.h > b.y then
         return true
     else
         return false
@@ -282,16 +279,18 @@ end
 
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
-    print("score: " .. p1.score, 2, 123, 7)
+    print("score:" .. p1.score, 3, 123, 7)
+    --print("CUSTOMERS", 30, 123, 7)
+    print("mail", 85, 123, 7)
     for i = 1, p1.max_letter, 1 do
-        pset(70 + (2 * i), 124, 5)
-        pset(70 + (2 * i), 125, 5)
-        pset(70 + (2 * i), 126, 5)
+        pset(100 + (2 * i), 124, 5)
+        pset(100 + (2 * i), 125, 5)
+        pset(100 + (2 * i), 126, 5)
     end
     for i = 1, p1.letters, 1 do
-        pset(70 + (2 * i), 124, 7)
-        pset(70 + (2 * i), 125, 7)
-        pset(70 + (2 * i), 126, 7)
+        pset(100 + (2 * i), 124, 7)
+        pset(100 + (2 * i), 125, 7)
+        pset(100 + (2 * i), 126, 7)
     end
     if reminder then
         for k, v in pairs(customers) do
@@ -301,11 +300,10 @@ function draw_gui()
             pal()
         end
     end
-    --   for i=1,#customers,1 do
-    --     pset(30+(2*i), 126, customers[i])
-    --     pset(30+(2*i), 126, customers[i])
-    --     pset(30+(2*i), 126, customers[i])
-    --   end
+
+    --rectfill(48, 124, 50, 126, customers[1])
+   -- rectfill(52, 124, 54, 126, customers[2])
+    --rectfill(56, 124, 58, 126, customers[3])
 end
 
 function advance_day()
@@ -384,5 +382,5 @@ function randsec_rang(l, h)
 end
 
 function draw_hitbox(o)
-    rect(o.x, o.y, (o.x+o.w), (o.y+o.h), 8)
+    rect(o.x, o.y, (o.x + o.w), (o.y + o.h), 8)
 end
