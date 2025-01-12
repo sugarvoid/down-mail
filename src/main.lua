@@ -269,7 +269,7 @@ function is_colliding(a, b)
     end
 end
 
-function is_touching(a, b)
+function is_colliding_pro(a, b)
     if a.x < b.x + b.w and
     a.x + a.w > b.x and
     a.y < b.y + b.h and

@@ -86,7 +86,7 @@ function demon:update()
         end
 
         for l in all(letters) do
-            if is_touching(l, self) then
+            if is_colliding_pro(l, self) then
                 sfx(10)
                 del(letters, l)
                 self:die()
