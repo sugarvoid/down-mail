@@ -42,14 +42,14 @@
 - [ ] Add more obstacles
 - [ ] Add bonus stage of some sort
 - [ ] Add annoying twister type enemy
-- [ ] Rename "Thing" to "Demon"
+- [x] Rename "Thing" to "Demon"
 - [ ] Make Thing throw more skulls the longer it is on screen
 - [ ] Finish making Thing sprites
-- [ ] Make player lose clothes when hit by skull or dog
-- [ ] Make chute tear apart after hit by all hazards
+- [x] Make player lose clothes when hit by skull or dog
+- [x] Make chute tear apart after hit by all hazards
 - [x] Increase base score based on distance the letter travels 
 - [ ] Figure out some sort of boss... Maybe
-- [ ] Make skulls go until hit wall (or go off screen)
+- [x] Make skulls go until hit wall (or go off screen)
 - [ ] Make demons throw skulls
 - [ ] Add branch to hazard table?
 - [x] Turn brach into pool
