@@ -53,7 +53,7 @@ function demon:draw()
     --end
     --love.graphics.draw(image, self.x, self.y, 0, self.facing_dir, 1, 4, 1)
     --self.curr_animation:draw(thing_sheet, self.x, self.y, 0, self.facing_dir, 1, 16)
-    
+    draw_hitbox(self)
 end
 
 function demon:update()
@@ -86,7 +86,7 @@ function demon:update()
         end
 
         for l in all(letters) do
-            if is_colliding(l, self) then
+            if is_touching(l, self) then
                 sfx(10)
                 del(letters, l)
                 self:die()

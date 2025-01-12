@@ -9,6 +9,8 @@ function init_player()
     _p.type="player"
     _p.x=54
     _p.y=54
+    _p.w=8
+    _p.h=8
     _p.score=0
     _p.letters=12
     _p.max_letter = 12
@@ -69,7 +71,7 @@ function player:draw()
         else
             spr(49,self.x,self.y)
         end
-
+        draw_hitbox(self)
 end
 
 function player:update()

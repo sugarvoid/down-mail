@@ -10,6 +10,8 @@ function letter:new()
     _l.y=0
     --_l.col=nil
     _l.t=0
+    _l.w=8
+    _l.h=8
     _l.score_mul=1
     _l.tossed=false
     _l.t_col=0

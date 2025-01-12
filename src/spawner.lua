@@ -12,7 +12,7 @@ spawner = {
             self.rock_2 -= 1
             self.mail_box -= 1
             self.demon -= 1
-            self.pool -= 1
+            -- self.pool -= 1
 
 
             if self.rock_1 <= 0 then

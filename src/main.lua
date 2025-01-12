@@ -269,6 +269,17 @@ function is_colliding(a, b)
     end
 end
 
+function is_touching(a, b)
+    if a.x < b.x + b.w and
+    a.x + a.w > b.x and
+    a.y < b.y + b.h and
+    a.y + a.h > b.y then
+        return true
+    else
+        return false
+    end
+end
+
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
     print("score: " .. p1.score, 2, 123, 7)
@@ -370,4 +381,8 @@ end
 
 function randsec_rang(l, h)
     return (flr(rnd(h)) + l) * 30
+end
+
+function draw_hitbox(o)
+    rect(o.x, o.y, (o.x+o.w), (o.y+o.h), 8)
 end
