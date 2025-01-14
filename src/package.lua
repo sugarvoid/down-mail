@@ -1,4 +1,3 @@
-packages={}
 
 package={}
 package.__index=package
@@ -21,8 +20,6 @@ function package:update()
         del(objects.front,self)
         p1:update_letters(5)
     end
-    if self.x<=5 then
-    end
 end
 
 function package:draw()
@@ -31,17 +28,8 @@ end
 
 
 function spawn_package()
-    --get random x
-    -- make sure there isn't already a mailbox with that x
-
-    --spawn package higher than 0,
-    -- show indicator
-    -- hide indicator
-
     new_package=package:new()
     new_package.x=rnd(avil_yx)
-    --flr(rnd(108))+10
-
     add(objects.front,new_package)
     reset_package_timer()
 end

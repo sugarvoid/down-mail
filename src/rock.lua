@@ -1,6 +1,4 @@
 
-rocks={}
-
 danger_y=10
 
 rock={}
@@ -20,10 +18,11 @@ function rock:update()
     self.y+=self.speed
     self.danger_time-=2
     if self.y>=130 then
-        del(rocks,self)
+        del(objects.front,self)
     end
     if is_colliding(p1, self) then
-        del(rocks, self)
+        explode(self.x,self.y,2,5,4)
+        del(objects.front, self)
         p1:take_damage()
     end
     if self.x<=5 then
@@ -53,7 +52,7 @@ function spawn_rock()
     new_rock.x=rnd(avil_yx)
     --flr(rnd(108))+10
 
-    add(rocks,new_rock)
+    add(objects.front,new_rock)
     reset_rock_timer()
 end
 

@@ -35,12 +35,10 @@ function demon:new(side)
     if side == "right" then
         _demon.x = 117
         _demon.facing_r = true
-        --_demon.facing_dir = -1
         _demon.skull_x=117
     elseif side == "left" then
         _demon.x = 3
         _demon.facing_r = false
-        --_demon.facing_dir = 1
         _demon.skull_x=11
     end
 
@@ -48,26 +46,11 @@ function demon:new(side)
 end
 
 function demon:draw()
-    --self.curr_animation:draw(thing_sheet, self.x, self.y)
-    --x = get_distance()
-    --if is_debug_on then
-     --   draw_hitbox(self)
      sspr(0, 64, 8, 24, self.x, self.y, 8, 24, self.facing_r)
-    --end
-    --love.graphics.draw(image, self.x, self.y, 0, self.facing_dir, 1, 4, 1)
-    --self.curr_animation:draw(thing_sheet, self.x, self.y, 0, self.facing_dir, 1, 16)
-    draw_hitbox(self)
-    pset(self.skull_x, self.y, 3) -- p1, self.facing_r))
 end
 
 function demon:update()
-    for a in all(self.curr_animation.f) do
-        
-    end
-
     if self.curr_animation == self.animations["throw"] and self.curr_animation.done then
-
-        --spawn_skull(self.x - (8 * self.facing_dir), self.y + 7, p1, self.facing_dir)
         --self.animations["throw"]:resume()
         --self.animations["throw"]:gotoFrame(1)
         self.curr_animation = self.animations["grow_head"]
@@ -105,12 +88,10 @@ end
 
 function demon:move(new_y)
     self.curr_animation = self.animations["climb"]
-    self.tw_move = flux.to(self, 1, { y = new_y }):ease("linear"):oncomplete(
-        function()
-            self.tmr_move = get_next_time(1, 4)
-            self.curr_animation = self.animations["idle"]
-        end
-    )
+    if self.y == new_y then
+        self.curr_animation = self.animations["idle"]
+        self.tmr_move = randsec_rang(1, 4)
+    end
 end
 
 function demon:crawl_on_screen()
@@ -118,28 +99,16 @@ function demon:crawl_on_screen()
     self.curr_animation = self.animations["climb"]
     local _y = rnd({y_range[1], y_range[2]})
     self.y = _y
-    -- flux.to(self, 1, { y = _y }):ease("linear"):oncomplete(
-    --     function()
-    --         --self:move_up()
-
-    --         self.curr_animation = self.animations["idle"]
-    --         self.tmr_move = get_next_time(1, 4)
-    --     end
-    -- )
 end
 
 function demon:die()
     del(demons, self)
     self.in_play = false
     --self.curr_animation = self.animations["climb"]
-    --FIXME: Sometimes the "thing" will not slide down, it just disappears.
-    print_debug("demon hit!")
     thing_on_left = false
     thing_on_right = false
-    
     self.tmr_move = -1
     self.tmr_throw = -1
-   
 end
 
 function demon:throw_skull()
@@ -175,9 +144,6 @@ function spawn_demon()
     end
 end
 
-function init_demons()
-
-end
 
 function update_demons()
     for d in all(demons) do

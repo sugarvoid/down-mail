@@ -13,8 +13,11 @@
 
 ## Goal :dart:
 
--   Deliver mail to correct mailboxes
+-   Deliver letters to correct customers
 -   Avoid falling objects
+-   Crashing into mailboxes is bad
+-   Dogs will slow you down
+-   See a demon, kill it with a letter quickly
 
 ## Controls :joystick:
 
@@ -50,7 +53,7 @@
 - [x] Increase base score based on distance the letter travels 
 - [ ] Figure out some sort of boss... Maybe
 - [x] Make skulls go until hit wall (or go off screen)
-- [ ] Make demons throw skulls
+- [x] Make demons throw skulls
 - [ ] Add branch to hazard table?
 - [x] Turn brach into pool
  

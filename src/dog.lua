@@ -29,7 +29,7 @@ function dog:update()
         spawn_bone(self)
     end
     local _newangle = atan2(self.target.x-self.x, self.target.y-self.y)
-    if _newangle <= 0.2 then
+    if _newangle <= 0.3 then
         local _t = self.target.type
         if _t == "bone" then
             del(objects.front, self)
@@ -37,6 +37,7 @@ function dog:update()
             spawn_heart(self.x,self.y)
         elseif _t == "player" then
             --TODO: add logic
+            p1.move_speed = 0.5
         end
     end
     

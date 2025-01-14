@@ -1,5 +1,3 @@
-hearts={}
-
 heart={}
 heart.__index=heart
 
@@ -11,9 +9,7 @@ function spawn_heart(x,y)
     _h.img=50
     _h.speed=3
     add(objects.front, _h)
-    --return _h
 end
-
 
 function heart:update()
     self.y-=self.speed

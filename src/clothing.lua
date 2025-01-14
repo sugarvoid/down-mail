@@ -20,6 +20,3 @@ function spawn_clothing(sprite)
     _c.fall_speed=2
     add(objects.front,_c)
 end
-
-
----------------------------------------------- 

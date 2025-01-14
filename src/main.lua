@@ -41,9 +41,6 @@ function update_objects()
 end
 
 function draw_objects()
-    -- for o in all(objects.back) do
-    --     o:draw()
-    -- end
     for o in all(objects.front) do
         o:draw()
     end
@@ -53,7 +50,6 @@ function _init()
     poke(0x5f5c, 255)
     set_customers()
     score = 0
-    misses = 0
     init_wind()
     reset_mb_timer()
     p1 = init_player()
@@ -105,8 +101,6 @@ end
 function _draw()
     if g_state == gamestates.title then
         draw_title()
-        --draw_day()
-        --draw_intro()
     elseif g_state == gamestates.day_intro then
         draw_intro()
     elseif g_state == gamestates.day_title then
@@ -123,7 +117,6 @@ function _draw()
         print("mem: " .. flr(stat(0)) .. "kb", 0, 0, 8)
         print("cpu: " .. stat(1) .. "%", 0, 8, 8)
     end
-    
 end
 
 function update_play()
@@ -131,29 +124,18 @@ function update_play()
     update_particles()
     update_objects()
     update_demons()
-    u_letters()
+    update_letters()
+
     map_y += .2
 
     if flr(map_y) == 17 then
         map_y = 0
     end
-    --moving the map up
-    --update_wind()
+
     if p1.life == 0 then
         sfx(11)
         change_state(gamestates.gameover)
     end
-
-
-
-    -- mb_spawn += 1
-    -- if mb_spawn >= next_mb then
-    --     spawn_mbox()
-    --     spawn_rock()
-    --     mb_spawn = 0
-    --     reset_mb_timer()
-    -- end
-
 
     spawner:update()
 end
@@ -161,7 +143,6 @@ end
 function update_intro()
     intro_t -= 1
     if intro_t <= 0 then
-        --g_state=gamestates.day_title
         change_state(gamestates.day_title)
     end
 end
@@ -185,18 +166,14 @@ function draw_play()
     for o in all(objects.back) do
         o:draw()
     end
-    --draw_wind()
     rectfill(0, 0, 127, 8, 0)
     rectfill(0, 120, 127, 128, 0)
     p1:draw()
-
     draw_particles()
-
 
     for o in all(objects.front) do
         o:draw()
     end
-
     for mb in all(mailboxes) do
         mb:draw()
     end
@@ -220,18 +197,16 @@ function draw_intro()
     cls()
     print("customers", hcenter("customers"), 45, 7)
     print("non-customers", hcenter("non-customers"), 80, 7)
-    --TODO: figure out how to center sprites
+
     for k, v in pairs(customers) do
         pal(6, v)
         sspr(32, 8, 8, 8, 25 + (16 * k), 52, 16, 16)
-        --spr(20, 30+(8*k), 52)
         pal()
     end
 
     for k, v in pairs(non_customers) do
         pal(6, v)
         sspr(32, 8, 8, 8, 25 + (16 * k), 88, 16, 16)
-        --spr(20, 30+(8*k), 88)
         pal()
     end
 
@@ -243,11 +218,7 @@ function draw_bonus()
     map(0, map_y)
     p1:draw()
     draw_rings()
-
-
     draw_letters()
-
-
     draw_gui()
 end
 
@@ -327,7 +298,6 @@ end
 
 function set_customers()
     shuffle(cols)
-
     customers = { cols[1], cols[2], cols[3] }
     non_customers = { cols[4], cols[5], cols[6] }
 end
