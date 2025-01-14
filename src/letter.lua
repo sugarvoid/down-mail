@@ -31,10 +31,12 @@ function letter:update()
                             explode(self.x, self.y, 2, 2, 7)
                         end
                     end
+                    
                 else
                     sfx(5)
+                    --deliveries[2] += 1
                 end
-
+                deliveries_left -= 1
                 del(letters,self)
             end
         end

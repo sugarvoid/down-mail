@@ -58,13 +58,33 @@ function mailbox:in_range(x_val)
     return x_val >= self.x - 10 and x_val <= self.x + 10
 end
 
+function is_customer(col)
+    for v in all(customers) do
+        print_debug(v)
+        if col == v then
+            return true
+        end
+    end
+    return false
+end
+
 function mailbox:on_good_letter(score)
     p1.score += (10 * flr(score))
-    deliveries_left -= 1
+
+    --FIXME: Not working
+    if is_customer(self.b_col) then
+        deliveries[1] += 1
+    else
+        deliveries[2] += 1
+    end
+    
     explode(self.x, self.y, 2, 6, self.b_col)
     self.empty = false
     self.speed = 4
     sfx(4)
+    if deliveries_left == 0 then
+        advance_day()
+    end
 end
 
 function spawn_mbox()

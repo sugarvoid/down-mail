@@ -31,6 +31,7 @@
 ## Progress
 
 ### Todo
+- [ ] Add advancing of day
 - [ ] Maker spawner class to handle hazards and mailboxes
 - [ ] Refactor input function. Group by input, not gamestate
 - [ ] Add floating numbers when getting score increase

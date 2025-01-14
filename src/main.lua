@@ -11,6 +11,8 @@ map_y = 0
 damaged_mb = 0
 game_over_x = -10
 
+deliveries={0,0}
+
 ending = 0
 end_spr = { 64, 68, 72, 76, 128, 132, 136, 140 }
 objects = { back = {}, front = {} }
@@ -19,17 +21,19 @@ day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
 intro_t = 60
 day_t = 60
+post_t = 60
 gamestates = {
     title = 0,
     day_intro = 1,
     day_title = 2,
     game = 3,
     bonus = 4,
-    gameover = 5
+    gameover = 5,
+    post_day = 6,
 }
 g_state = gamestates.title
 
-deliveries_left = 10
+deliveries_left = 4 --10
 
 function update_objects()
     for o in all(objects.front) do
@@ -63,6 +67,8 @@ function _update()
             intro_t = 0
         elseif g_state == gamestates.day_title then
             day_t = 0
+        elseif g_state == gamestates.post_day then
+            post_t = 0
         elseif g_state == gamestates.game then
 
         elseif g_state == gamestates.gameover then
@@ -93,6 +99,8 @@ function _update()
         update_play()
     elseif g_state == gamestates.bonus then
         update_bonus()
+    elseif g_state == gamestates.post_day then
+        update_postday()
     elseif g_state == gamestates.gameover then
         update_gameover()
     end
@@ -111,6 +119,8 @@ function _draw()
         draw_bonus()
     elseif g_state == gamestates.gameover then
         draw_gameover()
+    elseif g_state == gamestates.post_day then
+        draw_postday()
     end
 
     if is_debug then
@@ -144,6 +154,13 @@ function update_intro()
     intro_t -= 1
     if intro_t <= 0 then
         change_state(gamestates.day_title)
+    end
+end
+
+function update_postday()
+    post_t -= 1
+    if post_t <= 0 then
+        change_state(gamestates.day_intro)
     end
 end
 
@@ -222,6 +239,16 @@ function draw_bonus()
     draw_gui()
 end
 
+function draw_postday()
+    cls(0)
+
+    print("deliveries: "..deliveries_left, 20, 40, 7)
+    print("customers: " .. deliveries[1], 20, 48, 7)
+    print("non-customers: "..deliveries[2], 20, 48+8, 7)
+
+    draw_skip()
+end
+
 function draw_day()
     cls(0)
     print(days[day], hcenter(days[day]), vcenter(days[day]), 7)
@@ -289,10 +316,14 @@ function advance_day()
     -- TODO: Reset player's health, position and letter stock
     deliveries_left = 10 --TODO: Maybe increase as the week goes on
     day += 1
-    g_state = gamestates.day_intro
+    g_state = gamestates.post_day
+    deliveries={0,0}
 end
 
 function change_state(new_state)
+    intro_t = 60
+    day_t = 60
+    post_t = 60
     g_state = new_state
 end
 
