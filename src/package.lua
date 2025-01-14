@@ -8,7 +8,7 @@ function package:new()
     _r.x=0
     _r.y=-40
     _r.img=41
-    _r.speed=rnd({1,2,3})
+    _r.speed=1
     return _r
 end
 

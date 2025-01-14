@@ -52,7 +52,7 @@ function demon:draw()
     --x = get_distance()
     --if is_debug_on then
      --   draw_hitbox(self)
-     sspr(96, 72, 8, 24, self.x, self.y, 8, 24, self.facing_r)
+     sspr(0, 64, 8, 24, self.x, self.y, 8, 24, self.facing_r)
     --end
     --love.graphics.draw(image, self.x, self.y, 0, self.facing_dir, 1, 4, 1)
     --self.curr_animation:draw(thing_sheet, self.x, self.y, 0, self.facing_dir, 1, 16)
@@ -180,7 +180,6 @@ function init_demons()
 end
 
 function update_demons()
-    print_debug(#demons)
     for d in all(demons) do
         d:update()
     end

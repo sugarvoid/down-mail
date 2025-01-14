@@ -1,3 +1,5 @@
+is_debug=false
+
 cols = { 12, 14, 10, 11, 9, 6 } --"b","y","p","g"}
 customers = {}
 non_customers = {}
@@ -116,8 +118,12 @@ function _draw()
     elseif g_state == gamestates.gameover then
         draw_gameover()
     end
-    print("mem: " .. flr(stat(0)) .. "kb", 0, 0, 8)
-    print("cpu: " .. stat(1) .. "%", 0, 8, 8)
+
+    if is_debug then
+        print("mem: " .. flr(stat(0)) .. "kb", 0, 0, 8)
+        print("cpu: " .. stat(1) .. "%", 0, 8, 8)
+    end
+    
 end
 
 function update_play()

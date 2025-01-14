@@ -45,22 +45,31 @@ function letter:update()
             -- end
             if is_colliding(self,mb) and not mb.damaged and mb.empty  then
                 if mb.customer then
-                    local _c
-                    if mb.col=="b" then
-                        _c=12
-                    elseif mb.col=="y" then
-                        _c=10
+                    if self.x < mb.x then
+                        if mb.facing_l then
+                            mb:on_good_letter(self.score_mul)
+                        else
+                            explode(self.x, self.y, 2, 2, 7)
+                        end
+                    else
+                        if not mb.facing_l then
+                            mb:on_good_letter(self.score_mul)
+                        else
+                            explode(self.x, self.y, 2, 2, 7)
+                        end
                     end
+                    
+                   
 
-                    p1.score+=(10 * flr(self.score_mul))
-                    deliveries_left-=1
+                    -- p1.score+=(10 * flr(self.score_mul))
+                    -- deliveries_left-=1
 
-                    --print_debug(flr(self.score_mul))
+                    -- --print_debug(flr(self.score_mul))
 
-                    explode(mb.x, mb.y, 2, 6,mb.b_col)
-                    mb.empty=false
-                    mb.speed=4
-                    sfx(4)
+                    -- explode(mb.x, mb.y, 2, 6,mb.b_col)
+                    -- mb.empty=false
+                    -- mb.speed=4
+                    -- sfx(4)
                 else
                     
                     sfx(5)
