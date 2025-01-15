@@ -10,6 +10,8 @@ next_mb = 0
 map_y = 0
 damaged_mb = 0
 game_over_x = -10
+score=0
+bouns_timer=0
 
 deliveries={0,0}
 
@@ -19,9 +21,9 @@ objects = { back = {}, front = {} }
 
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
-intro_t = 60
-day_t = 60
-post_t = 60
+intro_t = 30*4
+day_t = 30*3
+post_t = 30*5
 gamestates = {
     title = 0,
     day_intro = 1,
@@ -120,6 +122,8 @@ function check_input()
             post_t = 0
         elseif g_state == gamestates.game then
             p1:throw()
+        elseif g_state == gamestates.bonus then
+            p1:throw()
         elseif g_state == gamestates.gameover then
             restart_game()
         end
@@ -196,8 +200,12 @@ function update_day()
 end
 
 function update_bonus()
+    bouns_timer-=1
+    if bouns_timer <= 0 then
+        advance_day()
+    end
     p1:update()
-    u_letters()
+    update_letters()
     update_rings()
     spawner:update()
 end
@@ -307,7 +315,7 @@ end
 
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
-    print("score:" .. p1.score, 3, 123, 7)
+    print("score:" .. score, 3, 123, 7)
     --print("CUSTOMERS", 30, 123, 7)
     print("mail", 85, 123, 7)
     for i = 1, p1.max_letter, 1 do
@@ -336,7 +344,9 @@ end
 
 function advance_day()
     -- TODO: Set customer tables
+    rings={}
     set_customers()
+    p1 = init_player()
     -- TODO: Reset player's health, position and letter stock
     deliveries_left = 10 --TODO: Maybe increase as the week goes on
     day += 1
@@ -414,4 +424,10 @@ end
 
 function draw_hitbox(o)
     rect(o.x, o.y, (o.x + o.w), (o.y + o.h), 8)
+end
+
+function goto_bonus()
+    spawner.reset()
+    bouns_timer=30*30
+    change_state(gamestates.bonus)
 end

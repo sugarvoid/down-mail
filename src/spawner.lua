@@ -59,5 +59,12 @@ spawner = {
                 self.ring = randsec_rang(2, 4)
             end
         end
+    end,
+    reset=function()
+        mailboxes={}
+        rocks={}
+        objects.front={}
+        objects.back={}
+        all_particles={}
     end
 }

@@ -68,8 +68,8 @@ function is_customer(col)
     return false
 end
 
-function mailbox:on_good_letter(score)
-    p1.score += (10 * flr(score))
+function mailbox:on_good_letter(_score)
+    score += (10 * flr(_score))
 
     --FIXME: Not working
     if is_customer(self.b_col) then
@@ -83,7 +83,8 @@ function mailbox:on_good_letter(score)
     self.speed = 4
     sfx(4)
     if deliveries_left == 0 then
-        advance_day()
+        goto_bonus()
+        --advance_day()
     end
 end
 

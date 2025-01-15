@@ -5,9 +5,10 @@ ring.__index = ring
 
 function ring:new()
     local _r = setmetatable({}, ring)
-    _r.x = 0
-    _r.y = 130
+    _r.x = randi_rang(20, 100)
+    _r.y = randi_rang(40, 60)
     _r.img = 141
+    _r.life= randsec_rang(3, 5)
     _r.size = 0
     _r.value = 10
     _r.color = 11
@@ -16,21 +17,21 @@ function ring:new()
 end
 
 function ring:update()
-    self.y -= self.speed
+    self.life-=1
 
-    if self.y <= -20 then
+    if self.life <= 0 then
         del(rings, self)
     end
 
-    if is_colliding(p1, self) then
-        del(rings, self)
-        sfx(4)
-        p1.score += (self.value / 2)
-    end
+    -- if is_colliding(p1, self) then
+    --     del(rings, self)
+    --     sfx(4)
+    --     p1.score += (self.value / 2)
+    -- end
 
     for l in all(letters) do
         if is_colliding(self, l) then
-            p1.score += self.value
+            score += self.value
             explode(l.x, l.y, 2, 6, self.col)
             sfx(4)
             del(letters, l)
@@ -54,13 +55,13 @@ function spawn_ring(size)
     new_ring = ring:new()
     new_ring.size = size
     new_ring.h = 8 * size
-    new_ring.x = rnd(avil_yx)
+    --new_ring.x = rnd(avil_yx)
     add(rings, new_ring)
     reset_ring_timer()
 end
 
 function reset_ring_timer()
-    next_ring = 70 + rnd(10)
+    next_ring = randsec_rang(2, 5)
 end
 
 function draw_rings()

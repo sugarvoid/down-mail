@@ -1,6 +1,8 @@
 player = {}
 player.__index = player
 
+local max_health = 3
+
 function init_player()
     local _p = setmetatable({}, player)
     _p.type = "player"
@@ -8,7 +10,7 @@ function init_player()
     _p.y = 54
     _p.w = 8
     _p.h = 8
-    _p.score = 0
+    --_p.score = 0
     _p.letters = 12
     _p.max_letter = 12
     _p.selected_letter = 0
@@ -20,7 +22,7 @@ function init_player()
     _p.is_chute_open = true
     _p.chute_spr = nil
     _p.chute_open_spr = 7
-    _p.life = 3
+    _p.life = max_health
     _p.thr_anmi = 0
     _p.move_speed = 1.5
     return _p
@@ -69,8 +71,6 @@ function player:draw()
 end
 
 function player:update()
-    print_debug(self.move_speed)
-    --self:get_input()
     if self.is_chute_open then
         self.chute_spr = self.chute_open_spr
     else
@@ -148,3 +148,11 @@ function player:throw()
         sfx(6)
     end
 end
+
+-- function player:reset()
+--     self.life = max_health
+--     self.x=54
+--     self.y=54
+--     self.is_alive=true
+--     self.letters = 12
+-- end
