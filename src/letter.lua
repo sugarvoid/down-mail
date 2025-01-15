@@ -43,8 +43,10 @@ function letter:update()
 
 
         if self.x<=8 or self.x>=120 then
-            spawn_dog(self.x,self.y)
-            sfx(14)
+            if g_state == gamestates.game then
+                spawn_dog(self.x,self.y)
+                sfx(14)
+            end
             explode(self.x,self.y,3,4,4)
             del(letters,self)
         end

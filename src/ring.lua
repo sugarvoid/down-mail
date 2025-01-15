@@ -34,7 +34,7 @@ function ring:update()
             score += self.value
             explode(l.x, l.y, 2, 6, self.col)
             sfx(4)
-            del(letters, l)
+            --del(letters, l)
             del(rings, self)
         end
     end
