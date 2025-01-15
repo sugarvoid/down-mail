@@ -31,7 +31,7 @@ gamestates = {
     gameover = 5,
     post_day = 6,
 }
-g_state = gamestates.title
+g_state=nil
 
 deliveries_left = 4 --10
 
@@ -50,44 +50,23 @@ function draw_objects()
     end
 end
 
-function _init()
-    poke(0x5f5c, 255)
+function restart_game()
     set_customers()
     score = 0
     init_wind()
     reset_mb_timer()
     p1 = init_player()
+    change_state(gamestates.title)
+end
+
+function _init()
+    poke(0x5f5c, 255)
+    restart_game()
 end
 
 function _update()
-    if btnp(🅾️) then
-        if g_state == gamestates.title then
-            g_state = gamestates.day_intro
-        elseif g_state == gamestates.day_intro then
-            intro_t = 0
-        elseif g_state == gamestates.day_title then
-            day_t = 0
-        elseif g_state == gamestates.post_day then
-            post_t = 0
-        elseif g_state == gamestates.game then
-
-        elseif g_state == gamestates.gameover then
-
-        end
-    end
-    if btnp(❎) then
-        if g_state == gamestates.title then
-
-        elseif g_state == gamestates.day_intro then
-
-        elseif g_state == gamestates.day_title then
-
-        elseif g_state == gamestates.game then
-
-        elseif g_state == gamestates.gameover then
-
-        end
-    end
+    check_input()
+    
 
 
     if g_state == gamestates.title then
@@ -126,6 +105,51 @@ function _draw()
     if is_debug then
         print("mem: " .. flr(stat(0)) .. "kb", 0, 0, 8)
         print("cpu: " .. stat(1) .. "%", 0, 8, 8)
+    end
+end
+
+function check_input()
+    if btnp(🅾️) then
+        if g_state == gamestates.title then
+            g_state = gamestates.day_intro
+        elseif g_state == gamestates.day_intro then
+            intro_t = 0
+        elseif g_state == gamestates.day_title then
+            day_t = 0
+        elseif g_state == gamestates.post_day then
+            post_t = 0
+        elseif g_state == gamestates.game then
+            p1:throw()
+        elseif g_state == gamestates.gameover then
+            restart_game()
+        end
+    end
+
+    if btn(➡️) then
+        p1:move("r")
+    elseif btn(⬅️) then
+        p1:move("l")
+    end
+
+
+    if btnp(⬆️) then
+        p1.is_chute_open = true
+    elseif btnp(⬇️) then
+        p1.is_chute_open = false
+    end
+
+    if btnp(❎) then
+        if g_state == gamestates.title then
+
+        elseif g_state == gamestates.day_intro then
+
+        elseif g_state == gamestates.day_title then
+
+        elseif g_state == gamestates.game then
+            spawn_package()
+        elseif g_state == gamestates.gameover then
+
+        end
     end
 end
 

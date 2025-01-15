@@ -1,4 +1,3 @@
-dogs={}
 
 dog={}
 dog.__index=dog

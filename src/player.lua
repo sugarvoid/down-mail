@@ -26,26 +26,36 @@ function init_player()
     return _p
 end
 
-function player:get_input()
-    if btn(➡️) then
-        self.x += self.move_speed
-        self.facing_l = false
-    elseif btn(⬅️) then
+-- function player:get_input()
+--     -- if btn(➡️) then
+--     --     self.x += self.move_speed
+--     --     self.facing_l = false
+--     -- elseif btn(⬅️) then
+--     --     self.x -= self.move_speed
+--     --     self.facing_l = true
+--     -- end
+
+--     -- if btnp(⬆️) then
+--     --     self.is_chute_open = true
+--     -- elseif btnp(⬇️) then
+--     --     self.is_chute_open = false
+--     -- end
+
+--     -- if btnp(🅾️) then
+--     --     --self:throw()
+--     -- end
+--     -- if btnp(❎) then
+--     --     spawn_package()
+--     -- end
+-- end
+
+function player:move(dir)
+    if dir == "l" then
         self.x -= self.move_speed
         self.facing_l = true
-    end
-
-    if btnp(⬆️) then
-        self.is_chute_open = true
-    elseif btnp(⬇️) then
-        self.is_chute_open = false
-    end
-
-    if btnp(🅾️) then
-        self:throw()
-    end
-    if btnp(❎) then
-        spawn_package()
+    elseif dir == "r" then
+        self.x += self.move_speed
+        self.facing_l = false
     end
 end
 
@@ -60,7 +70,7 @@ end
 
 function player:update()
     print_debug(self.move_speed)
-    self:get_input()
+    --self:get_input()
     if self.is_chute_open then
         self.chute_spr = self.chute_open_spr
     else
