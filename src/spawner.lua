@@ -4,7 +4,7 @@ spawner = {
     pool = randsec_rang(3, 10),
     mail_box = 140,
     demon = 140,
-    ring = randsec_rang(3, 5),
+    ring = 30, --randsec_rang(3, 5),
 
     update = function(self)
         if g_state == gamestates.game then
@@ -56,7 +56,8 @@ spawner = {
 
             if self.ring <= 0 then
                 spawn_ring(2)
-                self.ring = randsec_rang(2, 4)
+                self.ring = 60
+                --self.ring = randsec_rang(2, 4)
             end
         end
     end,
