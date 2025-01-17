@@ -9,6 +9,8 @@ local demons = {}
 local thing_on_left = false
 local thing_on_right = false
 
+local throw_times = {30*5,30*3,30*2}
+
 function demon:new(side)
     local _demon = setmetatable({}, demon)
     _demon.animations = {
@@ -18,11 +20,12 @@ function demon:new(side)
         grow_head = {f={}, loop=true, done=false},
     }
     _demon.img=14
+    _demon.agro=1
     _demon.next_y = 50
-    _demon.tmr_move = -1
-    _demon.tmr_throw = 100
+    _demon.tmr_move = randsec_rang(6, 7)
+    _demon.tmr_throw = throw_times[_demon.agro]
     _demon.timer = 150
-    _demon.time_on_screen = nil -- TODO: longer on screen, throw more often
+    _demon.time_on_screen = 0
     _demon.in_play = false
     _demon.w = 8
     _demon.h = 24
@@ -62,10 +65,18 @@ function demon:update()
     end
 
     if self.in_play then
+        self.time_on_screen+=1
         self.tmr_move -= 1 -- math.clamp(0, self.tmr_move - 1, 90)
         self.tmr_throw -= 1 --math.clamp(0, self.tmr_throw - 1, 90)
-        if self.tmr_move == 0 then
+
+        if self.tmr_move <= 0 then
             self:move( randi_rang(y_range[1], y_range[2]))
+        end
+
+        if self.time_on_screen == 30*5 then
+            self.time_on_screen = 0
+            self.agro = mid(1, self.agro + 1, #throw_times)
+            self.tmr_throw=throw_times[self.agro]
         end
 
         if self.tmr_throw == 0 then
@@ -88,9 +99,10 @@ end
 
 function demon:move(new_y)
     self.curr_animation = self.animations["climb"]
+    self.y = new_y
     if self.y == new_y then
         self.curr_animation = self.animations["idle"]
-        self.tmr_move = randsec_rang(1, 4)
+        self.tmr_move = randsec_rang(4, 8)
     end
 end
 
@@ -113,7 +125,7 @@ end
 
 function demon:throw_skull()
     self.curr_animation = self.animations["throw"]
-    self.tmr_throw = 60
+    self.tmr_throw = throw_times[self.agro]
     --sfx_skull:play()
     spawn_skull(self.skull_x, self.y, p1, self.facing_r)
 end

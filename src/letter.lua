@@ -17,7 +17,7 @@ function letter:update()
 
         for mb in all(mailboxes) do
             if is_colliding(self,mb) and not mb.damaged and mb.empty  then
-                if mb.customer then
+                --if mb.customer then
                     if self.x < mb.x then
                         if mb.facing_l then
                             mb:on_good_letter(self.score_mul)
@@ -32,10 +32,10 @@ function letter:update()
                         end
                     end
                     
-                else
-                    sfx(5)
+                --else
+                    --sfx(5)
                     --deliveries[2] += 1
-                end
+                --end
                 deliveries_left -= 1
                 del(letters,self)
             end

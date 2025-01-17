@@ -189,6 +189,7 @@ function update_postday()
     post_t -= 1
     if post_t <= 0 then
         change_state(gamestates.day_intro)
+        deliveries={0,0}
     end
 end
 
@@ -269,6 +270,9 @@ function draw_bonus()
     draw_rings()
     draw_letters()
     draw_gui()
+   -- rect(10, 10, 118, 14, 5)
+    --rectfill(11, 11, 117, 13, 7)
+    print(flr(bouns_timer/30), 20, 20, 5)
 end
 
 function draw_postday()
@@ -351,7 +355,7 @@ function advance_day()
     deliveries_left = 10 --TODO: Maybe increase as the week goes on
     day += 1
     g_state = gamestates.post_day
-    deliveries={0,0}
+    
 end
 
 function change_state(new_state)

@@ -8,7 +8,7 @@ function mailbox:new()
     _m.x = 0
     _m.y = 0
     _m.col = nil
-    _m.customer = true
+    --_m.customer = true
     _m.facing_l = nil
     _m.b_col = 0
     _m.img = 21
@@ -60,11 +60,13 @@ end
 
 function is_customer(col)
     for v in all(customers) do
-        print_debug(v)
+        --print_debug(v)
         if col == v then
+            print_debug("yes")
             return true
         end
     end
+    print_debug("no")
     return false
 end
 
@@ -74,14 +76,16 @@ function mailbox:on_good_letter(_score)
     --FIXME: Not working
     if is_customer(self.b_col) then
         deliveries[1] += 1
+        sfx(4)
     else
         deliveries[2] += 1
+        sfx(5)
     end
     
     explode(self.x, self.y, 2, 6, self.b_col)
     self.empty = false
     self.speed = 4
-    sfx(4)
+    
     if deliveries_left == 0 then
         goto_bonus()
         --advance_day()

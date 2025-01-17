@@ -10,6 +10,7 @@ function ring:new()
     _r.img = 141
     _r.life= randsec_rang(3, 5)
     _r.size = 0
+    _r.w=8
     _r.value = 10
     _r.color = 11
     _r.speed = rnd({ 1, 2})
@@ -30,7 +31,7 @@ function ring:update()
     -- end
 
     for l in all(letters) do
-        if is_colliding(self, l) then
+        if is_colliding_pro(self, l) then
             score += self.value
             explode(l.x, l.y, 2, 6, self.col)
             sfx(4)
@@ -44,11 +45,14 @@ function ring:draw()
     pal(7, self.color)
     if self.size == 1 then
         spr(self.img, self.x, self.y)
+        self.h = 8
     else
         spr(140, self.x, self.y, 1, 1, false, false)
         spr(140, self.x, self.y+8, 1, 1, false, true)
+        self.h = 16
     end
     pal()
+    draw_hitbox(self)
 end
 
 function spawn_ring(size)
@@ -67,6 +71,7 @@ end
 function draw_rings()
     for r in all(rings) do
         r:draw()
+        
     end
 end
 
