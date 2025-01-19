@@ -4,13 +4,14 @@ danger_y=10
 rock={}
 rock.__index=rock
 
-function rock:new()
+function rock:new(lane)
     local _r=setmetatable({},rock)
-    _r.x=0
+    _r.x=lanes[lane][1]
     _r.y=-40
     _r.img=rnd({26,27})
     _r.speed=rnd({2,3,4})
     _r.danger_time=20
+    _r.lane=lane
     return _r
 end
 
@@ -19,9 +20,11 @@ function rock:update()
     self.danger_time-=2
     if self.y>=130 then
         del(objects.front,self)
+        update_lane(self.lane, false)
     end
     if is_colliding(p1, self) then
         explode(self.x,self.y,2,5,4)
+        update_lane(self.lane, false)
         del(objects.front, self)
         p1:take_damage()
     end
@@ -40,7 +43,7 @@ function rock:in_range()
     return x_val>=self.x-10 and x_val<=self.x+10
 end
 
-function spawn_rock()
+function spawn_rock(lane)
     --get random x
     -- make sure there isn't already a mailbox with that x
 
@@ -48,8 +51,9 @@ function spawn_rock()
     -- show indicator
     -- hide indicator
 
-    new_rock=rock:new()
-    new_rock.x=rnd(avil_yx)
+    new_rock=rock:new(lane)
+    update_lane(lane, true)
+    --new_rock.x=rnd(avil_yx)
     --flr(rnd(108))+10
 
     add(objects.front,new_rock)

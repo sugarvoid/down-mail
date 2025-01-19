@@ -3,21 +3,44 @@ mailboxes = {}
 mailbox = {}
 mailbox.__index = mailbox
 
-function mailbox:new()
-    local _m = setmetatable({}, mailbox)
-    _m.x = 0
-    _m.y = 0
-    _m.col = nil
-    --_m.customer = true
-    _m.facing_l = nil
-    _m.b_col = 0
-    _m.img = 21
-    _m.empty = true
-    _m.damaged = false
-    _m.dir = 0
-    _m.dx = 1.3
-    _m.speed = rnd({ 0.5, 0.7, 0.9 })
-    return _m
+local mb_spr = 21
+
+-- function mailbox:new(lane)
+--     local _m = setmetatable({}, mailbox)
+--     _mb.x = 0
+--     _mb.y = 0
+--     --_m.col = nil
+--     _mb.lane=lane
+--     _mb.facing_l = nil
+--     _mb.b_col = 0
+--     _mb.img = 21
+--     _mb.empty = true
+--     _mb.damaged = false
+--     _mb.dir = 0
+--     _mb.dx = 1.3
+--     _mb.speed = rnd({ 0.5, 0.7, 0.9 })
+--     return _m
+-- end
+
+function spawn_mbox(lane)
+    local _mb = setmetatable({}, mailbox)
+    _mb.lane = lane
+    _mb.x = lanes[lane][1]
+    _mb.y = 128
+    _mb.facing_l = _mb.x > 128 / 2
+    _mb.b_col = rnd(cols)
+    --_mb.img = 21
+    _mb.empty = true
+    _mb.damaged = false
+    _mb.dir = 0
+    _mb.dx = 1.3
+    _mb.speed = rnd({ 0.5, 0.7, 0.9 })
+
+
+    
+    add(mailboxes, _mb)
+    update_lane(lane, true)
+    reset_mb_timer()
 end
 
 function mailbox:update()
@@ -32,8 +55,9 @@ function mailbox:update()
         self.speed = -2
     end
 
-    if self.y <= -16 then
+    if self.y <= -16 or self.y >= 130 then
         del(mailboxes, self)
+        update_lane(self.lane, false)
     end
 
     if is_colliding(p1, self) and not self.damaged then
@@ -49,7 +73,7 @@ end
 
 function mailbox:draw()
     pal(6, self.b_col)
-    spr(self.img, self.x, self.y, 1, 1, self.facing_l)
+    spr(mb_spr, self.x, self.y, 1, 1, self.facing_l)
     pal()
     spr(37, self.x, self.y + 8)
 end
@@ -92,15 +116,7 @@ function mailbox:on_good_letter(_score)
     end
 end
 
-function spawn_mbox()
-    new_mb = mailbox:new()
-    new_mb.x = rnd(avil_yx)
-    new_mb.y = 128
-    new_mb.facing_l = new_mb.x > 128 / 2
-    new_mb.b_col = rnd(cols)
-    add(mailboxes, new_mb)
-    reset_mb_timer()
-end
+
 
 function reset_mb_timer()
     next_mb = 70 + rnd(10)

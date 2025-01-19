@@ -1,3 +1,24 @@
+local avil_yx = { 7, 16, 25, 34, 43, 52, 61, 70, 79, 88, 97, 106, 113 }
+
+
+lanes = {
+    { 7,   false },
+    { 16,  false },
+    { 25,  false },
+    { 34,  false },
+    { 43,  false },
+    { 52,  false },
+    { 61,  false },
+    { 70,  false },
+    { 79,  false },
+    { 88,  false },
+    { 97,  false },
+    { 106, false },
+    { 113, false }
+}
+
+
+
 spawner = {
     rock_1 = randsec_rang(3, 10),
     rock_2 = randsec_rang(3, 10),
@@ -12,27 +33,23 @@ spawner = {
             self.rock_2 -= 1
             self.mail_box -= 1
             self.demon -= 1
-            -- self.pool -= 1
 
 
             if self.rock_1 <= 0 then
-                spawn_rock()
-                --self.rock_1 = randi_rang(3, 10)
+                local lane = get_available_lane()
+                spawn_rock(lane)
                 self.rock_1 = randsec_rang(3, 10)
             end
 
             if self.rock_2 <= 0 then
-                spawn_rock()
+                local lane = get_available_lane()
+                spawn_rock(lane)
                 self.rock_2 = randsec_rang(3, 10)
             end
 
-            if self.pool <= 0 then
-                spawn_pool()
-                self.pool = randsec_rang(3, 10)
-            end
-
             if self.mail_box <= 0 then
-                spawn_mbox()
+                local lane = get_available_lane()
+                spawn_mbox(lane)
                 self.mail_box = randsec_rang(2, 4)
             end
 
@@ -61,11 +78,24 @@ spawner = {
             end
         end
     end,
-    reset=function()
-        mailboxes={}
-        rocks={}
-        objects.front={}
-        objects.back={}
-        all_particles={}
-    end
+    reset = function()
+        mailboxes = {}
+        rocks = {}
+        objects.front = {}
+        objects.back = {}
+        all_particles = {}
+    end,
 }
+
+
+function get_available_lane()
+    local _idx
+    repeat
+        _idx = flr(rnd(#lanes)) + 1
+    until lanes[_idx][2] == false
+    return _idx
+end
+
+function update_lane(lane, occupied)
+    lanes[lane][2] = occupied
+end
