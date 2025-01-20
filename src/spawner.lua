@@ -1,8 +1,7 @@
-local avil_yx = { 7, 16, 25, 34, 43, 52, 61, 70, 79, 88, 97, 106, 113 }
+--local avil_yx = { 7, 16, 25, 34, 43, 52, 61, 70, 79, 88, 97, 106, 113 }
 
 
 lanes = {
-    { 7,   false },
     { 16,  false },
     { 25,  false },
     { 34,  false },
@@ -14,18 +13,15 @@ lanes = {
     { 88,  false },
     { 97,  false },
     { 106, false },
-    { 113, false }
 }
-
 
 
 spawner = {
     rock_1 = randsec_rang(3, 10),
     rock_2 = randsec_rang(3, 10),
-    pool = randsec_rang(3, 10),
     mail_box = 140,
     demon = 140,
-    ring = 30, --randsec_rang(3, 5),
+    ring = 30,
 
     update = function(self)
         if g_state == gamestates.game then
@@ -33,7 +29,6 @@ spawner = {
             self.rock_2 -= 1
             self.mail_box -= 1
             self.demon -= 1
-
 
             if self.rock_1 <= 0 then
                 local lane = get_available_lane()
@@ -59,8 +54,6 @@ spawner = {
             end
 
 
-
-
             -- update objects
             for mb in all(mailboxes) do
                 mb:update()
@@ -72,15 +65,20 @@ spawner = {
             self.ring -= 1
 
             if self.ring <= 0 then
-                spawn_ring(2)
+                spawn_ring()
                 self.ring = 60
                 --self.ring = randsec_rang(2, 4)
+            end
+
+            for r in all(rings) do
+                r:update()
             end
         end
     end,
     reset = function()
         mailboxes = {}
         rocks = {}
+        rings={}
         objects.front = {}
         objects.back = {}
         all_particles = {}

@@ -220,7 +220,7 @@ function update_bonus()
     end
     p1:update()
     update_letters()
-    update_rings()
+    --update_rings()
     spawner:update()
 end
 
@@ -467,5 +467,11 @@ function update_gameover()
     game_over_x+=1
     if game_over_x==130 then
         game_over_x=-30
+    end
+end
+
+function in_range(x_val)
+    if x_val>=1 and x_val<=20 then
+        print 'it is!'
     end
 end

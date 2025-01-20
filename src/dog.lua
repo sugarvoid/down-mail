@@ -4,7 +4,6 @@ dog.__index=dog
 
 function spawn_dog(x,y)
     local _d=setmetatable({},dog)
-    
     _d.x=x
     _d.y=y
     _d.timer=150

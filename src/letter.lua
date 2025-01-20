@@ -7,8 +7,8 @@ function letter:update()
         self.score_mul+=0.2
         self.x+=self.speed*self.dir
         self.t=(self.t+1)%5
-        turn=self.t==0
-        if turn then
+        rotate=self.t==0
+        if rotate then
             self.img+=1
         end
         if self.img==35 then
@@ -17,7 +17,6 @@ function letter:update()
 
         for mb in all(mailboxes) do
             if is_colliding(self,mb) and not mb.damaged and mb.empty  then
-                --if mb.customer then
                     if self.x < mb.x then
                         if mb.facing_l then
                             mb:on_good_letter(self.score_mul)
@@ -31,11 +30,6 @@ function letter:update()
                             explode(self.x, self.y, 2, 2, 7)
                         end
                     end
-                    
-                --else
-                    --sfx(5)
-                    --deliveries[2] += 1
-                --end
                 deliveries_left -= 1
                 del(letters,self)
             end

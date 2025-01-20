@@ -78,9 +78,9 @@ function mailbox:draw()
     spr(37, self.x, self.y + 8)
 end
 
-function mailbox:in_range(x_val)
-    return x_val >= self.x - 10 and x_val <= self.x + 10
-end
+-- function mailbox:in_range(x_val)
+--     return x_val >= self.x - 10 and x_val <= self.x + 10
+-- end
 
 function is_customer(col)
     for v in all(customers) do

@@ -1,23 +1,6 @@
 
 all_particles={}
 
--- function add_particle(x,y,life,dx,dy,grav,grow,shrink,r, c)
---     local _p={
---         x=x,
---         y=y,
---         timer=0,
---         life=life,
---         dx=dx,
---         dy=dy,
---         grav=grav,
---         shrink=shrink,
---         grow=grow,
---         r=r,
---         c=c,
---     }
---     add(all_particles,_p)
--- end
-
 function update_particles()
     for p in all(all_particles) do
         p.timer+=1
