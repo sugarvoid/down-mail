@@ -76,6 +76,7 @@ end
 
 function _init()
     poke(0x5f5c, 255)
+    menuitem(3, "toogle hint", function(b) if (b&32 > 0) then reminder = not reminder end end)
     restart_game()
 end
 
@@ -229,8 +230,7 @@ function draw_play()
     for o in all(objects.back) do
         o:draw()
     end
-    rectfill(0, 0, 127, 8, 0)
-    rectfill(0, 120, 127, 128, 0)
+    
     p1:draw()
     draw_particles()
 
@@ -349,7 +349,7 @@ function draw_gui()
         for k, v in pairs(customers) do
             pal(6, v)
             --sspr(32, 8, 8, 8, 25+(4*k), 88, 4, 4)
-            spr(21, 30 + (8 * k), 122)
+            spr(21, 38 + (8 * k), 122)
             pal()
         end
     end
