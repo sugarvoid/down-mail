@@ -9,7 +9,7 @@ local demons = {}
 local thing_on_left = false
 local thing_on_right = false
 
-local throw_times = {30*5,30*3,30*2}
+local throw_times = {30*3,30*2,30*1}
 
 function demon:new(side)
     local _demon = setmetatable({}, demon)

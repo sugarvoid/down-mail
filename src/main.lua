@@ -12,6 +12,7 @@ damaged_mb = 0
 game_over_x = -10
 score=0
 bouns_timer=0
+hint_txt= "hint off"
 
 deliveries={0,0}
 
@@ -35,7 +36,7 @@ gamestates = {
 }
 g_state=nil
 
-deliveries_left = 4 --10
+deliveries_left = 10
 
 end_text_l1=""
 end_text_l2=""
@@ -76,8 +77,25 @@ end
 
 function _init()
     poke(0x5f5c, 255)
-    menuitem(3, "toogle hint", function(b) if (b&32 > 0) then reminder = not reminder end end)
+    --menuitem(1, "select me", my_menu_item)
+    menuitem(3, hint_txt, my_menu_item) 
     restart_game()
+end
+
+function my_menu_item(b)
+    if (b&1 > 0) toggle_hint()
+    if (b&2 > 0) toggle_hint()
+    return true -- stay open
+end
+
+function toggle_hint()
+    reminder = not reminder
+    if reminder then
+        hint_txt = "hint on"
+    else
+        hint_txt= "hint off"
+    end
+    menuitem(_,hint_txt)
 end
 
 function _update()

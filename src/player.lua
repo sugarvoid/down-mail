@@ -110,7 +110,6 @@ function player:update()
             self.thr_anmi -= 1
         end
         if self.thr_anmi == 0 then
-            --and self.img==self.sprite_b then
             self.img = self.sprite_a
         else
             self.img = self.sprite_b

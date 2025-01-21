@@ -1,7 +1,7 @@
 # Down Mail
 
 ## Project Status
-- Currently working on this.
+- Currently working on getting this to a "finished" state.
 
 ## Gameplay
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)
@@ -31,10 +31,7 @@
 ## Progress
 
 ### Todo
-- [ ] Maker spawner class to handle hazards and mailboxes
 - [ ] Refactor input function. Group by input, not gamestate
-- [ ] Create way to add to letters
-- [ ] Add bonus stage of some sort
+- [ ] Create way to add to letters ammo
 - [ ] Add annoying twister type enemy
 - [ ] Finish making Thing sprites
-- [ ] Figure out some sort of boss... Maybe

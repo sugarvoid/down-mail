@@ -19,8 +19,8 @@ lanes = {
 spawner = {
     rock_1 = randsec_rang(3, 10),
     rock_2 = randsec_rang(3, 10),
-    mail_box = 140,
-    demon = 140,
+    mail_box = 40,
+    demon = 30*10,
     ring = 30,
 
     update = function(self)
