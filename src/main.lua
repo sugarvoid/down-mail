@@ -22,8 +22,8 @@ objects = { back = {}, front = {} }
 
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
-intro_t = 30*4
-day_t = 30*3
+intro_t = 30*6
+day_t = 30*6
 post_t = 30*8
 gamestates = {
     title = 0,
@@ -42,13 +42,10 @@ end_text_l1=""
 end_text_l2=""
 
 endings={
-    "local mailman goes missing",
-    "local mailman turns to red splat",
-    "local mailman missing",
-    "[demon attacked]",
-    "dog claims mailman's life",
-    "mailman fired",
-    "mailman quits, buys city",
+    {"city mourns", "loss of mailman"},
+    {"local mailman", "goes missing"},
+    {"mailman fired", ""},
+    {"mailman quits,", "buys city"},
 }
 
 function update_objects()
@@ -77,14 +74,13 @@ end
 
 function _init()
     poke(0x5f5c, 255)
-    --menuitem(1, "select me", my_menu_item)
-    menuitem(3, hint_txt, my_menu_item) 
+    menuitem(3, hint_txt, my_menu_item)
     restart_game()
 end
 
 function my_menu_item(b)
-    if (b&1 > 0) toggle_hint()
-    if (b&2 > 0) toggle_hint()
+    if b&1 > 0 then toggle_hint() end
+    if b&2 > 0 then toggle_hint() end
     return true -- stay open
 end
 
@@ -380,6 +376,9 @@ end
 function advance_day()
     -- TODO: Set customer tables
     rings={}
+    intro_t = 30*6
+    day_t = 30*6
+    post_t = 30*6
     set_customers()
     p1 = init_player()
     -- TODO: Reset player's health, position and letter stock
@@ -390,9 +389,7 @@ function advance_day()
 end
 
 function change_state(new_state)
-    intro_t = 60
-    day_t = 60
-    post_t = 60
+    
     g_state = new_state
 end
 
@@ -478,7 +475,13 @@ function draw_gameover()
     spr(end_spr[1],80,34,4,4)
     pal()
     print("game over",game_over_x,1,0)
-    print(end_text_l1,10,40,0)
+    print(end_text[1],10,40+5,0)
+    print(end_text[2],10,48+5,0)
+    fillp(▤)
+    rectfill(10, 70, 76, 95, 0)
+    rectfill(10, 100, 90, 110, 0)
+    rectfill(90, 70, 110, 90, 6)
+    fillp()
 end
 
 function update_gameover()
