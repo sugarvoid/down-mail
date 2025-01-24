@@ -1,74 +1,80 @@
-letter={}
-letter.__index=letter
-letters={}
+letter = {}
+letter.__index = letter
+letters = {}
 
 function letter:update()
     if self.tossed then
-        self.score_mul+=0.2
-        self.x+=self.speed*self.dir
-        self.t=(self.t+1)%5
-        rotate=self.t==0
+        self.score_mul += 0.2
+
+        self.speed  = mid(-4, self.speed + self.accel, 4)
+
+
+        self.x += self.speed * self.dir
+
+        ---self.x += self.speed * self.dir
+
+        self.t = (self.t + 1) % 5
+        rotate = self.t == 0
         if rotate then
-            self.img+=1
+            self.img += 1
         end
-        if self.img==35 then
-            self.img=32
+        if self.img == 35 then
+            self.img = 32
         end
 
         for mb in all(mailboxes) do
-            if is_colliding(self,mb) and not mb.damaged and mb.empty  then
-                    if self.x < mb.x then
-                        if mb.facing_l then
-                            mb:on_good_letter(self.score_mul)
-                        else
-                            explode(self.x, self.y, 2, 2, 7)
-                        end
+            if is_colliding(self, mb) and not mb.damaged and mb.empty then
+                if self.x < mb.x then
+                    if mb.facing_l then
+                        mb:on_good_letter(self.score_mul)
                     else
-                        if not mb.facing_l then
-                            mb:on_good_letter(self.score_mul)
-                        else
-                            explode(self.x, self.y, 2, 2, 7)
-                        end
+                        explode(self.x, self.y, 2, 2, 7)
                     end
+                else
+                    if not mb.facing_l then
+                        mb:on_good_letter(self.score_mul)
+                    else
+                        explode(self.x, self.y, 2, 2, 7)
+                    end
+                end
                 deliveries_left -= 1
-                del(letters,self)
+                del(letters, self)
             end
         end
 
 
-        if self.x<=8 or self.x>=120 then
+        if self.x <= 8 or self.x >= 120 then
             if g_state == gamestates.game then
-                spawn_dog(self.x,self.y)
+                spawn_dog(self.x, self.y)
                 sfx(14)
             end
-            explode(self.x,self.y,3,4,4)
-            del(letters,self)
+            explode(self.x, self.y, 3, 4, 4)
+            del(letters, self)
         end
-
     else
-        self.y-=2
+        self.y -= 2
     end
 end
 
 function letter:draw()
-    spr(self.img,self.x,self.y)
+    spr(self.img, self.x, self.y)
 end
 
 function spawn_letter(_dir)
-    local _l=setmetatable({},letter)
-    _l.t=0
-    _l.w=8
-    _l.h=8
-    _l.score_mul=1
-    _l.tossed=true
-    _l.img=32
-    _l.dir=_dir
-    _l.speed=3
-    _l.x=p1.x
-    _l.y=p1.y
-    add(letters,_l)
+    local _l = setmetatable({}, letter)
+    _l.t = 0
+    _l.w = 8
+    _l.h = 8
+    _l.score_mul = 1
+    _l.tossed = true
+    _l.img = 32
+    _l.dir = _dir
+    _l.speed = 1
+    _l.accel = 0.5
+    _l.x = p1.x
+    _l.y = p1.y
+    add(letters, _l)
 end
-
 
 function update_letters()
     for l in all(letters) do
