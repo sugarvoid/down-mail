@@ -37,5 +37,5 @@ Missing a letter will cause a twiswter to spawn, lower player mobility for a sho
 ### Todo
 - [ ] Refactor input function. Group by input, not gamestate
 - [ ] Create way to add to letters ammo
-- [ ] Add annoying twister type enemy
+- [ ] Add player death animation 
 - [ ] Finish making Thing sprites

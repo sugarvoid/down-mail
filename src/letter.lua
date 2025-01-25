@@ -43,7 +43,7 @@ function letter:update()
         end
 
 
-        if self.x <= 8 or self.x >= 120 then
+        if self.x <= 0 or self.x >= 120 then
             if g_state == gamestates.game then
                 spawn_dog(self.x, self.y)
                 sfx(14)

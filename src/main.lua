@@ -198,10 +198,7 @@ function update_play()
         map_y = 0
     end
 
-    if p1.life == 0 then
-        sfx(11)
-        change_state(gamestates.gameover)
-    end
+    
 
     spawner:update()
 end
@@ -299,7 +296,7 @@ function draw_bonus()
     draw_gui()
    -- rect(10, 10, 118, 14, 5)
     --rectfill(11, 11, 117, 13, 7)
-    print(flr(bouns_timer/30), 20, 20, 5)
+    print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
 end
 
 function draw_postday()

@@ -4,23 +4,12 @@ danger_y=10
 rock={}
 rock.__index=rock
 
--- function rock:new(lane)
---     local _r=setmetatable({},rock)
---     _r.x=lanes[lane][1]
---     _r.y=-40
---     _r.img=rnd({26,27})
---     _r.speed=rnd({2,3,4})
---     _r.danger_time=20
---     _r.lane=lane
---     return _r
--- end
-
 function spawn_rock(lane)
     local _r=setmetatable({},rock)
     _r.x=lanes[lane][1]
     _r.y=-40
     _r.img=rnd({26,27})
-    _r.speed=rnd({2,3,4})
+    _r.speed=rnd({3,4,5})
     _r.danger_time=20
     _r.lane=lane
     update_lane(lane, true)
@@ -48,14 +37,3 @@ function rock:draw()
         spr(25,self.x,danger_y)
     end
 end
-
--- function rock:in_range()
---     return x_val>=self.x-10 and x_val<=self.x+10
--- end
-
-
-
--- function reset_rock_timer()
---     next_rock=70+rnd(10)
--- end
-

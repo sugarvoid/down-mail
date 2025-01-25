@@ -130,6 +130,11 @@ function player:take_damage()
     sfx(16)
     self.sprite_a += 2
     self.sprite_b += 2
+    if p1.life == 0 then
+        sfx(11)
+        end_text = endings[2]
+        change_state(gamestates.gameover)
+    end
 end
 
 function player:throw()

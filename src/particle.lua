@@ -34,7 +34,7 @@ function explode(x,y,r,num,c)
             x=x,
             y=y,
             timer=0,
-            life=30+rnd(20),
+            life=30+rnd(10),
             dx=rnd(2)-1,
             dy=rnd(2)-1,
             grav=false,

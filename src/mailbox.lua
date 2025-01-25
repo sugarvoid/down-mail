@@ -3,25 +3,6 @@ mailboxes = {}
 mailbox = {}
 mailbox.__index = mailbox
 
-local mb_spr = 21
-
--- function mailbox:new(lane)
---     local _m = setmetatable({}, mailbox)
---     _mb.x = 0
---     _mb.y = 0
---     --_m.col = nil
---     _mb.lane=lane
---     _mb.facing_l = nil
---     _mb.b_col = 0
---     _mb.img = 21
---     _mb.empty = true
---     _mb.damaged = false
---     _mb.dir = 0
---     _mb.dx = 1.3
---     _mb.speed = rnd({ 0.5, 0.7, 0.9 })
---     return _m
--- end
-
 function spawn_mbox(lane)
     local _mb = setmetatable({}, mailbox)
     _mb.lane = lane
@@ -29,7 +10,7 @@ function spawn_mbox(lane)
     _mb.y = 128
     _mb.facing_l = _mb.x > 128 / 2
     _mb.b_col = rnd(cols)
-    --_mb.img = 21
+    _mb.img = 21
     _mb.empty = true
     _mb.damaged = false
     _mb.dir = 0
@@ -46,15 +27,6 @@ end
 function mailbox:update()
     self.y -= self.speed
 
-    if self.empty and not self.damaged then
-        self.img = 21
-    elseif not self.empty and not self.damaged then
-        self.img = 20
-    elseif self.damaged then
-        self.img = 22
-        self.speed = -2
-    end
-
     if self.y <= -16 or self.y >= 130 then
         del(mailboxes, self)
         update_lane(self.lane, false)
@@ -63,6 +35,8 @@ function mailbox:update()
     if is_colliding(p1, self) and not self.damaged then
         sfx(3)
         self.damaged = true
+        self.img = 22
+        self.speed = -2
         damaged_mb += 1
         if damaged_mb == 3 then
             end_text = endings[4]
@@ -73,7 +47,7 @@ end
 
 function mailbox:draw()
     pal(6, self.b_col)
-    spr(mb_spr, self.x, self.y, 1, 1, self.facing_l)
+    spr(self.img, self.x, self.y, 1, 1, self.facing_l)
     pal()
     spr(37, self.x, self.y + 8)
 end
@@ -95,6 +69,7 @@ function is_customer(col)
 end
 
 function mailbox:on_good_letter(_score)
+    self.img = 20
     score += (10 * flr(_score))
 
     --FIXME: Not working
