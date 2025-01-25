@@ -29,7 +29,7 @@
 
 Demons will throws skulls at player.
 Rocks will fall from the top.
-Missing a letter will cause a twiswter to spawn, lower player mobility for a short time.
+Missing a letter will cause a twister to spawn, lower player mobility for a short time.
 
 
 ## Progress
