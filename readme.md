@@ -1,4 +1,5 @@
 # Down Mail
+[Play in browser](https://sugarvoid.itch.io/down-mail)
 
 ## Project Status
 - Currently working on getting this to a "finished" state.
@@ -16,7 +17,7 @@
 -   Deliver letters to correct customers
 -   Avoid falling objects
 -   Crashing into mailboxes is bad
--   Dogs will slow you down
+-   Twisters will slow you down
 -   See a demon, kill it with a letter quickly
 
 ## Controls :joystick:
@@ -36,6 +37,6 @@ Missing a letter will cause a twister to spawn, lower player mobility for a shor
 
 ### Todo
 - [ ] Refactor input function. Group by input, not gamestate
-- [ ] Create way to add to letters ammo
+- [x] Create way to add to letters ammo
 - [ ] Add player death animation 
 - [ ] Finish making Thing sprites
