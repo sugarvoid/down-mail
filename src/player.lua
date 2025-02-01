@@ -25,6 +25,7 @@ function init_player()
     _p.life = max_health
     _p.thr_anmi = 0
     _p.move_speed = 1.5
+    _p.twister_count = 0
     return _p
 end
 

@@ -20,8 +20,9 @@ spawner = {
     rock_1 = randsec_rang(3, 10),
     rock_2 = randsec_rang(3, 10),
     mail_box = 40,
-    demon = 30*10,
+    demon = 30 * 10,
     ring = 30,
+    ammo = 30,
 
     update = function(self)
         if g_state == gamestates.game then
@@ -29,6 +30,7 @@ spawner = {
             self.rock_2 -= 1
             self.mail_box -= 1
             self.demon -= 1
+            self.ammo -= 1
 
             if self.rock_1 <= 0 then
                 local lane = get_available_lane()
@@ -51,6 +53,12 @@ spawner = {
             if self.demon <= 0 then
                 self.demon = randsec_rang(9, 20)
                 spawn_demon()
+            end
+
+            if self.ammo <= 0 then
+                self.ammo = randsec_rang(10, 20)
+
+                spawn_package()
             end
 
 
@@ -78,7 +86,7 @@ spawner = {
     reset = function()
         mailboxes = {}
         rocks = {}
-        rings={}
+        rings = {}
         objects.front = {}
         objects.back = {}
         all_particles = {}

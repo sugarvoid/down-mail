@@ -178,7 +178,7 @@ function check_input()
         elseif g_state == gamestates.day_title then
 
         elseif g_state == gamestates.game then
-            spawn_package()
+            --spawn_package()
         elseif g_state == gamestates.gameover then
 
         end
