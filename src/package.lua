@@ -34,7 +34,7 @@ function package:draw()
 end
 
 function spawn_package()
-    if p1.letters < p1.max_letter / 3 then
+    if p1.letters < p1.max_letter / 6 then
         new_package = package:new()
         new_package.x = rnd(avil_yx)
         add(objects.front, new_package)

@@ -15,7 +15,7 @@ function spawn_mbox(lane)
     _mb.damaged = false
     _mb.dir = 0
     _mb.dx = 1.3
-    _mb.speed = rnd({ 0.5, 0.7, 0.9 })
+    _mb.speed = rnd({0.7, 0.9, 1.4 })
 
 
     

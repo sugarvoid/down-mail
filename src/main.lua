@@ -64,6 +64,7 @@ function draw_objects()
 end
 
 function restart_game()
+    spawner:reset()
     set_customers()
     score = 0
     init_wind()
@@ -301,6 +302,9 @@ end
 
 function draw_postday()
     cls(0)
+    
+    all_particles = {}
+    letters = {}
 
     print("deliveries: "..deliveries_left, 20, 40, 7)
     print("customers: " .. deliveries[1], 20, 48, 7)
@@ -382,6 +386,7 @@ function advance_day()
     deliveries_left = 10 --TODO: Maybe increase as the week goes on
     day += 1
     g_state = gamestates.post_day
+    init_wind()
     
 end
 
