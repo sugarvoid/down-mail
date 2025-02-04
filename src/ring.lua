@@ -18,7 +18,7 @@ end
 
 function spawn_ring()
     local _r = setmetatable({}, ring)
-    _r.x = randi_rang(20, 100)
+    _r.x = randi_rang(20, 90)
     _r.y = randi_rang(40, 60)
     _r.img = 141
     _r.life = randsec_rang(3, 5)

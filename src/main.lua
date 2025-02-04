@@ -1,4 +1,4 @@
-is_debug=false
+is_debug = false
 
 cols = { 12, 14, 10, 11, 9, 6 } --"b","y","p","g"}
 customers = {}
@@ -10,11 +10,11 @@ next_mb = 0
 map_y = 0
 damaged_mb = 0
 game_over_x = -10
-score=0
-bouns_timer=0
-hint_txt= "hint off"
+score = 0
+bouns_timer = 0
+hint_txt = "hint off"
 
-deliveries={0,0}
+deliveries = { 0, 0 }
 
 ending = 0
 end_spr = { 64, 68, 72, 76, 128, 132, 136, 140 }
@@ -22,9 +22,9 @@ objects = { back = {}, front = {} }
 
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
-intro_t = 30*6
-day_t = 30*6
-post_t = 30*8
+intro_t = 30 * 6
+day_t = 30 * 6
+post_t = 30 * 8
 gamestates = {
     title = 0,
     day_intro = 1,
@@ -34,18 +34,18 @@ gamestates = {
     gameover = 5,
     post_day = 6,
 }
-g_state=nil
+g_state = nil
 
 deliveries_left = 10
 
-end_text_l1=""
-end_text_l2=""
+end_text_l1 = ""
+end_text_l2 = ""
 
-endings={
-    {"city mourns", "loss of mailman"},
-    {"local mailman", "goes missing"},
-    {"mailman fired", ""},
-    {"mailman quits,", "buys city"},
+endings = {
+    { "city mourns",    "loss of mailman" },
+    { "local mailman",  "goes missing" },
+    { "mailman fired",  "" },
+    { "mailman quits,", "buys city" },
 }
 
 function update_objects()
@@ -64,6 +64,10 @@ function draw_objects()
 end
 
 function restart_game()
+    day = 1
+    intro_t = 30 * 6
+    day_t = 30 * 6
+    post_t = 30 * 8
     spawner:reset()
     set_customers()
     score = 0
@@ -80,8 +84,8 @@ function _init()
 end
 
 function my_menu_item(b)
-    if b&1 > 0 then toggle_hint() end
-    if b&2 > 0 then toggle_hint() end
+    if b & 1 > 0 then toggle_hint() end
+    if b & 2 > 0 then toggle_hint() end
     return true -- stay open
 end
 
@@ -90,14 +94,14 @@ function toggle_hint()
     if reminder then
         hint_txt = "hint on"
     else
-        hint_txt= "hint off"
+        hint_txt = "hint off"
     end
-    menuitem(_,hint_txt)
+    menuitem(_, hint_txt)
 end
 
 function _update()
     check_input()
-    
+
 
 
     if g_state == gamestates.title then
@@ -199,7 +203,7 @@ function update_play()
         map_y = 0
     end
 
-    
+
 
     spawner:update()
 end
@@ -215,7 +219,7 @@ function update_postday()
     post_t -= 1
     if post_t <= 0 then
         change_state(gamestates.day_intro)
-        deliveries={0,0}
+        deliveries = { 0, 0 }
     end
 end
 
@@ -227,7 +231,7 @@ function update_day()
 end
 
 function update_bonus()
-    bouns_timer-=1
+    bouns_timer -= 1
     if bouns_timer <= 0 then
         advance_day()
     end
@@ -242,7 +246,7 @@ function draw_play()
     for o in all(objects.back) do
         o:draw()
     end
-    
+
     p1:draw()
     draw_particles()
 
@@ -290,25 +294,26 @@ end
 
 function draw_bonus()
     cls(0)
-    map(0, map_y)
+    map(16, 0)
     p1:draw()
     draw_rings()
     draw_letters()
     draw_gui()
-   -- rect(10, 10, 118, 14, 5)
-    --rectfill(11, 11, 117, 13, 7)
-    print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
+    rectfill(17, 10, 17 + flr(bouns_timer / 30) * 3, 13, 3)
+    rect(17, 9, 109, 14, 7)
+    print("bonus", 50, 3, 7)
+    -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
 end
 
 function draw_postday()
     cls(0)
-    
+
     all_particles = {}
     letters = {}
 
-    print("deliveries: "..deliveries_left, 20, 40, 7)
+    print("deliveries: " .. deliveries_left, 20, 40, 7)
     print("customers: " .. deliveries[1], 20, 48, 7)
-    print("non-customers: "..deliveries[2], 20, 48+8, 7)
+    print("non-customers: " .. deliveries[2], 20, 48 + 8, 7)
 
     draw_skip()
 end
@@ -370,16 +375,16 @@ function draw_gui()
     end
 
     --rectfill(48, 124, 50, 126, customers[1])
-   -- rectfill(52, 124, 54, 126, customers[2])
+    -- rectfill(52, 124, 54, 126, customers[2])
     --rectfill(56, 124, 58, 126, customers[3])
 end
 
 function advance_day()
     -- TODO: Set customer tables
-    rings={}
-    intro_t = 30*6
-    day_t = 30*6
-    post_t = 30*6
+    rings = {}
+    intro_t = 30 * 6
+    day_t = 30 * 6
+    post_t = 30 * 6
     set_customers()
     p1 = init_player()
     -- TODO: Reset player's health, position and letter stock
@@ -387,11 +392,9 @@ function advance_day()
     day += 1
     g_state = gamestates.post_day
     init_wind()
-    
 end
 
 function change_state(new_state)
-    
     g_state = new_state
 end
 
@@ -462,23 +465,21 @@ end
 
 function goto_bonus()
     spawner.reset()
-    bouns_timer=30*30
+    bouns_timer = 30 * 30
     change_state(gamestates.bonus)
 end
 
-
-
 function draw_gameover()
     cls(7)
-    spr(192,32,8,8,2)
-    print("$0.25",6,10,5)
-    rect(4,30,124,120,5)
-    pal(14,0)
-    spr(end_spr[1],80,34,4,4)
+    spr(192, 32, 8, 8, 2)
+    print("$0.25", 6, 10, 5)
+    rect(4, 30, 124, 120, 5)
+    pal(14, 0)
+    spr(end_spr[1], 80, 34, 4, 4)
     pal()
-    print("game over",game_over_x,1,0)
-    print(end_text[1],10,40+5,0)
-    print(end_text[2],10,48+5,0)
+    print("game over", game_over_x, 1, 0)
+    print(end_text[1], 10, 40 + 5, 0)
+    print(end_text[2], 10, 48 + 5, 0)
     fillp(▤)
     rectfill(10, 70, 76, 95, 0)
     rectfill(10, 100, 90, 110, 0)
@@ -487,14 +488,14 @@ function draw_gameover()
 end
 
 function update_gameover()
-    game_over_x+=1
-    if game_over_x==130 then
-        game_over_x=-30
+    game_over_x += 1
+    if game_over_x == 130 then
+        game_over_x = -30
     end
 end
 
 function in_range(x_val)
-    if x_val>=1 and x_val<=20 then
+    if x_val >= 1 and x_val <= 20 then
         print 'it is!'
     end
 end

@@ -1,4 +1,3 @@
---local avil_yx = { 7, 16, 25, 34, 43, 52, 61, 70, 79, 88, 97, 106, 113 }
 
 
 lanes = {
@@ -14,7 +13,6 @@ lanes = {
     { 97,  false },
     { 106, false },
 }
-
 
 spawner = {
     rock_1 = randsec_rang(3, 10),
@@ -56,11 +54,9 @@ spawner = {
             end
 
             if self.ammo <= 0 then
-                self.ammo = randsec_rang(10, 20)
-
+                self.ammo = randsec_rang(6, 12)
                 spawn_package()
             end
-
 
             -- update objects
             for mb in all(mailboxes) do
@@ -75,7 +71,6 @@ spawner = {
             if self.ring <= 0 then
                 spawn_ring()
                 self.ring = 60
-                --self.ring = randsec_rang(2, 4)
             end
 
             for r in all(rings) do

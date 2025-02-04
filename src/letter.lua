@@ -5,14 +5,8 @@ letters = {}
 function letter:update()
     if self.tossed then
         self.score_mul += 0.2
-
         self.speed  = mid(-4, self.speed + self.accel, 4)
-
-
         self.x += self.speed * self.dir
-
-        ---self.x += self.speed * self.dir
-
         self.t = (self.t + 1) % 5
         rotate = self.t == 0
         if rotate then
@@ -37,7 +31,7 @@ function letter:update()
                         explode(self.x, self.y, 2, 2, 7)
                     end
                 end
-                deliveries_left -= 1
+                
                 del(letters, self)
             end
         end
@@ -45,7 +39,7 @@ function letter:update()
 
         if self.x <= 0 or self.x >= 120 then
             if g_state == gamestates.game then
-                spawn_dog(self.x, self.y)
+                spawn_twister(self.x, self.y)
                 sfx(14)
             end
             explode(self.x, self.y, 3, 4, 4)

@@ -71,6 +71,7 @@ end
 function mailbox:on_good_letter(_score)
     self.img = 20
     score += (10 * flr(_score))
+    deliveries_left -= 1
 
     --FIXME: Not working
     if is_customer(self.b_col) then

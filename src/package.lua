@@ -11,6 +11,8 @@ function package:new()
     _r.step = 5
     _r.img = 41
     _r.speed = 1
+    _r.amplitude = 10
+    _r.frequency = 0.02
     return _r
 end
 
@@ -19,13 +21,16 @@ function package:update()
     if (self.tick == 0) then
         self.frame = self.frame % #self.anim + 1
     end
+
+    self.x = 64 + sin(self.frequency * self.y) * self.amplitude
+
     self.y -= self.speed
     if self.y <= -4 then
         del(objects.front, self)
     end
     if is_colliding(p1, self) then
         del(objects.front, self)
-        p1:update_letters(5)
+        p1:update_letters(p1.max_letter)
     end
 end
 
@@ -34,9 +39,9 @@ function package:draw()
 end
 
 function spawn_package()
-    if p1.letters < p1.max_letter / 6 then
+    if p1.letters < p1.max_letter / 2 then
         new_package = package:new()
-        new_package.x = rnd(avil_yx)
+        new_package.x = randi_rang(20, 100)  --rnd(avil_yx)
         add(objects.front, new_package)
     end
 
@@ -44,5 +49,5 @@ function spawn_package()
 end
 
 function reset_package_timer()
-    next_package = 70 + rnd(10)
+    next_package = randsec_rang(2, 8) --70 + rnd(10)
 end

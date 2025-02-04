@@ -126,7 +126,6 @@ end
 function demon:throw_skull()
     self.curr_animation = self.animations["throw"]
     self.tmr_throw = throw_times[self.agro]
-    --sfx_skull:play()
     spawn_skull(self.skull_x, self.y, p1, self.facing_r)
 end
 
