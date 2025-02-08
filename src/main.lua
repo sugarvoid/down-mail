@@ -374,6 +374,8 @@ function draw_gui()
         end
     end
 
+    line( 48, 127, 65, 127, 0) 
+
     --rectfill(48, 124, 50, 126, customers[1])
     -- rectfill(52, 124, 54, 126, customers[2])
     --rectfill(56, 124, 58, 126, customers[3])
