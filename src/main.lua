@@ -171,8 +171,10 @@ function check_input()
 
     if btnp(⬆️) then
         p1.is_chute_open = true
+        p1.speed = 1
     elseif btnp(⬇️) then
         p1.is_chute_open = false
+        p1.speed = 2
     end
 
     if btnp(❎) then

@@ -26,6 +26,8 @@ function init_player()
     _p.thr_anmi = 0
     _p.move_speed = 1.5
     _p.twister_count = 0
+    _p.speed = 1
+    _p.accel = 0.1
     return _p
 end
 
@@ -79,9 +81,11 @@ function player:update()
     end
 
     if self.is_chute_open then
-        self.y -= 1.5
+        self.speed  = mid(-3, self.speed + self.accel, 3)
+        self.y -= self.speed
     else
-        self.y += 2.5
+        self.speed  = mid(-4, self.speed + self.accel, 4)
+        self.y += self.speed
     end
 
     if self.x <= 4 or self.x >= 118 then
