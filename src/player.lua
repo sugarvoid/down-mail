@@ -73,6 +73,16 @@ function player:draw()
     end
 end
 
+function player:update_chute(open)
+    
+    self.is_chute_open = open
+    if open then
+        self.speed = 1
+    else
+        self.speed = 2
+    end
+end
+
 function player:update()
     if self.is_chute_open then
         self.chute_spr = self.chute_open_spr
@@ -99,9 +109,14 @@ function player:update()
     end
     --TODO: user goto_gameover funciton
     if self.y >= 130 then
-        self.is_alive = false
-        end_text = endings[1]
-        change_state(gamestates.gameover)
+        if g_state == gamestates.bonus then
+            bouns_timer = 0
+        else
+            self.is_alive = false
+            end_text = endings[1]
+            change_state(gamestates.gameover)
+        end
+        
     end
 
     if self.y <= -10 then

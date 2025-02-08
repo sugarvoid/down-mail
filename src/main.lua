@@ -138,8 +138,8 @@ function _draw()
     end
 
     if is_debug then
-        print("mem: " .. flr(stat(0)) .. "kb", 0, 0, 8)
-        print("cpu: " .. stat(1) .. "%", 0, 8, 8)
+        print("mem: " .. flr(stat(0)) .. "kb", 10, 0, 8)
+        print("cpu: " .. stat(1) .. "%", 10, 8, 8)
     end
 end
 
@@ -170,11 +170,13 @@ function check_input()
 
 
     if btnp(⬆️) then
-        p1.is_chute_open = true
-        p1.speed = 1
+        p1:update_chute(true)
+        --p1.is_chute_open = true
+        --p1.speed = 1
     elseif btnp(⬇️) then
-        p1.is_chute_open = false
-        p1.speed = 2
+        p1:update_chute(false)
+        --p1.is_chute_open = false
+        --p1.speed = 2
     end
 
     if btnp(❎) then
