@@ -9,7 +9,7 @@ function spawn_skull(x,y, p,face_r)
     _d.y=y
     _d.target={x=p.x, y=p.y}
     _d.facing_r=face_r
-    _d.img=142
+    _d.img=16
     _d.speed=4
     _d.dx = p.x - _d.x
     _d.dy = p.y - _d.y

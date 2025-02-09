@@ -7,7 +7,7 @@ function spawn_ring()
     local _r = setmetatable({}, ring)
     _r.x = randi_rang(20, 90)
     _r.y = randi_rang(40, 60)
-    _r.img = 141
+    _r.img = 48
     _r.life = randsec_rang(3, 5)
     _r.w = 8
     _r.value = 10
@@ -41,8 +41,8 @@ end
 
 function ring:draw()
     pal(7, self.color)
-    spr(140, self.x, self.y, 1, 1, false, false)
-    spr(140, self.x, self.y + 8, 1, 1, false, true)
+    spr(self.img, self.x, self.y, 1, 1, false, false)
+    spr(self.img, self.x, self.y + 8, 1, 1, false, true)
     pal()
 end
 

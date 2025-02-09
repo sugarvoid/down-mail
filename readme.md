@@ -15,6 +15,7 @@
 -   Crashing into mailboxes is bad
 -   Twisters will slow you down
 -   See a demon, kill it with a letter quickly
+-   Game last three days
 
 ## Controls :joystick:
 

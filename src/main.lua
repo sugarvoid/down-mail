@@ -15,13 +15,16 @@ bouns_timer = 0
 hint_txt = "hint off"
 
 deliveries = { 0, 0 }
+total_deliveries = 0
 
 ending = 0
-end_spr = { 64, 68, 72, 76} --, 128, 132, 136, 140 }
+end_spr = { 64, 68, 72, 76, 140} --, 128, 132, 136, 140 }
 objects = { back = {}, front = {} }
+
 
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
+days_needed = 3
 intro_t = 30 * 6
 day_t = 30 * 6
 post_t = 30 * 8
@@ -36,7 +39,8 @@ gamestates = {
 }
 
 g_state = nil
-deliveries_left = 10
+deliveries_needed = 5
+deliveries_left = deliveries_needed
 
 end_text_l1 = ""
 end_text_l2 = ""
@@ -47,6 +51,7 @@ endings = {
     { "local mailman",  "goes missing" },
     { "mailman fired",  "" },
     { "mailman quits,", "buys city" },
+    { "mediocre mailman,", "does job" },
 }
 
 function update_objects()
@@ -66,6 +71,7 @@ end
 
 function restart_game()
     day = 1
+    total_deliveries = 0
     intro_t = 30 * 6
     day_t = 30 * 6
     post_t = 30 * 8
@@ -239,7 +245,20 @@ end
 function update_bonus()
     bouns_timer -= 1
     if bouns_timer <= 0 then
-        advance_day()
+        if day <= (days_needed - 1) then
+           advance_day()
+        else
+            --if day == 3 then
+                if total_deliveries == (deliveries_needed * (days_needed)) then
+                    end_text = endings[4]
+                    ending_idx = 4
+                else
+                    end_text = endings[5]
+                    ending_idx = 5
+                end      
+                change_state(gamestates.gameover)
+            --end
+        end
     end
     p1:update()
     update_letters()
@@ -391,6 +410,11 @@ function draw_gui()
 end
 
 function advance_day()
+    day += 1
+
+    
+
+
     -- TODO: Set customer tables
     rings = {}
     intro_t = 30 * 6
@@ -399,8 +423,8 @@ function advance_day()
     set_customers()
     p1 = init_player()
     -- TODO: Reset player's health, position and letter stock
-    deliveries_left = 10 --TODO: Maybe increase as the week goes on
-    day += 1
+    deliveries_left = deliveries_needed --TODO: Maybe increase as the week goes on
+    
     g_state = gamestates.post_day
     init_wind()
 end
@@ -475,6 +499,7 @@ function draw_hitbox(o)
 end
 
 function goto_bonus()
+    p1.move_speed = 1.5
     spawner.reset()
     bouns_timer = 30 * 30
     change_state(gamestates.bonus)
