@@ -17,7 +17,8 @@ lanes = {
 spawner = {
     rock_1 = randsec_rang(3, 10),
     rock_2 = randsec_rang(3, 10),
-    mail_box = 40,
+    mail_box = randsec_rang(3, 10),
+    mail_box_2 = randsec_rang(1, 2),
     demon = 30 * 10,
     ring = 30,
     ammo = 30,
@@ -27,6 +28,7 @@ spawner = {
             self.rock_1 -= 1
             self.rock_2 -= 1
             self.mail_box -= 1
+            self.mail_box_2 -= 1
             self.demon -= 1
             self.ammo -= 1
 
@@ -46,6 +48,12 @@ spawner = {
                 local lane = get_available_lane()
                 spawn_mbox(lane)
                 self.mail_box = randsec_rang(2, 4)
+            end
+
+            if self.mail_box_2 <= 0 then
+                local lane = get_available_lane()
+                spawn_mbox(lane)
+                self.mail_box_2 = randsec_rang(2, 4)
             end
 
             if self.demon <= 0 then

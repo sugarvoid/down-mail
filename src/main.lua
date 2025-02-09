@@ -39,7 +39,7 @@ gamestates = {
 }
 
 g_state = nil
-deliveries_needed = 5
+deliveries_needed = 6
 deliveries_left = deliveries_needed
 
 end_text_l1 = ""
@@ -326,7 +326,7 @@ function draw_bonus()
     draw_rings()
     draw_letters()
     draw_gui()
-    rectfill(17, 10, 17 + flr(bouns_timer / 30) * 3, 13, 3)
+    rectfill(17, 10, 17 + flr(bouns_timer / 15) * 3, 13, 3)
     rect(17, 9, 109, 14, 7)
     print("bonus", 50, 3, 7)
     -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
@@ -501,7 +501,7 @@ end
 function goto_bonus()
     p1.move_speed = 1.5
     spawner.reset()
-    bouns_timer = 30 * 30
+    bouns_timer = 30 * 15
     change_state(gamestates.bonus)
 end
 
