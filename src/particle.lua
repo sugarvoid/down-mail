@@ -28,13 +28,13 @@ function draw_particles()
 end
 
 
-function explode(x,y,r,num,c)
+function explode(x,y,r,num,c,t)
     for i=0, num do
         local _p={
             x=x,
             y=y,
             timer=0,
-            life=30+rnd(10),
+            life=(t or 30)+rnd(10),
             dx=rnd(2)-1,
             dy=rnd(2)-1,
             grav=false,

@@ -33,15 +33,20 @@ function mailbox:update()
     end
 
     if is_colliding(p1, self) and not self.damaged then
-        sfx(3)
-        self.damaged = true
-        self.img = 22
-        self.speed = -2
-        damaged_mb += 1
-        if damaged_mb == 3 then
-            end_text = endings[4]
-            g_state = 2
-        end
+        self:take_damage()
+    end
+end
+
+function mailbox:take_damage()
+    sfx(3)
+    self.damaged = true
+    self.img = 22
+    self.speed = -2
+    damaged_mb += 1
+    if damaged_mb == 3 then
+        end_text = endings[3]
+        ending_idx = 3
+        change_state(gamestates.gameover)
     end
 end
 
@@ -82,7 +87,7 @@ function mailbox:on_good_letter(_score)
         sfx(5)
     end
     
-    explode(self.x, self.y, 2, 6, self.b_col)
+    explode(self.x, self.y, 2, 6, self.b_col, 10)
     self.empty = false
     self.speed = 4
     

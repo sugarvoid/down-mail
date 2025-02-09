@@ -22,13 +22,13 @@ function letter:update()
                     if mb.facing_l then
                         mb:on_good_letter(self.score_mul)
                     else
-                        explode(self.x, self.y, 2, 2, 7)
+                        explode(self.x, self.y, 2, 2, 7, 10)
                     end
                 else
                     if not mb.facing_l then
                         mb:on_good_letter(self.score_mul)
                     else
-                        explode(self.x, self.y, 2, 2, 7)
+                        explode(self.x, self.y, 2, 2, 7, 10)
                     end
                 end
                 
@@ -40,9 +40,9 @@ function letter:update()
         if self.x <= 0 or self.x >= 120 then
             if g_state == gamestates.game then
                 spawn_twister(self.x, self.y)
+                explode(self.x, self.y, 3, 4, 4, 10)
                 sfx(14)
             end
-            explode(self.x, self.y, 3, 4, 4)
             del(letters, self)
         end
     else

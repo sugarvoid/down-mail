@@ -17,7 +17,7 @@ hint_txt = "hint off"
 deliveries = { 0, 0 }
 
 ending = 0
-end_spr = { 64, 68, 72, 76, 128, 132, 136, 140 }
+end_spr = { 64, 68, 72, 76} --, 128, 132, 136, 140 }
 objects = { back = {}, front = {} }
 
 day = 1
@@ -34,12 +34,13 @@ gamestates = {
     gameover = 5,
     post_day = 6,
 }
-g_state = nil
 
-deliveries_left = 10
+g_state = nil
+deliveries_left = 1
 
 end_text_l1 = ""
 end_text_l2 = ""
+ending_idx = 0
 
 endings = {
     { "city mourns",    "loss of mailman" },
@@ -139,7 +140,8 @@ function _draw()
 
     if is_debug then
         print("mem: " .. flr(stat(0)) .. "kb", 10, 0, 8)
-        print("cpu: " .. stat(1) .. "%", 10, 8, 8)
+        print("cpu: " .. stat(1)*100 .. "%", 10, 8, 8)
+        print(#letters, 10, 20, 8)
     end
 end
 
@@ -241,6 +243,7 @@ function update_bonus()
     end
     p1:update()
     update_letters()
+    update_particles()
     --update_rings()
     spawner:update()
 end
@@ -300,6 +303,7 @@ function draw_bonus()
     cls(0)
     map(16, 0)
     p1:draw()
+    draw_particles()
     draw_rings()
     draw_letters()
     draw_gui()
@@ -307,6 +311,7 @@ function draw_bonus()
     rect(17, 9, 109, 14, 7)
     print("bonus", 50, 3, 7)
     -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
+    
 end
 
 function draw_postday()
@@ -479,9 +484,10 @@ function draw_gameover()
     cls(7)
     spr(192, 32, 8, 8, 2)
     print("$0.25", 6, 10, 5)
+    print("score: " .. score, 10, 32, 5)
     rect(4, 30, 124, 120, 5)
     pal(14, 0)
-    spr(end_spr[1], 80, 34, 4, 4)
+    spr(end_spr[ending_idx], 80, 34, 4, 4)
     pal()
     print("game over", game_over_x, 1, 0)
     print(end_text[1], 10, 40 + 5, 0)

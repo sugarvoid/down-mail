@@ -101,27 +101,30 @@ function player:update()
     if self.x <= 4 or self.x >= 118 then
         sfx(12)
         self.is_alive = false
-        end_text = endings[2]
+        end_text = endings[1]
+        ending_idx = 1
         g_state = gamestates.gameover
         --self.img = 49
         -- TODO: add blood particales
         -- then go to game overload
     end
     --TODO: user goto_gameover funciton
-    if self.y >= 130 then
+    if self.y >= 140 then
         if g_state == gamestates.bonus then
             bouns_timer = 0
         else
             self.is_alive = false
-            end_text = endings[1]
+            end_text = endings[2]
+            ending_idx = 2
             change_state(gamestates.gameover)
         end
         
     end
 
-    if self.y <= -10 then
+    if self.y <= -30 then
         self.is_alive = false
-        end_text = endings[3]
+        end_text = endings[2]
+        ending_idx = 2
         change_state(gamestates.gameover)
     end
 
@@ -153,6 +156,7 @@ function player:take_damage()
     if p1.life == 0 then
         sfx(11)
         end_text = endings[2]
+        ending_idx = 1
         change_state(gamestates.gameover)
     end
 end
