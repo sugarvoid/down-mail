@@ -36,7 +36,7 @@ gamestates = {
 }
 
 g_state = nil
-deliveries_left = 1
+deliveries_left = 10
 
 end_text_l1 = ""
 end_text_l2 = ""
@@ -141,7 +141,7 @@ function _draw()
     if is_debug then
         print("mem: " .. flr(stat(0)) .. "kb", 10, 0, 8)
         print("cpu: " .. stat(1)*100 .. "%", 10, 8, 8)
-        print(#letters, 10, 20, 8)
+        
     end
 end
 
@@ -320,7 +320,7 @@ function draw_postday()
     all_particles = {}
     letters = {}
 
-    print("deliveries: " .. deliveries_left, 20, 40, 7)
+    print("deliveries: " .. (deliveries[1] + deliveries[2]), 20, 40, 7)
     print("customers: " .. deliveries[1], 20, 48, 7)
     print("non-customers: " .. deliveries[2], 20, 48 + 8, 7)
 

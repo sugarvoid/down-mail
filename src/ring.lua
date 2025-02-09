@@ -3,19 +3,6 @@ rings = {}
 ring = {}
 ring.__index = ring
 
--- function ring:new()
---     local _r = setmetatable({}, ring)
---     _r.x = randi_rang(20, 100)
---     _r.y = randi_rang(40, 60)
---     _r.img = 141
---     _r.life = randsec_rang(3, 5)
---     _r.w = 8
---     _r.value = 10
---     _r.color = 11
---     _r.speed = rnd({ 1, 2 })
---     return _r
--- end
-
 function spawn_ring()
     local _r = setmetatable({}, ring)
     _r.x = randi_rang(20, 90)
@@ -47,7 +34,7 @@ end
 
 function ring:on_letter_contact(letter)
     score += self.value
-    explode(self.x, self.y, 3, 6, self.color)
+    explode(self.x, self.y+8, 3, 6, self.color)
     sfx(4)
     del(rings, self)
 end
