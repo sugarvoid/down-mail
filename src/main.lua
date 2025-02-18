@@ -1,4 +1,4 @@
-is_debug = false
+is_debug = true
 
 cols = { 12, 14, 10, 11, 9, 6 } --"b","y","p","g"}
 customers = {}
@@ -39,7 +39,7 @@ gamestates = {
 }
 
 g_state = nil
-deliveries_needed = 6
+deliveries_needed = 2 -- 6
 deliveries_left = deliveries_needed
 
 end_text_l1 = ""
@@ -294,7 +294,9 @@ end
 
 function draw_title()
     cls(7)
-    print("down mail", hcenter("down mail"), 50, 0)
+    spr(200, 48, 34, 4, 2)
+    spr(232, 48, 34+10, 4, 2)
+    --print("down mail", hcenter("down mail"), 50, 0)
     print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 0)
 end
 
