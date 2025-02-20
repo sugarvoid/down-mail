@@ -16,6 +16,7 @@ hint_txt = "hint off"
 
 deliveries = { 0, 0 }
 total_deliveries = 0
+offset=0
 
 ending = 0
 end_spr = { 64, 68, 72, 76, 140} --, 128, 132, 136, 140 }
@@ -39,7 +40,7 @@ gamestates = {
 }
 
 g_state = nil
-deliveries_needed = 2 -- 6
+deliveries_needed = 6
 deliveries_left = deliveries_needed
 
 end_text_l1 = ""
@@ -135,6 +136,7 @@ function _draw()
     elseif g_state == gamestates.day_title then
         draw_day()
     elseif g_state == gamestates.game then
+        screen_shake()
         draw_play()
     elseif g_state == gamestates.bonus then
         draw_bonus()
@@ -297,7 +299,7 @@ function draw_title()
     spr(200, 48, 34, 4, 2)
     spr(232, 48, 34+10, 4, 2)
     --print("down mail", hcenter("down mail"), 50, 0)
-    print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 0)
+    print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 12)
 end
 
 function draw_intro()
@@ -538,3 +540,20 @@ function in_range(x_val)
         print 'it is!'
     end
 end
+
+
+function screen_shake()
+    local fade = 0.95
+    local offset_x=16-rnd(32)
+    local offset_y=16-rnd(32)
+  
+    offset_x*=offset
+    offset_y*=offset
+    
+    camera(offset_x,offset_y)
+  
+    offset*=fade
+    if offset<0.05 then
+      offset=0
+    end
+  end

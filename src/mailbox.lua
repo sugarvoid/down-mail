@@ -37,6 +37,7 @@ function mailbox:update()
 end
 
 function mailbox:take_damage()
+    offset =0.1
     sfx(3)
     self.damaged = true
     self.img = 22

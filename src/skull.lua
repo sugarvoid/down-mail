@@ -28,6 +28,7 @@ function skull:update()
     self.y += self.dy * self.speed
 
     if is_colliding(p1, self) then
+        offset =0.1
         del(objects.front, self)
         p1:take_damage()
     end

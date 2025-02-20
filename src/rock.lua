@@ -24,6 +24,7 @@ function rock:update()
         update_lane(self.lane, false)
     end
     if is_colliding(p1, self) then
+        offset =0.1
         explode(self.x,self.y,2,5,4)
         update_lane(self.lane, false)
         del(objects.front, self)
