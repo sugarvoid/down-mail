@@ -1,6 +1,8 @@
 twister = {}
 twister.__index = twister
 
+twisters = {}
+
 function spawn_twister(x, y)
     local _t = setmetatable({}, twister)
     _t.x = x
@@ -17,7 +19,7 @@ function spawn_twister(x, y)
     _t.angle = 0
     _t.speed = 1.5
     _t.prox = 0.2
-    add(objects.front, _t)
+    add(twisters, _t)
 end
 
 function twister:set_target(obj)
@@ -36,11 +38,13 @@ function twister:update()
         self.prox = 0.8
         p1.move_speed = 1.5
     end
+    
     local _newangle = atan2(self.target.x - self.x, self.target.y - self.y)
+
     if _newangle <= 0.3 then
         local _t = self.target.type
         if _t == "exit" then
-            del(objects.front, self)
+            del(twisters, self)
         elseif _t == "player" then
             p1.move_speed = 0.5
         end

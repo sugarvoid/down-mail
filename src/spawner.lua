@@ -58,7 +58,7 @@ spawner = {
 
             if self.demon <= 0 then
                 self.demon = randsec_rang(9, 20)
-                spawn_demon()
+              --  spawn_demon()
             end
 
             if self.ammo <= 0 then
@@ -90,6 +90,7 @@ spawner = {
         mailboxes = {}
         rocks = {}
         rings = {}
+        twisters = {}
         objects.front = {}
         objects.back = {}
         all_particles = {}

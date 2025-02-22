@@ -40,7 +40,7 @@ gamestates = {
 }
 
 g_state = nil
-deliveries_needed = 6
+deliveries_needed = 2
 deliveries_left = deliveries_needed
 
 end_text_l1 = ""
@@ -505,7 +505,7 @@ end
 function goto_bonus()
     p1.move_speed = 1.5
     spawner.reset()
-    bouns_timer = 30 * 15
+    bouns_timer = 50  --30 * 15
     change_state(gamestates.bonus)
 end
 

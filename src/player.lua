@@ -118,7 +118,7 @@ function player:update()
 end
 
 function player:update_letters(amount)
-    self.letters = mid(0, self.letters + amount, self.max_letter)
+    --self.letters = mid(0, self.letters + amount, self.max_letter)
 end
 
 function player:take_damage()

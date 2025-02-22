@@ -30,7 +30,7 @@ function demon:new(side)
     _demon.w = 8
     _demon.h = 24
     _demon.y = off_screen_y
-    _demon.curr_animation = _demon.animations["idle"]
+   -- _demon.curr_animation = _demon.animations["idle"]
     _demon.skull_x=0
 
     _demon.facing_r = false
@@ -53,17 +53,6 @@ function demon:draw()
 end
 
 function demon:update()
-    if self.curr_animation == self.animations["throw"] and self.curr_animation.done then
-        --self.animations["throw"]:resume()
-        --self.animations["throw"]:gotoFrame(1)
-        self.curr_animation = self.animations["grow_head"]
-    end
-    if self.curr_animation == self.animations["grow_head"] and self.curr_animation.done then
-        --self.animations["grow_head"]:resume()
-        --self.animations["grow_head"]:gotoFrame(1)
-        self.curr_animation = self.animations["idle"]
-    end
-
     if self.in_play then
         self.time_on_screen+=1
         self.tmr_move -= 1 -- math.clamp(0, self.tmr_move - 1, 90)
@@ -98,17 +87,17 @@ function demon:reset()
 end
 
 function demon:move(new_y)
-    self.curr_animation = self.animations["climb"]
+    --self.curr_animation = self.animations["climb"]
     self.y = new_y
     if self.y == new_y then
-        self.curr_animation = self.animations["idle"]
+        --self.curr_animation = self.animations["idle"]
         self.tmr_move = randsec_rang(4, 8)
     end
 end
 
 function demon:crawl_on_screen()
     self.in_play = true
-    self.curr_animation = self.animations["climb"]
+   -- self.curr_animation = self.animations["climb"]
     local _y = rnd({y_range[1], y_range[2]})
     self.y = _y
 end
@@ -124,7 +113,7 @@ function demon:die()
 end
 
 function demon:throw_skull()
-    self.curr_animation = self.animations["throw"]
+    --self.curr_animation = self.animations["throw"]
     self.tmr_throw = throw_times[self.agro]
     spawn_skull(self.skull_x, self.y, p1, self.facing_r)
 end
