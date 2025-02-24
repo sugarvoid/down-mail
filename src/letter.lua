@@ -8,10 +8,10 @@ function letter:update()
         self.speed  = mid(-4, self.speed + self.accel, 4)
         self.x += self.speed * self.dir
         self.t = (self.t + 1) % 5
-       -- local rotate = self.t == 0
-       -- if rotate then
-        --    self.img += 1
-       -- end
+       local rotate = self.t == 0
+       if rotate then
+           self.img += 1
+       end
         if self.img == 35 then
             self.img = 32
         end
