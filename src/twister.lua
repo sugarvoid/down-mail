@@ -19,7 +19,7 @@ function spawn_twister(x, y)
     _t.angle = 0
     _t.speed = 1.5
     _t.prox = 0.2
-    add(twisters, _t)
+    add(objects.front, _t)
 end
 
 function twister:set_target(obj)
@@ -44,7 +44,7 @@ function twister:update()
     if _newangle <= 0.3 then
         local _t = self.target.type
         if _t == "exit" then
-            del(twisters, self)
+            del(objects.front, self)
         elseif _t == "player" then
             p1.move_speed = 0.5
         end

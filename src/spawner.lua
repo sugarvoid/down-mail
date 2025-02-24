@@ -58,7 +58,7 @@ spawner = {
 
             if self.demon <= 0 then
                 self.demon = randsec_rang(9, 20)
-              --  spawn_demon()
+                spawn_demon()
             end
 
             if self.ammo <= 0 then
@@ -100,9 +100,9 @@ spawner = {
 
 function get_available_lane()
     local _idx
-    repeat
+  --  repeat
         _idx = flr(rnd(#lanes)) + 1
-    until lanes[_idx][2] == false
+   -- until lanes[_idx][2] == false
     return _idx
 end
 
