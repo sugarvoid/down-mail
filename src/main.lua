@@ -1,4 +1,4 @@
-is_debug = true
+is_debug = false
 
 cols = { 12, 14, 10, 11, 9, 6 } --"b","y","p","g"}
 customers = {}
@@ -299,7 +299,7 @@ function draw_title()
     spr(200, 48, 34, 4, 2)
     spr(232, 48, 34+10, 4, 2)
     --print("down mail", hcenter("down mail"), 50, 0)
-    print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 12)
+    print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 8)
 end
 
 function draw_intro()
