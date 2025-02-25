@@ -36,3 +36,7 @@ Missing a letter will cause a twister to spawn, lower player mobility for a shor
 - [ ] Refactor input function. Group by input, not gamestate
 - [ ] Add player death animation 
 - [ ] Finish making demon sprites
+- [ ] Reset crashed mailboxes at start of day
+- [ ] Reset screen shake when going to bonus
+- [ ] Make rings move
+- [ ] Make cover cave walls thicker
