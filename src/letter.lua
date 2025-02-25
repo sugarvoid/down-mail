@@ -7,9 +7,12 @@ function letter:update()
         self.score_mul += 0.2
         self.speed  = mid(-4, self.speed + self.accel, 4)
         self.x += self.speed * self.dir
-        self.t = (self.t + 1) % 5
-       local rotate = self.t == 0
-       if rotate then
+        self.t += 1
+
+    --     self.t = (self.t + 1) % 2
+    --    local rotate = self.t == 0
+       if self.t >= 3 then
+            self.t = 0
            self.img += 1
        end
         if self.img == 35 then

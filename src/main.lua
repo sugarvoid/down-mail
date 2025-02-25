@@ -309,13 +309,13 @@ function draw_intro()
 
     for k, v in pairs(customers) do
         pal(6, v)
-        sspr(32, 8, 8, 8, 25 + (16 * k), 52, 16, 16)
+        sspr(56, 8, 8, 8, 25 + (16 * k), 52, 16, 16)
         pal()
     end
 
     for k, v in pairs(non_customers) do
         pal(6, v)
-        sspr(32, 8, 8, 8, 25 + (16 * k), 88, 16, 16)
+        sspr(56, 8, 8, 8, 25 + (16 * k), 88, 16, 16)
         pal()
     end
 
