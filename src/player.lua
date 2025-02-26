@@ -48,6 +48,7 @@ function player:draw()
     else
         spr(49, self.x, self.y)
     end
+    print(deliveries_left, self.x, self.y+8)
 end
 
 function player:update_chute(open)
@@ -61,6 +62,14 @@ function player:update_chute(open)
 end
 
 function player:update()
+
+    if self:check_for_twisters() then
+        self.move_speed = 0.5
+      else
+        self.move_speed = 1.5
+      end
+
+
     if self.is_chute_open then
         self.chute_spr = self.chute_open_spr
     else
@@ -115,11 +124,22 @@ function player:update()
             self.img = self.sprite_b
         end
     end
+
+    
 end
 
 function player:update_letters(amount)
     --self.letters = mid(0, self.letters + amount, self.max_letter)
 end
+
+function player:check_for_twisters()
+    for t in all(twisters) do
+      if t.dis < 30 then
+        return true
+      end
+    end
+    return false
+  end
 
 function player:take_damage()
     if (self.life == 3) then spawn_clothing(17) end

@@ -72,6 +72,7 @@ end
 
 function restart_game()
     day = 1
+    deliveries_left = deliveries_needed
     total_deliveries = 0
     intro_t = 30 * 6
     day_t = 30 * 6
@@ -210,6 +211,9 @@ function update_play()
     update_objects()
     update_demons()
     update_letters()
+    for t in all(twisters) do
+        t:update()
+    end
 
     map_y += .2
 
@@ -280,6 +284,9 @@ function draw_play()
 
     for o in all(objects.front) do
         o:draw()
+    end
+    for t in all(twisters) do
+        t:draw()
     end
     for mb in all(mailboxes) do
         mb:draw()
@@ -434,6 +441,7 @@ function advance_day()
 end
 
 function change_state(new_state)
+    offset=0
     g_state = new_state
 end
 
@@ -557,3 +565,14 @@ function screen_shake()
       offset=0
     end
   end
+
+
+  --function calc_dist2(x1,y1,x2,y2)
+    --return abs(x1-x2)+abs(y1-y2)
+  --end
+
+
+  function dist(a,b)
+    return abs(a.x-b.x)+abs(a.y-b.y)
+  end
+

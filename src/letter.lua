@@ -42,7 +42,10 @@ function letter:update()
 
         if self.x <= 0 or self.x >= 120 then
             if g_state == gamestates.game then
-                spawn_twister(self.x, self.y)
+                if #twisters < 3 then
+                   spawn_twister(self.x, self.y) 
+                end
+                
                 explode(self.x, self.y, 3, 4, 4, 10)
                 sfx(14)
             end

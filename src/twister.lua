@@ -16,10 +16,11 @@ function spawn_twister(x, y)
     _t.step = 3
     _t.img = 19
     _t.img = 51
+    _t.dis = 0
     _t.angle = 0
     _t.speed = 1.5
     _t.prox = 0.2
-    add(objects.front, _t)
+    add(twisters, _t)
 end
 
 function twister:set_target(obj)
@@ -33,28 +34,38 @@ function twister:update()
     end
     self.timer -= 1
     if self.timer == 0 then
-        self.target = { x = randi_rang(10,100), y = 125, type = "exit" }
+        del(twisters, self)
+        self.img = 38
+        self.target = nil --{ x = randi_rang(10,100), y = 125, type = "exit" }
         self.speed = 3
         self.prox = 0.8
         p1.move_speed = 1.5
     end
-    
-    local _newangle = atan2(self.target.x - self.x, self.target.y - self.y)
 
-    if _newangle <= 0.3 then
-        local _t = self.target.type
-        if _t == "exit" then
-            del(objects.front, self)
-        elseif _t == "player" then
-            p1.move_speed = 0.5
+    if self.target then
+        local _newangle = atan2(self.target.x - self.x, self.target.y - self.y)
+
+        if _newangle <= 0.3 then
+            local _t = self.target.type
+            if _t == "exit" then
+                del(twisters, self)
+            elseif _t == "player" then
+                -- p1.move_speed = 0.5
+            end
         end
+
+        self.angle = angle_lerp(self.angle, _newangle, self.prox)
+        self.x += self.speed * cos(self.angle)
+        self.y += self.speed * sin(self.angle)
+
+        self.dis = dist(self.target, self)
     end
 
-    self.angle = angle_lerp(self.angle, _newangle, self.prox)
-    self.x += self.speed * cos(self.angle)
-    self.y += self.speed * sin(self.angle)
+    
+    --print_debug(self.dis)
 end
 
 function twister:draw()
+    print(self.dis, self.x, self.y - 8)
     spr(self.anim[self.frame], self.x, self.y, 1, 1, self.facing_l)
 end
