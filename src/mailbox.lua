@@ -27,8 +27,9 @@ end
 function mailbox:update()
     self.y -= self.speed
 
-    if self.y <= -16 or self.y >= 190 then
-        self:check()
+    if self.y <= -16 or self.y >= 132 then
+        del(mailboxes, self)
+        update_lane(self.lane, false)
     end
 
     if is_colliding(p1, self) and not self.damaged then
@@ -78,23 +79,28 @@ function mailbox:check()
         --FIXME: Not working
         if is_customer(self.b_col) then
             deliveries[1] += 1
-            sfx(4)
+           -- sfx(4)
         else
             deliveries[2] += 1
-            sfx(5)
+            --sfx(5)
         end
         deliveries_left -= 1
         if deliveries_left == 0 then
-            goto_bonus()
+            goto_bonus_tmr = 60
+            sfx(2)
+            clear_objs()
+            spawner.running = false
+            --goto_bonus()
             --advance_day()
         end
     end
-    del(mailboxes, self)
-    update_lane(self.lane, false)
+    
 end
 
 function mailbox:on_good_letter(_score)
+    
     self.empty = false
+   self:check() 
     self.img = 20
     score += (10 * flr(_score))
     explode(self.x, self.y, 2, 6, self.b_col, 10)

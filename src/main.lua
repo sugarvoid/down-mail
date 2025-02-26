@@ -1,6 +1,6 @@
 is_debug = false
 
-cols = { 12, 14, 10, 11, 9, 6 } --"b","y","p","g"}
+cols = { 12, 14, 9, 6 }
 customers = {}
 non_customers = {}
 reminder = false
@@ -15,11 +15,15 @@ bouns_timer = 0
 hint_txt = "hint off"
 
 deliveries = { 0, 0 }
-total_deliveries = 0
+deliveries_good = 0
+deliveries_bad = 0
+goto_bonus_tmr = 60
+
+
 offset=0
 
 ending = 0
-end_spr = { 64, 68, 72, 76, 140} --, 128, 132, 136, 140 }
+end_spr = { 64, 68, 72, 76, 140}
 objects = { back = {}, front = {} }
 
 
@@ -73,7 +77,7 @@ end
 function restart_game()
     day = 1
     deliveries_left = deliveries_needed
-    total_deliveries = 0
+    deliveries = { 0, 0 }
     intro_t = 30 * 6
     day_t = 30 * 6
     post_t = 30 * 8
@@ -209,7 +213,7 @@ function update_play()
     p1:update()
     update_particles()
     update_objects()
-    update_demons()
+    update_lizards()
     update_letters()
     for t in all(twisters) do
         t:update()
@@ -224,6 +228,15 @@ function update_play()
 
 
     spawner:update()
+
+    if deliveries_left <= 0 then
+        deliveries_left = 0
+        goto_bonus_tmr -= 1
+        if goto_bonus_tmr == 0 then
+            goto_bonus()
+        end
+    end
+
 end
 
 function update_intro()
@@ -245,6 +258,7 @@ function update_day()
     day_t -= 1
     if day_t <= 0 then
         g_state = gamestates.game
+        spawner.running = true
     end
 end
 
@@ -255,7 +269,7 @@ function update_bonus()
            advance_day()
         else
             --if day == 3 then
-                if total_deliveries == (deliveries_needed * (days_needed)) then
+                if deliveries[1] == (deliveries_needed * (days_needed)) then
                     end_text = endings[4]
                     ending_idx = 4
                 else
@@ -298,7 +312,12 @@ function draw_play()
 
     map(0, map_y)
     draw_gui()
-    draw_demons()
+    draw_lizards()
+    for k, v in ipairs(lanes) do
+        if lanes[k][2] == true then
+            circfill(lanes[k][1] + 4, 119, 2, 10)
+        end
+    end
 end
 
 function draw_title()
@@ -316,13 +335,13 @@ function draw_intro()
 
     for k, v in pairs(customers) do
         pal(6, v)
-        sspr(56, 8, 8, 8, 25 + (16 * k), 52, 16, 16)
+        sspr(56, 8, 8, 8, 25 + (20 * k), 52, 16, 16)
         pal()
     end
 
     for k, v in pairs(non_customers) do
         pal(6, v)
-        sspr(56, 8, 8, 8, 25 + (16 * k), 88, 16, 16)
+        sspr(56, 8, 8, 8, 25 + (20 * k), 88, 16, 16)
         pal()
     end
 
@@ -393,13 +412,15 @@ function draw_gui()
     rectfill(0, 121, 128, 128, 0)
     print("score:" .. score, 3, 123, 7)
     --print("CUSTOMERS", 30, 123, 7)
+
+    --print(days[day], 85, 123, 7)
     print("mail", 85, 123, 7)
-    for i = 1, p1.max_letter, 1 do
+    for i = 1, deliveries_needed, 1 do
         pset(100 + (2 * i), 124, 5)
         pset(100 + (2 * i), 125, 5)
         pset(100 + (2 * i), 126, 5)
     end
-    for i = 1, p1.letters, 1 do
+    for i = 1, (deliveries[1]+deliveries[2]), 1 do
         pset(100 + (2 * i), 124, 7)
         pset(100 + (2 * i), 125, 7)
         pset(100 + (2 * i), 126, 7)
@@ -447,8 +468,8 @@ end
 
 function set_customers()
     shuffle(cols)
-    customers = { cols[1], cols[2], cols[3] }
-    non_customers = { cols[4], cols[5], cols[6] }
+    customers = { cols[1], cols[2] }
+    non_customers = { cols[3], cols[4] }
 end
 
 function angle_lerp(angle1, angle2, t)
@@ -515,6 +536,7 @@ function goto_bonus()
     spawner.reset()
     bouns_timer = 30 * 15
     change_state(gamestates.bonus)
+    spawner.running = true
 end
 
 function draw_gameover()

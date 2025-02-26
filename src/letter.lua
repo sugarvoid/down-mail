@@ -21,6 +21,8 @@ function letter:update()
 
         for mb in all(mailboxes) do
             if is_colliding(self, mb) and not mb.damaged and mb.empty then
+                
+                sfx(8)
                 if self.x < mb.x then
                     if mb.facing_l then
                         mb:on_good_letter(self.score_mul)
@@ -44,10 +46,11 @@ function letter:update()
             if g_state == gamestates.game then
                 if #twisters < 3 then
                    spawn_twister(self.x, self.y) 
+                   sfx(14)
                 end
                 
                 explode(self.x, self.y, 3, 4, 4, 10)
-                sfx(14)
+                
             end
             del(letters, self)
         end

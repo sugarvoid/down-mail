@@ -19,17 +19,21 @@ spawner = {
     rock_2 = randsec_rang(3, 10),
     mail_box = randsec_rang(3, 10),
     mail_box_2 = randsec_rang(1, 2),
-    demon = 30 * 10,
+    lizard = 30 * 10,
     ring = 30,
     ammo = 30,
+    running = true,
 
     update = function(self)
+        if self.running then
+            
+        
         if g_state == gamestates.game then
             self.rock_1 -= 1
             self.rock_2 -= 1
             self.mail_box -= 1
             self.mail_box_2 -= 1
-            self.demon -= 1
+            self.lizard -= 1
             self.ammo -= 1
 
             if self.rock_1 <= 0 then
@@ -56,9 +60,9 @@ spawner = {
                 self.mail_box_2 = randsec_rang(2, 4)
             end
 
-            if self.demon <= 0 then
-                self.demon = randsec_rang(9, 20)
-                spawn_demon()
+            if self.lizard <= 0 then
+                self.lizard = randsec_rang(9, 20)
+                spawn_lizard()
             end
 
             if self.ammo <= 0 then
@@ -85,16 +89,10 @@ spawner = {
                 r:update()
             end
         end
+    end
     end,
     reset = function()
-        mailboxes = {}
-        rocks = {}
-        rings = {}
-        twisters = {}
-        demons = {}
-        objects.front = {}
-        objects.back = {}
-        all_particles = {}
+        clear_objs()
         for k, v in ipairs(lanes) do
             lanes[k][2] = false
         end
@@ -112,4 +110,18 @@ end
 
 function update_lane(lane, occupied)
     lanes[lane][2] = occupied
+end
+
+
+function clear_objs()
+    mailboxes = {}
+        rocks = {}
+        rings = {}
+        twisters = {}
+        lizards = {}
+        objects.front = {}
+        objects.back = {}
+        all_particles = {}
+        thing_on_left = false
+    thing_on_right = false
 end

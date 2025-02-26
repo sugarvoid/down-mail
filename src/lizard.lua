@@ -1,58 +1,57 @@
-demon = {}
-demon.__index = demon
+lizard = {}
+lizard.__index = lizard
 
-local next_demon = 70
+local next_lizard = 70
 local y_range = { 10, 90 }
 local off_screen_y = 138
-local demons = {}
+local lizards = {}
 
 local thing_on_left = false
 local thing_on_right = false
 
 local throw_times = {30*3,30*2,30*1}
 
-function demon:new(side)
-    local _demon = setmetatable({}, demon)
-    _demon.animations = {
+function lizard:new(side)
+    local _lizard = setmetatable({}, lizard)
+    _lizard.animations = {
         idle = {f={}, loop=true, done=false},
         climb = {f={}, loop=true, done=false},
         throw = {f={}, loop=true, done=false},
-        grow_head = {f={}, loop=true, done=false},
     }
-    _demon.img=14
-    _demon.agro=1
-    _demon.next_y = 50
-    _demon.tmr_move = randsec_rang(6, 7)
-    _demon.tmr_throw = throw_times[_demon.agro]
-    _demon.timer = 150
-    _demon.time_on_screen = 0
-    _demon.in_play = false
-    _demon.w = 8
-    _demon.h = 24
-    _demon.y = off_screen_y
-   -- _demon.curr_animation = _demon.animations["idle"]
-    _demon.skull_x=0
+    _lizard.img=14
+    _lizard.agro=1
+    _lizard.next_y = 50
+    _lizard.tmr_move = randsec_rang(6, 7)
+    _lizard.tmr_throw = throw_times[_lizard.agro]
+    _lizard.timer = 150
+    _lizard.time_on_screen = 0
+    _lizard.in_play = false
+    _lizard.w = 8
+    _lizard.h = 24
+    _lizard.y = off_screen_y
+   -- _lizard.curr_animation = _lizard.animations["idle"]
+    _lizard.skull_x=0
 
-    _demon.facing_r = false
+    _lizard.facing_r = false
 
     if side == "right" then
-        _demon.x = 117
-        _demon.facing_r = true
-        _demon.skull_x=117
+        _lizard.x = 117
+        _lizard.facing_r = true
+        _lizard.skull_x=117
     elseif side == "left" then
-        _demon.x = 3
-        _demon.facing_r = false
-        _demon.skull_x=11
+        _lizard.x = 3
+        _lizard.facing_r = false
+        _lizard.skull_x=11
     end
 
-    return _demon
+    return _lizard
 end
 
-function demon:draw()
+function lizard:draw()
      sspr(0, 64, 8, 24, self.x, self.y, 8, 24, self.facing_r)
 end
 
-function demon:update()
+function lizard:update()
     if self.in_play then
         self.time_on_screen+=1
         self.tmr_move -= 1 -- math.clamp(0, self.tmr_move - 1, 90)
@@ -82,11 +81,11 @@ function demon:update()
     end
 end
 
-function demon:reset()
+function lizard:reset()
 
 end
 
-function demon:move(new_y)
+function lizard:move(new_y)
     --self.curr_animation = self.animations["climb"]
     self.y = new_y
     if self.y == new_y then
@@ -95,15 +94,15 @@ function demon:move(new_y)
     end
 end
 
-function demon:crawl_on_screen()
+function lizard:crawl_on_screen()
     self.in_play = true
    -- self.curr_animation = self.animations["climb"]
     local _y = rnd({y_range[1], y_range[2]})
     self.y = _y
 end
 
-function demon:die()
-    del(demons, self)
+function lizard:die()
+    del(lizards, self)
     self.in_play = false
     --self.curr_animation = self.animations["climb"]
     thing_on_left = false
@@ -112,20 +111,20 @@ function demon:die()
     self.tmr_throw = -1
 end
 
-function demon:throw_skull()
+function lizard:throw_skull()
     --self.curr_animation = self.animations["throw"]
     self.tmr_throw = throw_times[self.agro]
     spawn_skull(self.skull_x, self.y, p1, self.facing_r)
 end
 
-function update_demon_spawner()
-    next_demon = next_demon - 1
-    if next_demon <= 0 then
+function update_lizard_spawner()
+    next_lizard = next_lizard - 1
+    if next_lizard <= 0 then
         spawn_rock()
     end
 end
 
-function spawn_demon()
+function spawn_lizard()
     if not thing_on_left and not thing_on_right then
         local _side
         if flr(rnd(2)) + 1 == 1 then
@@ -136,23 +135,23 @@ function spawn_demon()
             thing_on_right = true
         end
 
-        local _demon = demon:new(_side)
-        add(demons, _demon)
-        _demon:crawl_on_screen()
+        local _lizard = lizard:new(_side)
+        add(lizards, _lizard)
+        _lizard:crawl_on_screen()
     else
         print_debug("there was already a thing on screen")
     end
 end
 
 
-function update_demons()
-    for d in all(demons) do
+function update_lizards()
+    for d in all(lizards) do
         d:update()
     end
 end
 
-function draw_demons()
-    for d in all(demons) do
+function draw_lizards()
+    for d in all(lizards) do
         d:draw()
     end
 end

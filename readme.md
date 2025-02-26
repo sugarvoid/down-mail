@@ -14,7 +14,7 @@
 -   Avoid falling objects
 -   Crashing into mailboxes is bad
 -   Twisters will slow you down
--   See a demon, kill it with a letter quickly
+-   See a lizard, kill it with a letter quickly
 -   Game last three days
 
 ## Controls :joystick:
@@ -25,9 +25,10 @@
 |   O    | Throw Letter |
 
 
-Demons will throws skulls at player.
+Lizards will throws rocks at player.
 Rocks will fall from the top.
 Missing a letter will cause a twister to spawn, lower player mobility for a short time.
+Spawning three twister are a bad thing
 
 
 ## Progress
@@ -35,7 +36,7 @@ Missing a letter will cause a twister to spawn, lower player mobility for a shor
 ### Todo
 - [ ] Refactor input function. Group by input, not gamestate
 - [ ] Add player death animation 
-- [ ] Finish making demon sprites
+- [ ] Finish making lizard sprites
 - [ ] Reset crashed mailboxes at start of day
 - [ ] Reset screen shake when going to bonus
 - [ ] Make rings move
