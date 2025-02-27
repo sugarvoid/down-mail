@@ -408,27 +408,24 @@ function is_colliding_pro(a, b)
     end
 end
 
+
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
     print("score:" .. score, 3, 123, 7)
-    --print("CUSTOMERS", 30, 123, 7)
-
-    --print(days[day], 85, 123, 7)
-    print("mail", 85, 123, 7)
+    print("deliveries", 70, 123, 7)
     for i = 1, deliveries_needed, 1 do
-        pset(100 + (2 * i), 124, 5)
-        pset(100 + (2 * i), 125, 5)
-        pset(100 + (2 * i), 126, 5)
+        pset(110 + (2 * i), 124, 5)
+        pset(110 + (2 * i), 125, 5)
+        pset(110 + (2 * i), 126, 5)
     end
     for i = 1, (deliveries[1]+deliveries[2]), 1 do
-        pset(100 + (2 * i), 124, 7)
-        pset(100 + (2 * i), 125, 7)
-        pset(100 + (2 * i), 126, 7)
+        pset(110 + (2 * i), 124, 7)
+        pset(110 + (2 * i), 125, 7)
+        pset(110 + (2 * i), 126, 7)
     end
     if reminder then
         for k, v in pairs(customers) do
             pal(6, v)
-            --sspr(32, 8, 8, 8, 25+(4*k), 88, 4, 4)
             spr(21, 38 + (8 * k), 122)
             pal()
         end
@@ -443,20 +440,13 @@ end
 
 function advance_day()
     day += 1
-
-    
-
-
-    -- TODO: Set customer tables
     rings = {}
     intro_t = 30 * 6
     day_t = 30 * 6
     post_t = 30 * 6
     set_customers()
     p1 = init_player()
-    -- TODO: Reset player's health, position and letter stock
-    deliveries_left = deliveries_needed --TODO: Maybe increase as the week goes on
-    
+    deliveries_left = deliveries_needed
     g_state = gamestates.post_day
     init_wind()
 end
@@ -564,13 +554,6 @@ function update_gameover()
         game_over_x = -30
     end
 end
-
-function in_range(x_val)
-    if x_val >= 1 and x_val <= 20 then
-        print 'it is!'
-    end
-end
-
 
 function screen_shake()
     local fade = 0.95

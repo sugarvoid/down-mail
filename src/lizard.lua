@@ -57,7 +57,7 @@ function lizard:update()
         self.tmr_move -= 1 -- math.clamp(0, self.tmr_move - 1, 90)
         self.tmr_throw -= 1 --math.clamp(0, self.tmr_throw - 1, 90)
 
-        if self.tmr_move <= 0 then
+        if self.tmr_move <= 0 and self.agro < 3 then
             self:move( randi_rang(y_range[1], y_range[2]))
         end
 
@@ -113,6 +113,7 @@ end
 
 function lizard:throw_skull()
     --self.curr_animation = self.animations["throw"]
+    sfx(17)
     self.tmr_throw = throw_times[self.agro]
     spawn_skull(self.skull_x, self.y, p1, self.facing_r)
 end

@@ -5,18 +5,16 @@ local max_health = 3
 
 function init_player()
     local _p = setmetatable({}, player)
-    _p.type = "player"
     _p.x = 54
     _p.y = 54
     _p.w = 8
     _p.h = 8
-    --_p.score = 0
     _p.letters = 12
     _p.max_letter = 12
     _p.selected_letter = 0
     _p.is_alive = true
-    _p.sprite_a = 1
-    _p.sprite_b = 2
+    _p.sprite_a = 5
+    _p.sprite_b = 6
     _p.img = nil
     _p.facing_l = false
     _p.is_chute_open = true
@@ -25,7 +23,6 @@ function init_player()
     _p.life = max_health
     _p.thr_anmi = 0
     _p.move_speed = 1.5
-    _p.twister_count = 0
     _p.speed = 1
     _p.accel = 0.1
     return _p
@@ -49,6 +46,12 @@ function player:draw()
         spr(49, self.x, self.y)
     end
     print(deliveries_left, self.x, self.y+8)
+    if self.life >= 2 then
+        spr(18, self.x, self.y, 1, 1, self.facing_l)
+    end
+    if self.life == 3 then
+        spr(17, self.x, self.y, 1, 1, self.facing_l)
+    end
 end
 
 function player:update_chute(open)
@@ -148,8 +151,8 @@ function player:take_damage()
     self.chute_open_spr += 1
     --self.chute = 39
     sfx(16)
-    self.sprite_a += 2
-    self.sprite_b += 2
+   -- self.sprite_a += 2
+    --self.sprite_b += 2
     if p1.life == 0 then
         sfx(11)
         end_text = endings[2]

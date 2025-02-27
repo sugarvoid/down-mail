@@ -22,15 +22,17 @@ function letter:update()
         for mb in all(mailboxes) do
             if is_colliding(self, mb) and not mb.damaged and mb.empty then
                 
-                sfx(8)
+                
                 if self.x < mb.x then
                     if mb.facing_l then
+                        sfx(8)
                         mb:on_good_letter(self.score_mul)
                     else
                         explode(self.x, self.y, 2, 2, 7, 10)
                     end
                 else
                     if not mb.facing_l then
+                        sfx(8)
                         mb:on_good_letter(self.score_mul)
                     else
                         explode(self.x, self.y, 2, 2, 7, 10)

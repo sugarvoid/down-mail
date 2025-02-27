@@ -16,9 +16,6 @@ function spawn_mbox(lane)
     _mb.dir = 0
     _mb.dx = 1.3
     _mb.speed = rnd({0.7, 0.9, 1.4 })
-
-
-    
     add(mailboxes, _mb)
     update_lane(lane, true)
     reset_mb_timer()
@@ -57,10 +54,6 @@ function mailbox:draw()
     pal()
     spr(37, self.x, self.y + 8)
 end
-
--- function mailbox:in_range(x_val)
---     return x_val >= self.x - 10 and x_val <= self.x + 10
--- end
 
 function is_customer(col)
     for v in all(customers) do
@@ -106,8 +99,6 @@ function mailbox:on_good_letter(_score)
     explode(self.x, self.y, 2, 6, self.b_col, 10)
     self.speed = 4
 end
-
-
 
 function reset_mb_timer()
     next_mb = 70 + rnd(10)

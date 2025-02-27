@@ -45,14 +45,14 @@ function twister:update()
     if self.target then
         local _newangle = atan2(self.target.x - self.x, self.target.y - self.y)
 
-        if _newangle <= 0.3 then
-            local _t = self.target.type
-            if _t == "exit" then
-                del(twisters, self)
-            elseif _t == "player" then
-                -- p1.move_speed = 0.5
-            end
-        end
+        -- if _newangle <= 0.3 then
+        --     local _t = self.target.type
+        --     if _t == "exit" then
+        --         del(twisters, self)
+        --     elseif _t == "player" then
+        --         -- p1.move_speed = 0.5
+        --     end
+        -- end
 
         self.angle = angle_lerp(self.angle, _newangle, self.prox)
         self.x += self.speed * cos(self.angle)

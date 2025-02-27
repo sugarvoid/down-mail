@@ -35,6 +35,7 @@ function skull:update()
 
     if self.x<=8 or self.x>=120 then
         explode(self.x,self.y,3,4,5)
+        sfx(18)
         del(objects.front,self)
     end
 end
