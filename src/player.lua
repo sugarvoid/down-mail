@@ -91,11 +91,11 @@ function player:update()
     end
 
     if self.x <= 4 or self.x >= 118 then
-        sfx(12)
+
         self.is_alive = false
         end_text = endings[1]
         ending_idx = 1
-        g_state = gamestates.gameover
+        change_state(gamestates.gameover)
         --self.img = 49
         -- TODO: add blood particales
         -- then go to game overload

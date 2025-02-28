@@ -37,5 +37,4 @@ Spawning three twister are a bad thing
 - [ ] Add player death animation 
 - [ ] Reset crashed mailboxes at start of day
 - [ ] Make rings move
-- [ ] Make cover cave walls thicker
 - [ ] Finish log for dog class

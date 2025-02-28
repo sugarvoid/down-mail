@@ -1,10 +1,8 @@
 is_debug = false
-
 cols = { 12, 14, 9, 6 }
 customers = {}
 non_customers = {}
 reminder = false
---next_mb = 0
 map_y = 0
 damaged_mb = 0
 game_over_x = -10
@@ -32,7 +30,6 @@ gamestates = {
     gameover = 5,
     post_day = 6,
 }
-
 g_state = nil
 deliveries_needed = 6
 deliveries_left = deliveries_needed
@@ -248,7 +245,8 @@ function update_day()
     day_t -= 1
     if day_t <= 0 then
         g_state = gamestates.game
-        spawner.running = true
+        spawner:start()
+        --music(1)
     end
 end
 
@@ -447,6 +445,9 @@ end
 function change_state(new_state)
     offset = 0
     g_state = new_state
+    if new_state == gamestates.gameover then
+        sfx(19)
+    end
 end
 
 function set_customers()

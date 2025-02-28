@@ -1,7 +1,6 @@
-mailboxes = {}
-
 mailbox = {}
 mailbox.__index = mailbox
+mailboxes = {}
 
 function spawn_mbox(lane)
     local _mb = setmetatable({}, mailbox)
@@ -35,7 +34,7 @@ function mailbox:update()
 end
 
 function mailbox:take_damage()
-    offset =0.1
+    offset = 0.1
     sfx(3)
     self.damaged = true
     self.img = 22

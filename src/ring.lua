@@ -38,7 +38,7 @@ function ring:on_letter_contact(letter)
     explode(self.x, self.y+10, 3, 4, 7)
     
 
-    sfx(4)
+    sfx(15)
     del(rings, self)
 end
 

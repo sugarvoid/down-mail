@@ -13,14 +13,16 @@ lanes = {
 }
 
 spawner = {
-    rock_1 = randsec_rang(3, 10),
-    rock_2 = randsec_rang(3, 10),
-    mail_box = randsec_rang(3, 10),
-    mail_box_2 = randsec_rang(1, 2),
-    dog = 30 * 10,
-    ring = 30,
-    ammo = 30,
-    running = true,
+    start = function(self)
+        self.rock_1 = randsec_rang(3, 10)
+        self.rock_2 = randsec_rang(3, 10)
+        self.mail_box = randsec_rang(3, 10)
+        self.mail_box_2 = randsec_rang(1, 2)
+        self.dog = 30 * 10
+        self.ring = 30
+        self.ammo = 30
+        self.running = true
+    end,
 
     update = function(self)
         if self.running then
@@ -47,13 +49,13 @@ spawner = {
                 if self.mail_box <= 0 then
                     local lane = get_available_lane()
                     spawn_mbox(lane)
-                    self.mail_box = randsec_rang(2, 4)
+                    self.mail_box = randsec_rang(1, 4)
                 end
 
                 if self.mail_box_2 <= 0 then
                     local lane = get_available_lane()
                     spawn_mbox(lane)
-                    self.mail_box_2 = randsec_rang(2, 4)
+                    self.mail_box_2 = randsec_rang(2, 5)
                 end
 
                 if self.dog <= 0 then
@@ -114,6 +116,4 @@ function clear_objs()
     objects.front = {}
     objects.back = {}
     all_particles = {}
-    thing_on_left = false
-    thing_on_right = false
 end
