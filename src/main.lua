@@ -84,7 +84,6 @@ function _init()
     poke(0x5f5c, 255)
     menuitem(3, hint_txt, my_menu_item)
     restart_game()
-    spawn_dog()
 end
 
 function my_menu_item(b)
@@ -203,10 +202,12 @@ function update_play()
     p1:update()
     update_particles()
     update_objects()
-    update_lizards()
     update_letters()
     for t in all(twisters) do
         t:update()
+    end
+    for d in all(dogs) do
+        d:update()
     end
 
     map_y += .2
@@ -304,7 +305,6 @@ function draw_play()
 
     map(0, map_y)
     draw_gui()
-    draw_lizards()
 
     if debug then
         for k, v in ipairs(lanes) do

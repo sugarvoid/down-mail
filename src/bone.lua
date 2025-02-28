@@ -1,10 +1,10 @@
---skulls={}
+--bones={}
 
-skull={}
-skull.__index=skull
+bone={}
+bone.__index=bone
 
-function spawn_skull(x,y, p,face_r)
-    local _d=setmetatable({},skull)
+function spawn_bone(x,y, p,face_r)
+    local _d=setmetatable({},bone)
     _d.x=x
     _d.y=y
     _d.target={x=p.x, y=p.y}
@@ -19,11 +19,11 @@ function spawn_skull(x,y, p,face_r)
     add(objects.front, _d)
 end
 
-function skull:set_target(obj)
+function bone:set_target(obj)
     self.target=obj
 end
 
-function skull:update()
+function bone:update()
     self.x += self.dx * self.speed
     self.y += self.dy * self.speed
 
@@ -40,7 +40,7 @@ function skull:update()
     end
 end
 
-function skull:draw()
+function bone:draw()
     spr(self.img,self.x,self.y,1,1,self.facing_r)
 end
 
