@@ -4,29 +4,19 @@ cols = { 12, 14, 9, 6 }
 customers = {}
 non_customers = {}
 reminder = false
-mb_spawn = 0
-avil_yx = { 7, 16, 25, 34, 43, 52, 61, 70, 79, 88, 97, 106, 113 }
-next_mb = 0
+--next_mb = 0
 map_y = 0
 damaged_mb = 0
 game_over_x = -10
 score = 0
 bouns_timer = 0
 hint_txt = "hint off"
-
 deliveries = { 0, 0 }
-deliveries_good = 0
-deliveries_bad = 0
 goto_bonus_tmr = 60
-
-
 offset=0
-
 ending = 0
 end_spr = { 64, 68, 72, 76, 140}
 objects = { back = {}, front = {} }
-
-
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
 days_needed = 3
@@ -75,6 +65,7 @@ function draw_objects()
 end
 
 function restart_game()
+  
     day = 1
     deliveries_left = deliveries_needed
     deliveries = { 0, 0 }

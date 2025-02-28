@@ -65,11 +65,6 @@ spawner = {
                 spawn_lizard()
             end
 
-            if self.ammo <= 0 then
-                self.ammo = randsec_rang(6, 12)
-                spawn_package()
-            end
-
             -- update objects
             for mb in all(mailboxes) do
                 mb:update()
