@@ -66,6 +66,9 @@ function twister:update()
 end
 
 function twister:draw()
-    print(self.dis, self.x, self.y - 8)
+    if debug then
+       print(self.dis, self.x, self.y - 8) 
+    end
+    
     spr(self.anim[self.frame], self.x, self.y, 1, 1, self.facing_l)
 end

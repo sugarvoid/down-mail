@@ -45,7 +45,10 @@ function player:draw()
     else
         spr(49, self.x, self.y)
     end
-    print(deliveries_left, self.x, self.y+8)
+    if debug then
+        print(deliveries_left, self.x, self.y+8)
+    end
+    
     if self.life >= 2 then
         spr(18, self.x, self.y, 1, 1, self.facing_l)
     end

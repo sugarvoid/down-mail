@@ -13,9 +13,9 @@ bouns_timer = 0
 hint_txt = "hint off"
 deliveries = { 0, 0 }
 goto_bonus_tmr = 60
-offset=0
+offset = 0
 ending = 0
-end_spr = { 64, 68, 72, 76, 140}
+end_spr = { 64, 68, 72, 76, 140 }
 objects = { back = {}, front = {} }
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
@@ -42,10 +42,10 @@ end_text_l2 = ""
 ending_idx = 0
 
 endings = {
-    { "city mourns",    "loss of mailman" },
-    { "local mailman",  "goes missing" },
-    { "mailman fired",  "" },
-    { "mailman quits,", "buys city" },
+    { "city mourns",       "loss of mailman" },
+    { "local mailman",     "goes missing" },
+    { "mailman fired",     "" },
+    { "mailman quits,",    "buys city" },
     { "mediocre mailman,", "does job" },
 }
 
@@ -65,7 +65,6 @@ function draw_objects()
 end
 
 function restart_game()
-  
     day = 1
     deliveries_left = deliveries_needed
     deliveries = { 0, 0 }
@@ -85,6 +84,7 @@ function _init()
     poke(0x5f5c, 255)
     menuitem(3, hint_txt, my_menu_item)
     restart_game()
+    spawn_dog()
 end
 
 function my_menu_item(b)
@@ -144,8 +144,7 @@ function _draw()
 
     if is_debug then
         print("mem: " .. flr(stat(0)) .. "kb", 10, 0, 8)
-        print("cpu: " .. stat(1)*100 .. "%", 10, 8, 8)
-        
+        print("cpu: " .. stat(1) * 100 .. "%", 10, 8, 8)
     end
 end
 
@@ -227,7 +226,6 @@ function update_play()
             goto_bonus()
         end
     end
-
 end
 
 function update_intro()
@@ -257,17 +255,17 @@ function update_bonus()
     bouns_timer -= 1
     if bouns_timer <= 0 then
         if day <= (days_needed - 1) then
-           advance_day()
+            advance_day()
         else
             --if day == 3 then
-                if deliveries[1] == (deliveries_needed * (days_needed)) then
-                    end_text = endings[4]
-                    ending_idx = 4
-                else
-                    end_text = endings[5]
-                    ending_idx = 5
-                end      
-                change_state(gamestates.gameover)
+            if deliveries[1] == (deliveries_needed * (days_needed)) then
+                end_text = endings[4]
+                ending_idx = 4
+            else
+                end_text = endings[5]
+                ending_idx = 5
+            end
+            change_state(gamestates.gameover)
             --end
         end
     end
@@ -300,13 +298,19 @@ function draw_play()
     for r in all(rocks) do
         r:draw()
     end
+    for d in all(dogs) do
+        d:draw()
+    end
 
     map(0, map_y)
     draw_gui()
     draw_lizards()
-    for k, v in ipairs(lanes) do
-        if lanes[k][2] == true then
-            circfill(lanes[k][1] + 4, 119, 2, 10)
+
+    if debug then
+        for k, v in ipairs(lanes) do
+            if lanes[k][2] == true then
+                circfill(lanes[k][1] + 4, 119, 2, 10)
+            end
         end
     end
 end
@@ -314,7 +318,7 @@ end
 function draw_title()
     cls(7)
     spr(200, 48, 34, 4, 2)
-    spr(232, 48, 34+10, 4, 2)
+    spr(232, 48, 34 + 10, 4, 2)
     --print("down mail", hcenter("down mail"), 50, 0)
     print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 8)
 end
@@ -351,7 +355,6 @@ function draw_bonus()
     rect(17, 9, 109, 14, 7)
     print("bonus", 50, 3, 7)
     -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
-    
 end
 
 function draw_postday()
@@ -399,7 +402,6 @@ function is_colliding_pro(a, b)
     end
 end
 
-
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
     print("score:" .. score, 3, 123, 7)
@@ -409,7 +411,7 @@ function draw_gui()
         pset(110 + (2 * i), 125, 5)
         pset(110 + (2 * i), 126, 5)
     end
-    for i = 1, (deliveries[1]+deliveries[2]), 1 do
+    for i = 1, (deliveries[1] + deliveries[2]), 1 do
         pset(110 + (2 * i), 124, 7)
         pset(110 + (2 * i), 125, 7)
         pset(110 + (2 * i), 126, 7)
@@ -422,7 +424,7 @@ function draw_gui()
         end
     end
 
-    line( 48, 127, 65, 127, 0) 
+    line(48, 127, 65, 127, 0)
 
     --rectfill(48, 124, 50, 126, customers[1])
     -- rectfill(52, 124, 54, 126, customers[2])
@@ -443,7 +445,7 @@ function advance_day()
 end
 
 function change_state(new_state)
-    offset=0
+    offset = 0
     g_state = new_state
 end
 
@@ -548,27 +550,25 @@ end
 
 function screen_shake()
     local fade = 0.95
-    local offset_x=16-rnd(32)
-    local offset_y=16-rnd(32)
-  
-    offset_x*=offset
-    offset_y*=offset
-    
-    camera(offset_x,offset_y)
-  
-    offset*=fade
-    if offset<0.05 then
-      offset=0
+    local offset_x = 16 - rnd(32)
+    local offset_y = 16 - rnd(32)
+
+    offset_x *= offset
+    offset_y *= offset
+
+    camera(offset_x, offset_y)
+
+    offset *= fade
+    if offset < 0.05 then
+        offset = 0
     end
-  end
+end
+
+--function calc_dist2(x1,y1,x2,y2)
+--return abs(x1-x2)+abs(y1-y2)
+--end
 
 
-  --function calc_dist2(x1,y1,x2,y2)
-    --return abs(x1-x2)+abs(y1-y2)
-  --end
-
-
-  function dist(a,b)
-    return abs(a.x-b.x)+abs(a.y-b.y)
-  end
-
+function dist(a, b)
+    return abs(a.x - b.x) + abs(a.y - b.y)
+end

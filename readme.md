@@ -41,3 +41,4 @@ Spawning three twister are a bad thing
 - [ ] Reset screen shake when going to bonus
 - [ ] Make rings move
 - [ ] Make cover cave walls thicker
+- [ ] Turn lizards to dog on hoverboard
