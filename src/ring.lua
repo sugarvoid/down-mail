@@ -34,7 +34,10 @@ end
 
 function ring:on_letter_contact(letter)
     score += self.value
-    explode(self.x, self.y+8, 3, 6, self.color)
+    explode(self.x, self.y+6, 3, 4, self.color)
+    explode(self.x, self.y+10, 3, 4, 7)
+    
+
     sfx(4)
     del(rings, self)
 end

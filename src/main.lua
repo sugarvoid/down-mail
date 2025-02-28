@@ -316,7 +316,7 @@ function draw_play()
 end
 
 function draw_title()
-    cls(7)
+    cls()
     spr(200, 48, 34, 4, 2)
     spr(232, 48, 34 + 10, 4, 2)
     --print("down mail", hcenter("down mail"), 50, 0)
