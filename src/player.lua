@@ -154,8 +154,6 @@ function player:take_damage()
     self.chute_open_spr += 1
     --self.chute = 39
     sfx(16)
-   -- self.sprite_a += 2
-    --self.sprite_b += 2
     if p1.life == 0 then
         --sfx(11)
         end_text = endings[2]
