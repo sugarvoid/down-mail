@@ -318,7 +318,7 @@ function draw_title()
     spr(200, 48, 34, 4, 2)
     spr(232, 48, 34 + 10, 4, 2)
     --print("down mail", hcenter("down mail"), 50, 0)
-    print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 8)
+    print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 7)
 end
 
 function draw_intro()
