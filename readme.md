@@ -38,3 +38,4 @@ Spawning three twister are a bad thing
 - [ ] Reset crashed mailboxes at start of day
 - [ ] Make rings move
 - [ ] Finish log for dog class
+- [ ] Prevent mailboxes and rocks spwaning at the same time
