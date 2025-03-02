@@ -16,12 +16,11 @@ spawner = {
     start = function(self)
         self.rock_1 = randsec_rang(3, 10)
         self.rock_2 = randsec_rang(3, 10)
-        self.mail_box = randsec_rang(3, 10)
+        self.mail_box = 60 --randsec_rang(3, 10)
         self.mail_box_2 = randsec_rang(3, 10)
 
         self.dog = randsec_rang(5, 10)
         self.ring = 30
-        self.ammo = 30
         self.running = true
     end,
 
@@ -33,7 +32,6 @@ spawner = {
                 self.mail_box -= 1
                 self.mail_box_2 -= 1
                 self.dog -= 1
-                self.ammo -= 1
 
                 if self.rock_1 <= 0 then
                     local lane = get_available_lane()

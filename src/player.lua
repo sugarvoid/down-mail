@@ -1,7 +1,6 @@
 player = {}
 player.__index = player
 
-local max_health = 3
 
 function init_player()
     local _p = setmetatable({}, player)
@@ -20,7 +19,8 @@ function init_player()
     _p.is_chute_open = true
     _p.chute_spr = nil
     _p.chute_open_spr = 7
-    _p.life = max_health
+    _p.max_health = 3
+    _p.life = _p.max_health
     _p.thr_anmi = 0
     _p.move_speed = 1.5
     _p.speed = 1

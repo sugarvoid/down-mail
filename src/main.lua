@@ -7,7 +7,7 @@ damaged_mb = 0
 game_over_x = -10
 score = 0
 bouns_timer = 0
-deliveries = { 0, 0 }
+deliveries = { 0, 0, 0}
 goto_bonus_tmr = 60
 offset = 0
 ending = 0
@@ -16,13 +16,15 @@ objects = { back = {}, front = {} }
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
 days_needed = 3
+
+day_duration = 20 * 30
+
 intro_t = 30 * 6
 day_t = 30 * 6
 post_t = 30 * 8
 gamestates = {
     title = 0,
     day_intro = 1,
-    day_title = 2,
     game = 3,
     bonus = 4,
     gameover = 5,
@@ -62,7 +64,7 @@ end
 function restart_game()
     day = 1
     deliveries_left = deliveries_needed
-    deliveries = { 0, 0 }
+    deliveries = { 0, 0, 0 }
     intro_t = 30 * 6
     day_t = 30 * 6
     post_t = 30 * 8
@@ -88,8 +90,8 @@ function _update()
     if g_state == gamestates.title then
     elseif g_state == gamestates.day_intro then
         update_intro()
-    elseif g_state == gamestates.day_title then
-        update_day()
+    -- elseif g_state == gamestates.day_title then
+    --     update_day()
     elseif g_state == gamestates.game then
         update_play()
     elseif g_state == gamestates.bonus then
@@ -106,8 +108,8 @@ function _draw()
         draw_title()
     elseif g_state == gamestates.day_intro then
         draw_intro()
-    elseif g_state == gamestates.day_title then
-        draw_day()
+    -- elseif g_state == gamestates.day_title then
+    --     draw_day()
     elseif g_state == gamestates.game then
         screen_shake()
         draw_play()
@@ -131,8 +133,8 @@ function check_input()
             g_state = gamestates.day_intro
         elseif g_state == gamestates.day_intro then
             intro_t = 0
-        elseif g_state == gamestates.day_title then
-            day_t = 0
+        -- elseif g_state == gamestates.day_title then
+        --     day_t = 0
         elseif g_state == gamestates.post_day then
             post_t = 0
         elseif g_state == gamestates.game then
@@ -210,26 +212,27 @@ end
 function update_intro()
     intro_t -= 1
     if intro_t <= 0 then
-        change_state(gamestates.day_title)
+        spawner:start()
+        change_state(gamestates.game)
     end
 end
 
 function update_postday()
     post_t -= 1
     if post_t <= 0 then
-        change_state(gamestates.day_intro)
-        deliveries = { 0, 0 }
+        change_state(gamestates.game)
+        --deliveries = { 0, 0, 0 }
     end
 end
 
-function update_day()
-    day_t -= 1
-    if day_t <= 0 then
-        g_state = gamestates.game
-        spawner:start()
-        --music(1)
-    end
-end
+-- function update_day()
+--     day_t -= 1
+--     if day_t <= 0 then
+--         g_state = gamestates.game
+--         spawner:start()
+--         --music(1)
+--     end
+-- end
 
 function update_bonus()
     bouns_timer -= 1
@@ -304,20 +307,22 @@ end
 
 function draw_intro()
     cls()
-    print("customers", hcenter("customers"), 45, 7)
-    print("non-customers", hcenter("non-customers"), 80, 7)
+    print("customers", hcenter("customers"), 20, 7)
+    print("non-customers", hcenter("non-customers"), 50, 7)
+    print("bonus", hcenter("bonus"), 80, 7)
 
-    for k, v in pairs(customers) do
-        pal(6, v)
-        sspr(56, 8, 8, 8, 25 + (20 * k), 52, 16, 16)
+        pal(6, 12)
+        sspr(56, 8, 8, 8, 25 + (30 * 1), 25, 16, 16)
         pal()
-    end
 
-    for k, v in pairs(non_customers) do
-        pal(6, v)
-        sspr(56, 8, 8, 8, 25 + (20 * k), 88, 16, 16)
+       
+        sspr(56, 8, 8, 8, 25 + (30 * 1), 55, 16, 16)
+        
+
+
+        pal(6, 10)
+        sspr(56, 8, 8, 8, 25 + (30 * 1), 85, 16, 16)
         pal()
-    end
 
     draw_skip()
 end
@@ -384,23 +389,34 @@ end
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
     print("score:" .. score, 3, 123, 7)
-    print("deliveries", 70, 123, 7)
-    for i = 1, deliveries_needed, 1 do
+    print("hp", 103, 123, 7)
+
+
+
+    for i = 1, p1.max_health, 1 do
+        pset(110 + (2 * i), 123, 5)
         pset(110 + (2 * i), 124, 5)
         pset(110 + (2 * i), 125, 5)
         pset(110 + (2 * i), 126, 5)
+        pset(110 + (2 * i), 127, 5)
     end
-    for i = 1, (deliveries[1] + deliveries[2]), 1 do
-        pset(110 + (2 * i), 124, 7)
-        pset(110 + (2 * i), 125, 7)
-        pset(110 + (2 * i), 126, 7)
+
+    for i = 1, p1.life, 1 do
+        pset(110 + (2 * i), 123, 14)
+        pset(110 + (2 * i), 124, 14)
+        pset(110 + (2 * i), 125, 14)
+        pset(110 + (2 * i), 126, 14)
+        pset(110 + (2 * i), 127, 14)
     end
+
     
-        for k, v in pairs(customers) do
-            pal(6, v)
-            spr(16, 38 + (8 * k), 122)
-            pal()
-        end
+       -- for k, v in pairs(customers) do
+          --  pal(6, v)
+          --  spr(16, 38 + (8 * k), 122)
+          --  pal()
+        --end
+
+    print (days[day], hcenter(days[day]), 123, 7)
     
 
 
@@ -544,11 +560,6 @@ function screen_shake()
         offset = 0
     end
 end
-
---function calc_dist2(x1,y1,x2,y2)
---return abs(x1-x2)+abs(y1-y2)
---end
-
 
 function dist(a, b)
     return abs(a.x - b.x) + abs(a.y - b.y)

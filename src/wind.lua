@@ -4,7 +4,7 @@ wind_line.__index=wind_line
 
 function wind_line:new()
     local _w=setmetatable({},wind_line)
-    _w.speed=randi_rang(2,5)
+    _w.speed=randi_rang(3,7)
     _w:reset()
     return _w
 end
@@ -33,7 +33,7 @@ function wind_line:draw()
 end
 
 function init_wind()
-    for i=0,15 do
+    for i=0,30 do
         add(objects.back,wind_line:new())
     end
 end

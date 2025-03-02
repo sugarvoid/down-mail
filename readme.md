@@ -2,7 +2,7 @@
 [Play in browser](https://sugarvoid.itch.io/down-mail)
 
 ## Project Status
-- Adding polish. 
+- Work in progress 
 
 ## Gameplay
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)
@@ -39,3 +39,5 @@ Spawning three twister are a bad thing
 - [ ] Make rings move
 - [ ] Finish log for dog class
 - [ ] Prevent mailboxes and rocks spwaning at the same time
+- [ ] Add invincibility frames from player
+- [ ] Make game endless/hi score game

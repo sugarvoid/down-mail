@@ -4,17 +4,45 @@ mailboxes = {}
 
 function spawn_mbox(lane)
     local _mb = setmetatable({}, mailbox)
+    _mb.m_type = nil -- 1=customer, 2=non_customers, 3=bonus
+
+
+    local rand = rnd()
+	local _type
+
+    print_debug(rand)
+    _mb.speed = rnd({0.7, 0.9, 1.4 })
+
+	if rand <= 0.50 then -- 50% chance for customer
+        _mb.m_type = 1
+        _mb.b_col = 12
+		--_mailbox.m_type = "customer"
+		--_mailbox.frame = 5
+	elseif rand <= 0.90 then -- 40% chance for non_customer (this will cover the range from 0.50 to 0.90)
+		_mb.m_type = 2
+        _mb.b_col = 6
+        --_mailbox.m_type = "non_customer"
+		--_mailbox.frame = 8
+	else                 -- 10% chance for bonus (this will cover the range from 0.90 to 1)
+		_mb.m_type = 3
+        _mb.b_col = 10
+        _mb.speed = 1.6
+        --_mailbox.m_type = "bonus"
+		--_mailbox.frame = 2
+	end
+
+
     _mb.lane = lane
     _mb.x = lanes[lane][1]
     _mb.y = 128
     _mb.facing_l = _mb.x > 128 / 2
-    _mb.b_col = rnd(cols)
+    --_mb.b_col = rnd(cols)
     _mb.img = 21
     _mb.empty = true
     _mb.damaged = false
     _mb.dir = 0
     _mb.dx = 1.3
-    _mb.speed = rnd({0.7, 0.9, 1.4 })
+    
     add(mailboxes, _mb)
     update_lane(lane, true)
     reset_mb_timer()
@@ -66,15 +94,20 @@ function is_customer(col)
     return false
 end
 
-function mailbox:check()
+function mailbox:check(points)
     if not self.empty and not self.damaged then
-        --FIXME: Not working
-        if is_customer(self.b_col) then
+        if self.m_type == 1 then
             deliveries[1] += 1
-           -- sfx(4)
-        else
+            score += (10 * flr(points))
+            sfx(4)
+        elseif self.m_type == 2 then
+            score += 5
             deliveries[2] += 1
-            --sfx(5)
+            sfx(5)
+        else
+            score += (10 * flr(points) * 1.5)
+            deliveries[3] += 1
+            sfx(21)
         end
         deliveries_left -= 1
         if deliveries_left == 0 then
@@ -82,19 +115,14 @@ function mailbox:check()
             sfx(2)
             clear_objs()
             spawner.running = false
-            --goto_bonus()
-            --advance_day()
         end
     end
-    
 end
 
 function mailbox:on_good_letter(_score)
-    
     self.empty = false
-   self:check() 
+    self:check(_score)
     self.img = 20
-    score += (10 * flr(_score))
     explode(self.x, self.y, 2, 6, self.b_col, 10)
     self.speed = 4
 end
