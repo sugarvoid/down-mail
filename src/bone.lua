@@ -1,5 +1,3 @@
---bones={}
-
 bone={}
 bone.__index=bone
 
@@ -9,7 +7,7 @@ function spawn_bone(x,y, p,face_r)
     _d.y=y
     _d.target={x=p.x, y=p.y}
     _d.facing_r=face_r
-    _d.img=36
+    _d.img=2
     _d.speed=5
     _d.dx = p.x - _d.x
     _d.dy = p.y - _d.y
@@ -19,9 +17,9 @@ function spawn_bone(x,y, p,face_r)
     add(objects.front, _d)
 end
 
-function bone:set_target(obj)
-    self.target=obj
-end
+--function bone:set_target(obj)
+--    self.target=obj
+--end
 
 function bone:update()
     self.x += self.dx * self.speed

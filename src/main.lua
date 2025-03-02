@@ -2,13 +2,11 @@ is_debug = false
 cols = { 12, 14, 9, 6 }
 customers = {}
 non_customers = {}
-reminder = false
 map_y = 0
 damaged_mb = 0
 game_over_x = -10
 score = 0
 bouns_timer = 0
-hint_txt = "hint off"
 deliveries = { 0, 0 }
 goto_bonus_tmr = 60
 offset = 0
@@ -79,24 +77,7 @@ end
 
 function _init()
     poke(0x5f5c, 255)
-    menuitem(3, hint_txt, my_menu_item)
     restart_game()
-end
-
-function my_menu_item(b)
-    if b & 1 > 0 then toggle_hint() end
-    if b & 2 > 0 then toggle_hint() end
-    return true -- stay open
-end
-
-function toggle_hint()
-    reminder = not reminder
-    if reminder then
-        hint_txt = "hint on"
-    else
-        hint_txt = "hint off"
-    end
-    menuitem(_, hint_txt)
 end
 
 function _update()
@@ -414,15 +395,14 @@ function draw_gui()
         pset(110 + (2 * i), 125, 7)
         pset(110 + (2 * i), 126, 7)
     end
-    if reminder then
+    
         for k, v in pairs(customers) do
             pal(6, v)
-            spr(21, 38 + (8 * k), 122)
+            spr(16, 38 + (8 * k), 122)
             pal()
         end
-    end
+    
 
-    line(48, 127, 65, 127, 0)
 
     --rectfill(48, 124, 50, 126, customers[1])
     -- rectfill(52, 124, 54, 126, customers[2])

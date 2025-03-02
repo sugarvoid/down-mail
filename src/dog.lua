@@ -16,6 +16,7 @@ function spawn_dog()
     d.col = rnd({4,7})
     d.img = 19
     d.agro=1
+    d.anmi_t = 0
     d.tmr_move = randsec_rang(6, 7)
     --d.timer = 150
     d.time_on_screen = 0
@@ -24,19 +25,30 @@ function spawn_dog()
     --d.dir = 0
     --d.dx = 1.3
     d.dst_y = randi_rang(20, 90)
+
+
+    --d.dst_y = 50
+
     d.start_y = -10
     d.is_moving = false
     d.in_play = false
     --d.amplitude = 10
     d.bob = 0.2
+    d.y_high = 0
+    d.y_low = 0
     
     if not d.facing_l then
         --d.x = 113
         --d.facing_r = true
+        d.shield_x = -8
+        d.shield_y_mid = -2
         d.bone_x=114
     else
         --d.x = 5
        -- d.facing_r = false
+       d.shield_y_out = 6
+        d.shield_y_mid = 2
+        d.shield_x = 8
         d.bone_x=11
     end
 
@@ -45,15 +57,18 @@ function spawn_dog()
 end
 
 function dog:update()
-    print_debug(self.y)
+    --print_debug(self.y)
+    self.anmi_t+=1
 
-    if self.y <= self.dst_y then
-        
+    if self.y <= self.dst_y and not self.in_play then
         self.y += .5
     else
         sfx(-2, 3)
         self.in_play = true
-        self.curr_y = self.dst_y - 2
+        --self.y = self.dst_y
+        self.y_high =  self.dst_y - 2
+        self.y_low = self.dst_y + 2
+        --self.curr_y = self.dst_y --- 2
     end
 
     if self.in_play then
@@ -67,11 +82,16 @@ function dog:update()
 
         self.y += self.bob
 
-        if self.y <= self.curr_y - 2 then 
+        --print_debug("low="..self.y_low .. " " .. "curr="..self.y .. " " .. "high="..self.y_high)
+
+        if self.y <= self.y_low then 
             self.bob *=-1 
-            
-        elseif self.y >= self.curr_y + 2 then
+            --print_debug("less that low")
+            --self.y += self.bob
+        end
+        if self.y >= self.y_high then
             self.bob *=-1
+            --self.y -= self.bob
         end
 
         --self.y = self.curr_y + sin(self.frequency * self.curr_y) * self.amplitude
@@ -126,7 +146,17 @@ function dog:draw()
     pal(14, self.col)
     spr(self.img, self.x, self.y, 1, 1, self.facing_l)
     pal()
-    spr(3, self.x, self.y + 7, 1, 1, self.facing_l)
+    spr(3+self.anmi_t%15\7.5, self.x, self.y + 7, 1, 1, self.facing_l)
+    if not self.in_play then
+        self:draw_shield()
+    end
+    
+end
+
+function dog:draw_shield()
+    spr(31, self.x + self.shield_x, self.y - 5, 1, 1, self.facing_l)
+    spr(47, self.x + self.shield_x, self.y + 3  , 1, 1, self.facing_l)
+    spr(31, self.x + self.shield_x, self.y + 11, 1, 1, self.facing_l, true)
 end
 
 

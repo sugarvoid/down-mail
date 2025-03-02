@@ -5,24 +5,19 @@ letters = {}
 function letter:update()
     if self.tossed then
         self.score_mul += 0.2
-        self.speed  = mid(-4, self.speed + self.accel, 4)
+        self.speed = mid(-4, self.speed + self.accel, 4)
         self.x += self.speed * self.dir
         self.t += 1
-
-    --     self.t = (self.t + 1) % 2
-    --    local rotate = self.t == 0
-       if self.t >= 3 then
+        if self.t >= 3 then
             self.t = 0
-           self.img += 1
-       end
+            self.img += 1
+        end
         if self.img == 35 then
             self.img = 32
         end
 
         for mb in all(mailboxes) do
             if is_colliding(self, mb) and not mb.damaged and mb.empty then
-                
-                
                 if self.x < mb.x then
                     if mb.facing_l then
                         sfx(8)
@@ -38,11 +33,9 @@ function letter:update()
                         explode(self.x, self.y, 2, 2, 7, 10)
                     end
                 end
-                
                 del(letters, self)
             end
         end
-
 
         if self.x <= 0 or self.x >= 120 then
             if g_state == gamestates.game then
@@ -50,9 +43,7 @@ function letter:update()
                    spawn_twister(self.x, self.y) 
                    sfx(14)
                 end
-                
                 explode(self.x, self.y, 3, 4, 4, 10)
-                
             end
             del(letters, self)
         end

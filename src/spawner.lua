@@ -17,8 +17,9 @@ spawner = {
         self.rock_1 = randsec_rang(3, 10)
         self.rock_2 = randsec_rang(3, 10)
         self.mail_box = randsec_rang(3, 10)
-        self.mail_box_2 = randsec_rang(1, 2)
-        self.dog = 30 * 10
+        self.mail_box_2 = randsec_rang(3, 10)
+
+        self.dog = randsec_rang(5, 10)
         self.ring = 30
         self.ammo = 30
         self.running = true
@@ -113,6 +114,7 @@ function clear_objs()
     rings = {}
     twisters = {}
     dogs = {}
+    sfx(-2, 3) -- in case dog enter sound is playing
     objects.front = {}
     objects.back = {}
     all_particles = {}
