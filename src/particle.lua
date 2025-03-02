@@ -44,18 +44,5 @@ function explode(x,y,r,num,c,t)
             c=c,
         }
         add(all_particles,_p)
-        -- add(all_particles,_p)
-        -- add_particle(
-        --     x,         -- x
-        --     y,         -- y
-        --     30+rnd(20),-- die
-        --     rnd(2)-1,  -- dx
-        --     rnd(2)-1,  -- dy
-        --     false,     -- gravity
-        --     false,     -- grow
-        --     true,      -- shrink
-        --     r,         -- radius
-        --     c    -- color
-        -- )
     end
 end

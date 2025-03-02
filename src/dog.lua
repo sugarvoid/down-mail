@@ -73,8 +73,8 @@ function dog:update()
 
     if self.in_play then
         self.time_on_screen+=1
-        self.tmr_move -= 1 -- math.clamp(0, self.tmr_move - 1, 90)
-        self.tmr_throw -= 1 --math.clamp(0, self.tmr_throw - 1, 90)
+        self.tmr_move -= 1
+        self.tmr_throw -= 1
 
         if self.tmr_move <= 0 and self.agro < 3 then
             --self:move( randi_rang(y_range[1], y_range[2]))
@@ -94,8 +94,7 @@ function dog:update()
             --self.y -= self.bob
         end
 
-        --self.y = self.curr_y + sin(self.frequency * self.curr_y) * self.amplitude
-
+        
         if self.time_on_screen == 30*4 then
             self.time_on_screen = 0
             self.agro = mid(1, self.agro + 1, #throw_times)
