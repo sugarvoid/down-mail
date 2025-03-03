@@ -18,21 +18,15 @@ function spawn_dog()
     d.agro=1
     d.anmi_t = 0
     d.tmr_move = randsec_rang(6, 7)
-    --d.timer = 150
     d.time_on_screen = 0
     d.tmr_throw = throw_times[d.agro]
     d.damaged = false
     --d.dir = 0
     --d.dx = 1.3
     d.dst_y = randi_rang(20, 80)
-
-
-    --d.dst_y = 50
-
     d.start_y = -10
     d.is_moving = false
     d.in_play = false
-    --d.amplitude = 10
     d.bob = 0.2
     d.y_high = 0
     d.y_low = 0
@@ -81,8 +75,6 @@ function dog:update()
         end
 
         self.y += self.bob
-
-        --print_debug("low="..self.y_low .. " " .. "curr="..self.y .. " " .. "high="..self.y_high)
 
         if self.y <= self.y_low then 
             self.bob *=-1 
@@ -149,7 +141,6 @@ function dog:draw()
     if not self.in_play then
         self:draw_shield()
     end
-    
 end
 
 function dog:draw_shield()

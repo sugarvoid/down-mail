@@ -61,6 +61,8 @@ local spawns = {
     {1, 8}
 }
 
+
+
 spawner = {
     start = function(self)
         self.rock_1 = randsec_rang(3, 10)

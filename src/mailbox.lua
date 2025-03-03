@@ -2,10 +2,15 @@ mailbox = {}
 mailbox.__index = mailbox
 mailboxes = {}
 
-
-stuff = {
-
+mb_tracker = {
+    --[[
+        1=customers
+        2=non_customers
+    ]] --
+    0,
+    0
 }
+
 
 function spawn_mbox(lane)
     local _mb = setmetatable({}, mailbox)
@@ -22,9 +27,11 @@ function spawn_mbox(lane)
 	if rand <= 0.50 then -- 50% chance for customer
         _mb.m_type = 1
         _mb.b_col = 12
+        mb_tracker[1] += 1
 	elseif rand <= 0.90 then -- 40% chance for non_customer
 		_mb.m_type = 2
-        _mb.b_col = 6
+        _mb.b_col = 2
+        mb_tracker[2] += 1
 	else                 -- 10% chance for bonus
 		_mb.m_type = 3
         _mb.b_col = 10

@@ -1,13 +1,13 @@
 is_debug = false
-cols = { 12, 14, 9, 6 }
-customers = {}
-non_customers = {}
+--cols = { 12, 14, 9, 6 }
+--customers = {}
+--non_customers = {}
 map_y = 0
 damaged_mb = 0
 game_over_x = -10
 score = 0
 bouns_timer = 0
-deliveries = { 0, 0, 0}
+deliveries = { 0, 0, 0 }
 goto_bonus_tmr = 0
 offset = 0
 level_length = 13
@@ -17,14 +17,13 @@ objects = { back = {}, front = {} }
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
 days_needed = 3
-
-day_duration = 20 * 30
+local good_score = 1000 --TODO: Replace
 
 clock = {
     seconds = 0,
     t = 0,
     is_running = false,
-    update=function(self)
+    update = function(self)
         if self.is_running then
             self.t += 1
             if self.t >= 30 then
@@ -32,20 +31,20 @@ clock = {
             end
         end
     end,
-    tick=function(self)
+    tick = function(self)
         self.seconds += 1
         self.t = 0
     end,
-    reset=function(self)
+    reset = function(self)
         self.is_running = false
-        self.t=0
+        self.t = 0
         self.seconds = 0
     end,
-    stop=function(self)
+    stop = function(self)
         self:reset()
     end,
-    start=function(self)
-        
+    start = function(self)
+
     end
 }
 
@@ -54,7 +53,8 @@ day_t = 30 * 6
 post_t = 30 * 8
 gamestates = {
     title = 0,
-    day_intro = 1,
+    how_to = 1,
+    day_title = 2,
     game = 3,
     bonus = 4,
     gameover = 5,
@@ -96,18 +96,22 @@ function restart_game()
     deliveries_left = deliveries_needed
     deliveries = { 0, 0, 0 }
     intro_t = 30 * 6
-    day_t = 30 * 6
+    day_t = 30 * 3
     post_t = 30 * 8
     spawner:reset()
-    set_customers()
+    --set_customers()
     score = 0
     init_wind()
     p1 = init_player()
+    mb_tracker = {0,0}
     change_state(gamestates.title)
 end
 
 function _init()
     poke(0x5f5c, 255)
+    poke(0x5f2e, 1) -- for pallete
+    pal(2, 135, 1)
+
     restart_game()
 end
 
@@ -117,10 +121,10 @@ function _update()
 
 
     if g_state == gamestates.title then
-    elseif g_state == gamestates.day_intro then
-        update_intro()
-    -- elseif g_state == gamestates.day_title then
-    --     update_day()
+    --elseif g_state == gamestates.how_to then
+        --update_intro()
+    elseif g_state == gamestates.day_title then
+        update_day()
     elseif g_state == gamestates.game then
         update_play()
     elseif g_state == gamestates.bonus then
@@ -133,12 +137,13 @@ function _update()
 end
 
 function _draw()
+    
     if g_state == gamestates.title then
         draw_title()
-    elseif g_state == gamestates.day_intro then
-        draw_intro()
-    -- elseif g_state == gamestates.day_title then
-    --     draw_day()
+    elseif g_state == gamestates.how_to then
+        draw_howto()
+    elseif g_state == gamestates.day_title then
+        draw_day()
     elseif g_state == gamestates.game then
         screen_shake()
         draw_play()
@@ -161,11 +166,11 @@ end
 function check_input()
     if btnp(🅾️) then
         if g_state == gamestates.title then
-            g_state = gamestates.day_intro
-        elseif g_state == gamestates.day_intro then
-            intro_t = 0
-        -- elseif g_state == gamestates.day_title then
-        --     day_t = 0
+            g_state = gamestates.day_title
+            -- elseif g_state == gamestates.how_to then
+            --     intro_t = 0
+        elseif g_state == gamestates.day_title then
+            day_t = 0
         elseif g_state == gamestates.post_day then
             post_t = 0
         elseif g_state == gamestates.game then
@@ -196,15 +201,16 @@ function check_input()
 
     if btnp(❎) then
         if g_state == gamestates.title then
-
-        elseif g_state == gamestates.day_intro then
-
+            change_state(gamestates.how_to)
+        elseif g_state == gamestates.how_to then
+            change_state(gamestates.title)
+        elseif g_state == gamestates.bonus then
+            bouns_timer = 0
         elseif g_state == gamestates.day_title then
-
         elseif g_state == gamestates.game then
-            --spawn_package()
+            clock.seconds = level_length
         elseif g_state == gamestates.gameover then
-            
+
         end
     end
 end
@@ -212,7 +218,7 @@ end
 function update_play()
     clock:update()
 
-    if clock.seconds == level_length then
+    if clock.seconds >= level_length then
         clock:stop()
         print_debug("level over")
         goto_bonus_tmr = 60
@@ -245,7 +251,7 @@ function update_play()
 
     spawner:update()
 
-    if goto_bonus_tmr < 0 then
+    if goto_bonus_tmr > 0 then
         goto_bonus_tmr -= 1
         if goto_bonus_tmr == 0 then
             goto_bonus()
@@ -253,14 +259,14 @@ function update_play()
     end
 end
 
-function update_intro()
-    intro_t -= 1
-    if intro_t <= 0 then
-        spawner:start()
-        start_level()
-        change_state(gamestates.game)
-    end
-end
+-- function update_intro()
+--     intro_t -= 1
+--     if intro_t <= 0 then
+--         spawner:start()
+--         start_level()
+--         change_state(gamestates.game)
+--     end
+-- end
 
 function update_postday()
     post_t -= 1
@@ -270,30 +276,32 @@ function update_postday()
     end
 end
 
--- function update_day()
---     day_t -= 1
---     if day_t <= 0 then
---         g_state = gamestates.game
---         spawner:start()
---         --music(1)
---     end
--- end
+function update_day()
+    day_t -= 1
+    if day_t <= 0 then
+        spawner:start()
+        start_level()
+        change_state(gamestates.game)
+        music(1)
+    end
+end
 
 function update_bonus()
     bouns_timer -= 1
     if bouns_timer <= 0 then
+        rings = {}
         if day <= (days_needed - 1) then
             advance_day()
         else
             --if day == 3 then
-            if deliveries[1] == (deliveries_needed * (days_needed)) then
-                end_text = endings[4]
-                ending_idx = 4
-            else
-                end_text = endings[5]
-                ending_idx = 5
-            end
-            change_state(gamestates.gameover)
+            -- if deliveries[1] == (deliveries_needed * (days_needed)) then
+            --     end_text = endings[4]
+            --     ending_idx = 4
+            -- else
+            --     end_text = endings[5]
+            --     ending_idx = 5
+            -- end
+            goto_gameover(4)
             --end
         end
     end
@@ -347,28 +355,36 @@ function draw_title()
     spr(200, 48, 34, 4, 2)
     spr(232, 48, 34 + 10, 4, 2)
     --print("down mail", hcenter("down mail"), 50, 0)
-    print("press 🅾️ to play", hcenter("press 🅾️ to play"), 75, 7)
+    print("🅾️ play", hcenter("🅾️ play"), 75, 7)
+    print("❎ info", hcenter("❎ info"), 83, 7)
 end
 
-function draw_intro()
+function draw_howto()
     cls()
 
     print("customers", hcenter("customers"), 22, 7)
     pal(6, 12)
+    
     sspr(56, 8, 8, 8, 55, 27, 16, 16)
     pal()
 
 
     print("non-customers", hcenter("non-customers"), 52, 7)
+    
+    pal(6, 2)
+    
     sspr(56, 8, 8, 8, 55, 57, 16, 16)
-
+    pal()
 
     print("bonus", hcenter("bonus"), 82, 7)
     pal(6, 10)
     sspr(56, 8, 8, 8, 55, 87, 16, 16)
     pal()
 
-    draw_skip()
+
+    print("bonus", hcenter("bonus"), 82, 7)
+
+    print("❎ back", 8, 120, 7)
 end
 
 function draw_bonus()
@@ -453,15 +469,15 @@ function draw_gui()
         pset(110 + (2 * i), 127, 7)
     end
 
-    
-       -- for k, v in pairs(customers) do
-          --  pal(6, v)
-          --  spr(16, 38 + (8 * k), 122)
-          --  pal()
-        --end
 
-    print (days[day], hcenter(days[day]), 123, 7)
-    
+    -- for k, v in pairs(customers) do
+    --  pal(6, v)
+    --  spr(16, 38 + (8 * k), 122)
+    --  pal()
+    --end
+
+    print(days[day], hcenter(days[day]), 123, 7)
+
 
 
     --rectfill(48, 124, 50, 126, customers[1])
@@ -475,30 +491,27 @@ end
 
 function advance_day()
     day += 1
-    rings = {}
+    
     intro_t = 30 * 6
-    day_t = 30 * 6
+    day_t = 30 * 3
     post_t = 30 * 6
-    set_customers()
+    --set_customers()
     p1 = init_player()
     deliveries_left = deliveries_needed
-    g_state = gamestates.post_day
+    g_state = gamestates.day_title
     init_wind()
 end
 
 function change_state(new_state)
     offset = 0
     g_state = new_state
-    if new_state == gamestates.gameover then
-        sfx(19)
-    end
 end
 
-function set_customers()
-    shuffle(cols)
-    customers = { cols[1], cols[2] }
-    non_customers = { cols[3], cols[4] }
-end
+-- function set_customers()
+--     shuffle(cols)
+--     customers = { cols[1], cols[2] }
+--     non_customers = { cols[3], cols[4] }
+-- end
 
 function angle_lerp(angle1, angle2, t)
     angle1 = angle1 % 1
@@ -565,6 +578,33 @@ function goto_bonus()
     bouns_timer = 30 * 15
     change_state(gamestates.bonus)
     spawner.running = true
+end
+
+function goto_gameover(reason)
+    --[[
+        1=death
+        2=missing
+        3=fired
+        4=3days
+    ]] --
+    if reason == 1 then
+        end_text = endings[1]
+        ending_idx = 1
+    elseif reason == 2 then
+        end_text = endings[2]
+        ending_idx = 2
+    elseif reason == 3 then
+    elseif reason == 4 then
+        if score >= good_score then
+            end_text = endings[4]
+            ending_idx = 4
+        else
+            end_text = endings[5]
+            ending_idx = 5
+        end
+    end
+    sfx(19)
+    change_state(gamestates.gameover)
 end
 
 function draw_gameover()

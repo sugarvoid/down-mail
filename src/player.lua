@@ -92,32 +92,28 @@ function player:update()
     if self.x <= 4 or self.x >= 118 then
 
         self.is_alive = false
-        end_text = endings[1]
-        ending_idx = 1
-        change_state(gamestates.gameover)
+        goto_gameover(1)
+        
+        --change_state(gamestates.gameover)
         --self.img = 49
         -- TODO: add blood particales
         -- then go to game overload
     end
     --TODO: user goto_gameover funciton
-    if self.y >= 140 then
-        if g_state == gamestates.bonus then
-            bouns_timer = 0
-        else
+    if self.y <= -30 or self.y >= 140 then
+        
             self.is_alive = false
-            end_text = endings[2]
-            ending_idx = 2
-            change_state(gamestates.gameover)
-        end
+            goto_gameover(2)
+            --change_state(gamestates.gameover)
         
     end
 
-    if self.y <= -30 then
-        self.is_alive = false
-        end_text = endings[2]
-        ending_idx = 2
-        change_state(gamestates.gameover)
-    end
+    -- if self.y <= -30 then
+    --     self.is_alive = false
+    --     end_text = endings[2]
+    --     ending_idx = 2
+    --     change_state(gamestates.gameover)
+    -- end
 
     if self.is_alive then
         if self.thr_anmi > 0 then
@@ -131,10 +127,6 @@ function player:update()
     end
 
     
-end
-
-function player:update_letters(amount)
-    --self.letters = mid(0, self.letters + amount, self.max_letter)
 end
 
 function player:check_for_twisters()
@@ -151,22 +143,19 @@ function player:take_damage()
     if (self.life == 2) then spawn_clothing(18) end
     self.life -= 1
     self.chute_open_spr += 1
-    --self.chute = 39
     sfx(16)
     if p1.life == 0 then
         --sfx(11)
-        end_text = endings[2]
-        ending_idx = 1
-        change_state(gamestates.gameover)
+        goto_gameover(1)
+        --end_text = endings[2]
+        --ending_idx = 1
+        --change_state(gamestates.gameover)
     end
 end
 
 function player:throw()
     if self.letters > 0 then
         --self.img=02
-        if g_state == gamestates.game then
-            self:update_letters(-1)
-        end
         self.thr_anmi = 10
         if self.facing_l then
             spawn_letter(-1)
