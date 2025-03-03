@@ -4,33 +4,27 @@ mailboxes = {}
 
 function spawn_mbox(lane)
     local _mb = setmetatable({}, mailbox)
-    _mb.m_type = nil -- 1=customer, 2=non_customers, 3=bonus
-
+    _mb.m_type = nil --[[
+        1=customer
+        2=non_customers
+        3=bonus
+    ]]
 
     local rand = rnd()
-	local _type
 
-    print_debug(rand)
-    _mb.speed = rnd({0.7, 0.9, 1.4 })
+    _mb.speed = rnd({0.7, 0.9, 1.3})
 
 	if rand <= 0.50 then -- 50% chance for customer
         _mb.m_type = 1
         _mb.b_col = 12
-		--_mailbox.m_type = "customer"
-		--_mailbox.frame = 5
-	elseif rand <= 0.90 then -- 40% chance for non_customer (this will cover the range from 0.50 to 0.90)
+	elseif rand <= 0.90 then -- 40% chance for non_customer
 		_mb.m_type = 2
         _mb.b_col = 6
-        --_mailbox.m_type = "non_customer"
-		--_mailbox.frame = 8
-	else                 -- 10% chance for bonus (this will cover the range from 0.90 to 1)
+	else                 -- 10% chance for bonus
 		_mb.m_type = 3
         _mb.b_col = 10
         _mb.speed = 1.6
-        --_mailbox.m_type = "bonus"
-		--_mailbox.frame = 2
 	end
-
 
     _mb.lane = lane
     _mb.x = lanes[lane][1]
@@ -42,10 +36,8 @@ function spawn_mbox(lane)
     _mb.damaged = false
     _mb.dir = 0
     _mb.dx = 1.3
-    
     add(mailboxes, _mb)
     update_lane(lane, true)
-    reset_mb_timer()
 end
 
 function mailbox:update()
@@ -127,6 +119,4 @@ function mailbox:on_good_letter(_score)
     self.speed = 4
 end
 
-function reset_mb_timer()
-    next_mb = 70 + rnd(10)
-end
+

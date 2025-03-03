@@ -177,11 +177,3 @@ function player:throw()
         sfx(6)
     end
 end
-
--- function player:reset()
---     self.life = max_health
---     self.x=54
---     self.y=54
---     self.is_alive=true
---     self.letters = 12
--- end
