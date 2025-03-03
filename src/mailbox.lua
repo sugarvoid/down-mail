@@ -2,6 +2,11 @@ mailbox = {}
 mailbox.__index = mailbox
 mailboxes = {}
 
+
+stuff = {
+
+}
+
 function spawn_mbox(lane)
     local _mb = setmetatable({}, mailbox)
     _mb.m_type = nil --[[
@@ -34,7 +39,7 @@ function spawn_mbox(lane)
     _mb.img = 21
     _mb.empty = true
     _mb.damaged = false
-    _mb.dir = 0
+    --_mb.dir = 0
     _mb.dx = 1.3
     add(mailboxes, _mb)
     update_lane(lane, true)
@@ -101,13 +106,13 @@ function mailbox:check(points)
             deliveries[3] += 1
             sfx(21)
         end
-        deliveries_left -= 1
-        if deliveries_left == 0 then
-            goto_bonus_tmr = 60
-            sfx(2)
-            clear_objs()
-            spawner.running = false
-        end
+        -- deliveries_left -= 1
+        -- if deliveries_left == 0 then
+        --     goto_bonus_tmr = 60
+        --     sfx(2)
+        --     clear_objs()
+        --     spawner.running = false
+        -- end
     end
 end
 

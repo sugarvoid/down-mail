@@ -8,20 +8,20 @@ function spawn_ring()
     _r.x = randi_rang(20, 90)
     _r.y = randi_rang(40, 60)
     _r.img = 48
-    _r.life = randsec_rang(3, 5)
+    _r.tmr = randsec_rang(3, 5)
     _r.w = 8
     _r.value = 10
     _r.color = rnd({ 11, 10, 12 })
     _r.speed = rnd({ 1, 2 })
     _r.h = 16
     add(rings, _r)
-    reset_ring_timer()
+    -- reset_ring_timer()
 end
 
 function ring:update()
-    self.life -= 1
+    self.tmr -= 1
 
-    if self.life <= 0 then
+    if self.tmr <= 0 then
         del(rings, self)
     end
 
@@ -49,9 +49,9 @@ function ring:draw()
     pal()
 end
 
-function reset_ring_timer()
-    next_ring = randsec_rang(2, 5)
-end
+-- function reset_ring_timer()
+--     next_ring = randsec_rang(2, 5)
+-- end
 
 function draw_rings()
     for r in all(rings) do

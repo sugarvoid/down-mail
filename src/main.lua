@@ -8,8 +8,9 @@ game_over_x = -10
 score = 0
 bouns_timer = 0
 deliveries = { 0, 0, 0}
-goto_bonus_tmr = 60
+goto_bonus_tmr = 0
 offset = 0
+level_length = 13
 ending = 0
 end_spr = { 64, 68, 72, 76, 140 }
 objects = { back = {}, front = {} }
@@ -18,6 +19,35 @@ days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "su
 days_needed = 3
 
 day_duration = 20 * 30
+
+clock = {
+    seconds = 0,
+    t = 0,
+    is_running = false,
+    update=function(self)
+        if self.is_running then
+            self.t += 1
+            if self.t >= 30 then
+                self:tick()
+            end
+        end
+    end,
+    tick=function(self)
+        self.seconds += 1
+        self.t = 0
+    end,
+    reset=function(self)
+        self.is_running = false
+        self.t=0
+        self.seconds = 0
+    end,
+    stop=function(self)
+        self:reset()
+    end,
+    start=function(self)
+        
+    end
+}
 
 intro_t = 30 * 6
 day_t = 30 * 6
@@ -72,7 +102,6 @@ function restart_game()
     set_customers()
     score = 0
     init_wind()
-    reset_mb_timer()
     p1 = init_player()
     change_state(gamestates.title)
 end
@@ -125,6 +154,8 @@ function _draw()
         print("mem: " .. flr(stat(0)) .. "kb", 10, 0, 8)
         print("cpu: " .. stat(1) * 100 .. "%", 10, 8, 8)
     end
+
+    print(clock.seconds, 8, 0)
 end
 
 function check_input()
@@ -173,12 +204,26 @@ function check_input()
         elseif g_state == gamestates.game then
             --spawn_package()
         elseif g_state == gamestates.gameover then
-
+            
         end
     end
 end
 
 function update_play()
+    clock:update()
+
+    if clock.seconds == level_length then
+        clock:stop()
+        print_debug("level over")
+        goto_bonus_tmr = 60
+        sfx(2)
+        clear_objs()
+        spawner.running = false
+    end
+
+
+
+
     p1:update()
     update_particles()
     update_objects()
@@ -200,8 +245,7 @@ function update_play()
 
     spawner:update()
 
-    if deliveries_left <= 0 then
-        deliveries_left = 0
+    if goto_bonus_tmr < 0 then
         goto_bonus_tmr -= 1
         if goto_bonus_tmr == 0 then
             goto_bonus()
@@ -213,6 +257,7 @@ function update_intro()
     intro_t -= 1
     if intro_t <= 0 then
         spawner:start()
+        start_level()
         change_state(gamestates.game)
     end
 end
@@ -307,22 +352,21 @@ end
 
 function draw_intro()
     cls()
-    print("customers", hcenter("customers"), 20, 7)
-    print("non-customers", hcenter("non-customers"), 50, 7)
-    print("bonus", hcenter("bonus"), 80, 7)
 
-        pal(6, 12)
-        sspr(56, 8, 8, 8, 25 + (30 * 1), 25, 16, 16)
-        pal()
-
-       
-        sspr(56, 8, 8, 8, 25 + (30 * 1), 55, 16, 16)
-        
+    print("customers", hcenter("customers"), 22, 7)
+    pal(6, 12)
+    sspr(56, 8, 8, 8, 55, 27, 16, 16)
+    pal()
 
 
-        pal(6, 10)
-        sspr(56, 8, 8, 8, 25 + (30 * 1), 85, 16, 16)
-        pal()
+    print("non-customers", hcenter("non-customers"), 52, 7)
+    sspr(56, 8, 8, 8, 55, 57, 16, 16)
+
+
+    print("bonus", hcenter("bonus"), 82, 7)
+    pal(6, 10)
+    sspr(56, 8, 8, 8, 55, 87, 16, 16)
+    pal()
 
     draw_skip()
 end
@@ -402,11 +446,11 @@ function draw_gui()
     end
 
     for i = 1, p1.life, 1 do
-        pset(110 + (2 * i), 123, 14)
-        pset(110 + (2 * i), 124, 14)
-        pset(110 + (2 * i), 125, 14)
-        pset(110 + (2 * i), 126, 14)
-        pset(110 + (2 * i), 127, 14)
+        pset(110 + (2 * i), 123, 7)
+        pset(110 + (2 * i), 124, 7)
+        pset(110 + (2 * i), 125, 7)
+        pset(110 + (2 * i), 126, 7)
+        pset(110 + (2 * i), 127, 7)
     end
 
     
@@ -423,6 +467,10 @@ function draw_gui()
     --rectfill(48, 124, 50, 126, customers[1])
     -- rectfill(52, 124, 54, 126, customers[2])
     --rectfill(56, 124, 58, 126, customers[3])
+end
+
+function start_level()
+    clock.is_running = true
 end
 
 function advance_day()

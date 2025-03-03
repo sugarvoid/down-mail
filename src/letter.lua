@@ -2,6 +2,23 @@ letter = {}
 letter.__index = letter
 letters = {}
 
+
+function spawn_letter(_dir)
+    local _l = setmetatable({}, letter)
+    _l.t = 0
+    _l.w = 8
+    _l.h = 8
+    _l.score_mul = 1
+    _l.tossed = true
+    _l.img = 32
+    _l.dir = _dir
+    _l.speed = 1
+    _l.accel = 0.5
+    _l.x = p1.x
+    _l.y = p1.y
+    add(letters, _l)
+end
+
 function letter:update()
     if self.tossed then
         self.score_mul += 0.2
@@ -54,22 +71,6 @@ end
 
 function letter:draw()
     spr(self.img, self.x, self.y)
-end
-
-function spawn_letter(_dir)
-    local _l = setmetatable({}, letter)
-    _l.t = 0
-    _l.w = 8
-    _l.h = 8
-    _l.score_mul = 1
-    _l.tossed = true
-    _l.img = 32
-    _l.dir = _dir
-    _l.speed = 1
-    _l.accel = 0.5
-    _l.x = p1.x
-    _l.y = p1.y
-    add(letters, _l)
 end
 
 function update_letters()

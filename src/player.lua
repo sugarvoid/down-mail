@@ -75,7 +75,6 @@ function player:update()
         self.move_speed = 1.5
       end
 
-
     if self.is_chute_open then
         self.chute_spr = self.chute_open_spr
     else
