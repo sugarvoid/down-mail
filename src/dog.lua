@@ -3,11 +3,10 @@ dog.__index = dog
 dogs = {}
 
 local throw_times = {30*1,30*2,30*1}
-local y_range = { 10, 90 }
 
 function spawn_dog()
     local d = setmetatable({}, dog)
-    d.x = rnd({113,7})
+    d.x = rnd({113, 7})
     d.curr_y = -10
     d.y = d.curr_y
     d.w = 8

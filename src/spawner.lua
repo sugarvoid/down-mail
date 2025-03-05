@@ -70,7 +70,6 @@ spawner = {
         self.mail_box = 60 --randsec_rang(3, 10)
         self.mail_box_2 = randsec_rang(3, 10)
         self.dog = randsec_rang(5, 10)
-        self.ring = 30
         self.running = true
     end,
 
@@ -128,16 +127,7 @@ spawner = {
                     r:update()
                 end
             elseif g_state == gamestates.bonus then
-                self.ring -= 1
 
-                if self.ring <= 0 then
-                    spawn_ring()
-                    self.ring = 60
-                end
-
-                for r in all(rings) do
-                    r:update()
-                end
             end
         end
     end,
@@ -174,7 +164,7 @@ end
 function clear_objs()
     mailboxes = {}
     rocks = {}
-    rings = {}
+
     twisters = {}
     dogs = {}
     sfx(-2, 3) -- in case dog enter sound is playing

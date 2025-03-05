@@ -11,6 +11,7 @@ deliveries = { 0, 0, 0 }
 goto_bonus_tmr = 0
 offset = 0
 level_length = 13
+bouns_length = 30 * 10
 ending = 0
 end_spr = { 64, 68, 72, 76, 140 }
 objects = { back = {}, front = {} }
@@ -109,8 +110,7 @@ end
 
 function _init()
     poke(0x5f5c, 255)
-    poke(0x5f2e, 1) -- for pallete
-    pal(2, 135, 1)
+
 
     restart_game()
 end
@@ -282,17 +282,16 @@ function update_day()
         spawner:start()
         start_level()
         change_state(gamestates.game)
-        music(1)
+        --TODO: Make better music
+        --music(1)
     end
 end
 
 function update_bonus()
     bouns_timer -= 1
     if bouns_timer <= 0 then
-        rings = {}
-        if day <= (days_needed - 1) then
-            advance_day()
-        else
+        mailboxes = {}
+        advance_day()
             --if day == 3 then
             -- if deliveries[1] == (deliveries_needed * (days_needed)) then
             --     end_text = endings[4]
@@ -301,9 +300,8 @@ function update_bonus()
             --     end_text = endings[5]
             --     ending_idx = 5
             -- end
-            goto_gameover(4)
+            --goto_gameover(4)
             --end
-        end
     end
     p1:update()
     update_letters()
@@ -352,11 +350,14 @@ end
 
 function draw_title()
     cls()
-    spr(200, 48, 34, 4, 2)
-    spr(232, 48, 34 + 10, 4, 2)
+    sspr(64, 96, 32, 16, 36, 20, 32*2, 16*2)
+    sspr(64, 112, 32, 16, 36, 20+22, 32*2, 16*2)
+    --spr(200, 48, 34, 4, 2)
+    --spr(232, 48, 34 + 10, 4, 2)
     --print("down mail", hcenter("down mail"), 50, 0)
     print("🅾️ play", hcenter("🅾️ play"), 75, 7)
     print("❎ info", hcenter("❎ info"), 83, 7)
+
 end
 
 function draw_howto()
@@ -370,8 +371,12 @@ function draw_howto()
 
 
     print("non-customers", hcenter("non-customers"), 52, 7)
-    
+
+ 
     pal(6, 2)
+
+    
+    
     
     sspr(56, 8, 8, 8, 55, 57, 16, 16)
     pal()
@@ -392,10 +397,9 @@ function draw_bonus()
     map(16, 0)
     p1:draw()
     draw_particles()
-    draw_rings()
     draw_letters()
     draw_gui()
-    rectfill(17, 10, 17 + flr(bouns_timer / 15) * 3, 13, 3)
+    rectfill(17, 10, 17 + flr(bouns_timer / 10) * 3, 13, 3)
     rect(17, 9, 109, 14, 7)
     print("bonus", 50, 3, 7)
     -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
@@ -416,7 +420,7 @@ end
 
 function draw_day()
     cls(0)
-    print(days[day], hcenter(days[day]), vcenter(days[day]), 7)
+    print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), vcenter( "\^w\^t" .. days[day]), 7)
     draw_skip()
 end
 
@@ -491,11 +495,10 @@ end
 
 function advance_day()
     day += 1
-    
+    if day == 8 then day = 1 end
     intro_t = 30 * 6
     day_t = 30 * 3
     post_t = 30 * 6
-    --set_customers()
     p1 = init_player()
     deliveries_left = deliveries_needed
     g_state = gamestates.day_title
@@ -575,7 +578,7 @@ end
 function goto_bonus()
     p1.move_speed = 1.5
     spawner.reset()
-    bouns_timer = 30 * 15
+    bouns_timer = bouns_length
     change_state(gamestates.bonus)
     spawner.running = true
 end

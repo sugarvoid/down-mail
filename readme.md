@@ -41,4 +41,3 @@ Spawning three twister are a bad thing
 - [ ] Prevent mailboxes and rocks spwaning at the same time
 - [ ] Add invincibility frames from player
 - [ ] Make game endless/hi score game
-- [ ] Increase size of title text

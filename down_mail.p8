@@ -13,10 +13,8 @@ __lua__
 #include src/letter.lua
 #include src/mailbox.lua
 #include src/particle.lua
-#include src/ring.lua
 #include src/spawner.lua
 #include src/bone.lua
-#include src/ring.lua
 #include src/dog.lua
 __gfx__
 000000000000000000000000000000060000000600f00f0000f00000007777000077770000707000000000000000000049440000000444940000000000000000

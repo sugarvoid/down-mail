@@ -18,6 +18,7 @@ function spawn_mbox(lane)
         1=customer
         2=non_customers
         3=bonus
+        4=rainbow
     ]]
 
     local rand = rnd()
