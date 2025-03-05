@@ -1,7 +1,4 @@
 is_debug = false
---cols = { 12, 14, 9, 6 }
---customers = {}
---non_customers = {}
 map_y = 0
 damaged_mb = 0
 game_over_x = -10
@@ -10,14 +7,14 @@ bouns_timer = 0
 deliveries = { 0, 0, 0 }
 goto_bonus_tmr = 0
 offset = 0
-level_length = 13
-bouns_length = 30 * 10
+level_length = 13 --TODO: Put back 30
+bouns_length = 2 --TODO: Put back 10
 ending = 0
 end_spr = { 64, 68, 72, 76, 140 }
 objects = { back = {}, front = {} }
 day = 1
 days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
-days_needed = 3
+
 local good_score = 1000 --TODO: Replace
 
 clock = {
@@ -45,7 +42,7 @@ clock = {
         self:reset()
     end,
     start = function(self)
-
+        self.is_running = true
     end
 }
 
@@ -225,6 +222,8 @@ function update_play()
         sfx(2)
         clear_objs()
         spawner.running = false
+        clock:reset()
+        clock:start()
     end
 
 
@@ -288,21 +287,34 @@ function update_day()
 end
 
 function update_bonus()
-    bouns_timer -= 1
-    if bouns_timer <= 0 then
+
+    clock:update()
+
+    if clock.seconds >= bouns_length then
+        clock:stop()
+
         mailboxes = {}
         advance_day()
-            --if day == 3 then
-            -- if deliveries[1] == (deliveries_needed * (days_needed)) then
-            --     end_text = endings[4]
-            --     ending_idx = 4
-            -- else
-            --     end_text = endings[5]
-            --     ending_idx = 5
-            -- end
-            --goto_gameover(4)
-            --end
+
     end
+
+
+
+    -- bouns_timer -= 1
+    -- if bouns_timer <= 0 then
+    --     mailboxes = {}
+    --     advance_day()
+    --         --if day == 3 then
+    --         -- if deliveries[1] == (deliveries_needed * (days_needed)) then
+    --         --     end_text = endings[4]
+    --         --     ending_idx = 4
+    --         -- else
+    --         --     end_text = endings[5]
+    --         --     ending_idx = 5
+    --         -- end
+    --         --goto_gameover(4)
+    --         --end
+    -- end
     p1:update()
     update_letters()
     update_particles()
@@ -399,8 +411,8 @@ function draw_bonus()
     draw_particles()
     draw_letters()
     draw_gui()
-    rectfill(17, 10, 17 + flr(bouns_timer / 10) * 3, 13, 3)
-    rect(17, 9, 109, 14, 7)
+    --rectfill(17, 10, 17 + flr(bouns_timer / 10) * 3, 13, 3)
+    --rect(17, 9, 109, 14, 7)
     print("bonus", 50, 3, 7)
     -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
 end
@@ -584,6 +596,7 @@ function goto_bonus()
 end
 
 function goto_gameover(reason)
+    spawner:reset()
     --[[
         1=death
         2=missing
@@ -615,6 +628,7 @@ function draw_gameover()
     spr(192, 32, 8, 8, 2)
     print("$0.25", 6, 10, 5)
     print("score: " .. score, 10, 32, 5)
+    print("acc: " .. p1:get_acc().."%", 10, 38, 5)
     rect(4, 30, 124, 120, 5)
     pal(14, 0)
     spr(end_spr[ending_idx], 80, 34, 4, 4)

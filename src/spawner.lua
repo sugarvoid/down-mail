@@ -132,6 +132,7 @@ spawner = {
         end
     end,
     reset = function()
+        sfx(-2, 3) -- in case dog enter sound is playing
         clear_objs()
         for k, v in ipairs(lanes) do
             lanes[k][2] = false
@@ -167,7 +168,7 @@ function clear_objs()
 
     twisters = {}
     dogs = {}
-    sfx(-2, 3) -- in case dog enter sound is playing
+    
     objects.front = {}
     objects.back = {}
     all_particles = {}

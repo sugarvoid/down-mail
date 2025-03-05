@@ -56,6 +56,7 @@ function letter:update()
 
         if self.x <= 0 or self.x >= 120 then
             if g_state == gamestates.game then
+                p1.misses += 1
                 if #twisters < 3 then
                    spawn_twister(self.x, self.y) 
                    sfx(14)

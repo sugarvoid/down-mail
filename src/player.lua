@@ -8,8 +8,6 @@ function init_player()
     _p.y = 54
     _p.w = 8
     _p.h = 8
-    _p.letters = 12
-    _p.max_letter = 12
     _p.selected_letter = 0
     _p.is_alive = true
     _p.sprite_a = 5
@@ -25,6 +23,8 @@ function init_player()
     _p.move_speed = 1.5
     _p.speed = 1
     _p.accel = 0.1
+    _p.throws = 0
+    _p.misses = 0
     return _p
 end
 
@@ -153,15 +153,25 @@ function player:take_damage()
     end
 end
 
-function player:throw()
-    if self.letters > 0 then
-        --self.img=02
-        self.thr_anmi = 10
-        if self.facing_l then
-            spawn_letter(-1)
-        else
-            spawn_letter(1)
-        end
-        sfx(6)
+function player:get_acc()
+    if self.throws == 0 then
+        return 0
+    else
+        return ((self.throws - self.misses) / self.throws) * 100
     end
+end
+
+function player:throw()
+    if g_state == gamestates.game then
+        self.throws += 1
+    end
+    --self.img=02
+    self.thr_anmi = 10
+    if self.facing_l then
+        spawn_letter(-1)
+    else
+        spawn_letter(1)
+    end
+    sfx(6)
+    
 end
