@@ -4,6 +4,7 @@ player.__index = player
 
 function init_player()
     local _p = setmetatable({}, player)
+    _p.in_vortex = false
     _p.x = 54
     _p.y = 54
     _p.w = 8
@@ -12,7 +13,7 @@ function init_player()
     _p.is_alive = true
     _p.sprite_a = 5
     _p.sprite_b = 6
-    _p.img = nil
+    _p.img = 0
     _p.facing_l = false
     _p.is_chute_open = true
     _p.chute_spr = nil
@@ -25,6 +26,7 @@ function init_player()
     _p.accel = 0.1
     _p.throws = 0
     _p.misses = 0
+    _p.a = 0
     return _p
 end
 
@@ -40,6 +42,7 @@ end
 
 function player:draw()
     if self.is_alive then
+        --spr_r(self.img, self.x, self.y, self.a, 1, 1)
         spr(self.img, self.x, self.y, 1, 1, self.facing_l)
         spr(self.chute_spr, self.x, self.y - 8)
     else
@@ -68,6 +71,10 @@ function player:update_chute(open)
 end
 
 function player:update()
+
+    self.a-=10
+
+    self.a = self.a%360 
 
     if self:check_for_twisters() then
         self.move_speed = 0.5

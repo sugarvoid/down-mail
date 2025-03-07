@@ -60,6 +60,9 @@ function letter:update()
                 if #twisters < 3 then
                    spawn_twister(self.x, self.y) 
                    sfx(14)
+                elseif #twisters == 3 then
+                    test_wormhole = worm_hole.new(p1.x, p1.y)
+                    twisters = {}
                 end
                 explode(self.x, self.y, 3, 4, 4, 10)
             end
