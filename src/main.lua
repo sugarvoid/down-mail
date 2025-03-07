@@ -5,10 +5,10 @@ game_over_x = -10
 score = 0
 bouns_timer = 0
 deliveries = { 0, 0, 0 }
-goto_bonus_tmr = 0
+goto_postday_tmr = 0
 offset = 0
-level_length = 13 --TODO: Put back 30
-bouns_length = 2 --TODO: Put back 10
+level_length = 10 --TODO: Put back 30
+bouns_length = 5 --TODO: Put back 10
 ending = 0
 end_spr = { 64, 68, 72, 76, 140 }
 objects = { back = {}, front = {} }
@@ -54,7 +54,6 @@ gamestates = {
     how_to = 1,
     day_title = 2,
     game = 3,
-    bonus = 4,
     gameover = 5,
     post_day = 6,
 }
@@ -124,8 +123,6 @@ function _update()
         update_day()
     elseif g_state == gamestates.game then
         update_play()
-    elseif g_state == gamestates.bonus then
-        update_bonus()
     elseif g_state == gamestates.post_day then
         update_postday()
     elseif g_state == gamestates.gameover then
@@ -144,8 +141,6 @@ function _draw()
     elseif g_state == gamestates.game then
         screen_shake()
         draw_play()
-    elseif g_state == gamestates.bonus then
-        draw_bonus()
     elseif g_state == gamestates.gameover then
         draw_gameover()
     elseif g_state == gamestates.post_day then
@@ -169,11 +164,11 @@ function check_input()
         elseif g_state == gamestates.day_title then
             day_t = 0
         elseif g_state == gamestates.post_day then
-            post_t = 0
+            --post_t = 0
+            p1:throw()
         elseif g_state == gamestates.game then
             p1:throw()
-        elseif g_state == gamestates.bonus then
-            p1:throw()
+
         elseif g_state == gamestates.gameover then
             restart_game()
         end
@@ -201,8 +196,6 @@ function check_input()
             change_state(gamestates.how_to)
         elseif g_state == gamestates.how_to then
             change_state(gamestates.title)
-        elseif g_state == gamestates.bonus then
-            bouns_timer = 0
         elseif g_state == gamestates.day_title then
         elseif g_state == gamestates.game then
             clock.seconds = level_length
@@ -218,7 +211,7 @@ function update_play()
     if clock.seconds >= level_length then
         clock:stop()
         print_debug("level over")
-        goto_bonus_tmr = 60
+        goto_postday_tmr = 60
         sfx(2)
         clear_objs()
         spawner.running = false
@@ -250,10 +243,16 @@ function update_play()
 
     spawner:update()
 
-    if goto_bonus_tmr > 0 then
-        goto_bonus_tmr -= 1
-        if goto_bonus_tmr == 0 then
-            goto_bonus()
+    if goto_postday_tmr > 0 then
+        goto_postday_tmr -= 1
+        if goto_postday_tmr == 0 then
+            --goto_bonus()
+            change_state(gamestates.post_day)
+            p1.move_speed = 1.5
+            spawner.reset()
+            bouns_timer = bouns_length
+            --change_state(gamestates.bonus)
+            --spawner.running = true
         end
     end
 end
@@ -286,7 +285,7 @@ function update_day()
     end
 end
 
-function update_bonus()
+function update_postday()
 
     clock:update()
 
@@ -385,7 +384,7 @@ function draw_howto()
     print("non-customers", hcenter("non-customers"), 52, 7)
 
  
-    pal(6, 2)
+    --pal(6, 2)
 
     
     
@@ -404,7 +403,7 @@ function draw_howto()
     print("❎ back", 8, 120, 7)
 end
 
-function draw_bonus()
+function draw_postday()
     cls(0)
     map(16, 0)
     p1:draw()
@@ -415,20 +414,19 @@ function draw_bonus()
     --rect(17, 9, 109, 14, 7)
     print("bonus", 50, 3, 7)
     -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
-end
 
-function draw_postday()
-    cls(0)
+    --cls(0)
 
     all_particles = {}
     letters = {}
 
-    print("deliveries: " .. (deliveries[1] + deliveries[2]), 20, 40, 7)
-    print("customers: " .. deliveries[1], 20, 48, 7)
-    print("non-customers: " .. deliveries[2], 20, 48 + 8, 7)
+    -- print("deliveries: " .. (deliveries[1] + deliveries[2]), 20, 40, 7)
+    -- print("customers: " .. deliveries[1], 20, 48, 7)
+    -- print("non-customers: " .. deliveries[2], 20, 48 + 8, 7)
 
-    draw_skip()
+    --draw_skip()
 end
+
 
 function draw_day()
     cls(0)

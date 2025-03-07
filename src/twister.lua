@@ -18,7 +18,7 @@ function spawn_twister(x, y)
     _t.img = 51
     _t.dis = 0
     _t.angle = 0
-    _t.speed = 1.5
+    _t.speed = 2
     _t.prox = 0.2
     add(twisters, _t)
 end
