@@ -161,9 +161,7 @@ function _draw()
         print("cpu: " .. stat(1) * 100 .. "%", 10, 8, 8)
     end
 
-    if test_wormhole then
-        test_wormhole:draw()
-    end
+    
     
 
     print(clock.seconds, 8, 0)
@@ -339,6 +337,9 @@ function draw_play()
     cls(0)
     for o in all(objects.back) do
         o:draw()
+    end
+    if test_wormhole then
+        test_wormhole:draw()
     end
 
     p1:draw()

@@ -10,6 +10,7 @@ function wh_pixel.new(x,y)
     _px.angle=0
     _px.originx=x
     _px.originy=y
+    _px.rad_sp = .5
     _px.radius = randi_rang(3, 16)
     _px.start_radius = _px.radius
     _px.speed=randf_rang(2,20)
@@ -23,7 +24,7 @@ function wh_pixel:update()
         self.angle=0
     end
 
-    self.radius -= .5
+    self.radius -= self.rad_sp
     if self.radius == 0 then
         self.radius = randi_rang(10, 16)
     end
@@ -37,7 +38,9 @@ function wh_pixel:update()
 end
 
 function wh_pixel:draw()
+    
     pset(self.x,self.y,self.col)
+    
 end
 
 
@@ -73,6 +76,7 @@ function worm_hole:reset()
 end
 
 function worm_hole:draw()
+    circfill(self.x, self.y, 5, 1)
     for p in all(self.pxs) do
         p:draw()
     end
