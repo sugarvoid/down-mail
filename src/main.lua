@@ -224,7 +224,7 @@ function update_play()
         clock:stop()
         print_debug("level over")
         goto_postday_tmr = 60
-        sfx(2)
+        sfx(22)
         clear_objs()
         spawner.running = false
         clock:reset()
