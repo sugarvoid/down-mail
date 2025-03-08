@@ -110,7 +110,7 @@ function mailbox:check(points)
             update_score(-10)
             --score -= 10
             deliveries[2] += 1
-            sfx(5)
+            sfx(12)
         else
             --score += (10 * flr(points) * 1.5)
             update_score(10 * flr(points) * 1.5)

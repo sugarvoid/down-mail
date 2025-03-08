@@ -3,12 +3,12 @@ map_y = 0
 damaged_mb = 0
 game_over_x = -10
 score = 0
-bouns_timer = 0
+post_day_timer = 0
 deliveries = { 0, 0, 0 }
 goto_postday_tmr = 0
 offset = 0
 level_length = 10 --TODO: Put back 30
-bouns_length = 10 --TODO: Put back 10
+post_day_length = 5 --TODO: Put back 10
 ending = 0
 end_spr = { 64, 68, 72, 76, 140 }
 objects = { back = {}, front = {} }
@@ -19,7 +19,7 @@ days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "su
 
 local good_score = 1000 --TODO: Replace
 
-clock = {
+local clock = {
     seconds = 0,
     t = 0,
     is_running = false,
@@ -98,6 +98,7 @@ function restart_game()
     day_t = 30 * 3
     post_t = 30 * 8
     spawner:reset()
+    clock:reset()
     --set_customers()
     score = 0
     init_wind()
@@ -118,6 +119,12 @@ end
 
 function _update()
     check_input()
+
+    map_y += .2
+
+    if flr(map_y) == 17 then
+        map_y = 0
+    end
 
     if test_wormhole then
         test_wormhole:update()
@@ -245,11 +252,7 @@ function update_play()
         d:update()
     end
 
-    map_y += .2
-
-    if flr(map_y) == 17 then
-        map_y = 0
-    end
+    
 
 
 
@@ -262,7 +265,7 @@ function update_play()
             change_state(gamestates.post_day)
             p1.move_speed = 1.5
             spawner.reset()
-            bouns_timer = bouns_length
+            post_day_timer = post_day_length
             --change_state(gamestates.bonus)
             --spawner.running = true
         end
@@ -301,7 +304,7 @@ function update_postday()
 
     clock:update()
 
-    if clock.seconds >= bouns_length then
+    if clock.seconds >= post_day_length then
         clock:stop()
 
         mailboxes = {}
@@ -313,8 +316,8 @@ function update_postday()
 
 
 
-    -- bouns_timer -= 1
-    -- if bouns_timer <= 0 then
+    -- post_day_timer -= 1
+    -- if post_day_timer <= 0 then
     --     mailboxes = {}
     --     advance_day()
     --         --if day == 3 then
@@ -427,14 +430,6 @@ function draw_postday()
     draw_particles()
     draw_letters()
     draw_gui()
-    --rectfill(17, 10, 17 + flr(bouns_timer / 10) * 3, 13, 3)
-    --rect(17, 9, 109, 14, 7)
-    -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
-
-    --cls(0)
-
-    
-
     print("deliveries: " .. (deliveries[1] + deliveries[2]), 20, 40, 7)
     print("customers: " .. deliveries[1], 20, 48, 7)
     print("non-customers: " .. deliveries[2], 20, 48 + 8, 7)
@@ -585,17 +580,18 @@ function shuffle(t)
     end
 end
 
+
 function randf_rang(l, h)
-    local h = h - l
-    return l + rnd(h)
+    local _h = h - l
+    return l + rnd(_h + 0.0001) -- Small offset to include h
 end
 
 function randi_rang(l, h)
-    return flr(rnd(h)) + l
+    return flr(rnd(h - l +1 )) + l
 end
 
 function randsec_rang(l, h)
-    return (flr(rnd(h)) + l) * 30
+    return (flr(rnd(h - l +1 )) + l) * 30
 end
 
 function draw_hitbox(o)
@@ -605,7 +601,7 @@ end
 function goto_bonus()
     p1.move_speed = 1.5
     spawner.reset()
-    bouns_timer = bouns_length
+    post_day_timer = post_day_length
     change_state(gamestates.bonus)
     spawner.running = true
 end
