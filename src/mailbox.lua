@@ -103,14 +103,17 @@ function mailbox:check(points)
     if not self.empty and not self.damaged then
         if self.m_type == 1 then
             deliveries[1] += 1
-            score += (10 * flr(points))
+            --score += (10 * flr(points))
+            update_score(10 * flr(points))
             sfx(4)
         elseif self.m_type == 2 then
-            score += 5
+            update_score(-10)
+            --score -= 10
             deliveries[2] += 1
             sfx(5)
         else
-            score += (10 * flr(points) * 1.5)
+            --score += (10 * flr(points) * 1.5)
+            update_score(10 * flr(points) * 1.5)
             deliveries[3] += 1
             sfx(21)
         end

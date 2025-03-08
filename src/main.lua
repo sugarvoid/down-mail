@@ -8,7 +8,7 @@ deliveries = { 0, 0, 0 }
 goto_postday_tmr = 0
 offset = 0
 level_length = 10 --TODO: Put back 30
-bouns_length = 5 --TODO: Put back 10
+bouns_length = 10 --TODO: Put back 10
 ending = 0
 end_spr = { 64, 68, 72, 76, 140 }
 objects = { back = {}, front = {} }
@@ -60,8 +60,8 @@ gamestates = {
     post_day = 6,
 }
 g_state = nil
-deliveries_needed = 6
-deliveries_left = deliveries_needed
+--deliveries_needed = 6
+--deliveries_left = 12 --deliveries_needed
 
 end_text_l1 = ""
 end_text_l2 = ""
@@ -92,7 +92,7 @@ end
 
 function restart_game()
     day = 1
-    deliveries_left = deliveries_needed
+    --deliveries_left = deliveries_needed
     deliveries = { 0, 0, 0 }
     intro_t = 30 * 6
     day_t = 30 * 3
@@ -210,7 +210,7 @@ function check_input()
             change_state(gamestates.title)
         elseif g_state == gamestates.day_title then
         elseif g_state == gamestates.game then
-            clock.seconds = level_length
+            --clock.seconds = level_length
         elseif g_state == gamestates.gameover then
 
         end
@@ -278,13 +278,13 @@ end
 --     end
 -- end
 
-function update_postday()
-    post_t -= 1
-    if post_t <= 0 then
-        change_state(gamestates.game)
-        --deliveries = { 0, 0, 0 }
-    end
-end
+-- function update_postday()
+--     post_t -= 1
+--     if post_t <= 0 then
+--         change_state(gamestates.game)
+--         --deliveries = { 0, 0, 0 }
+--     end
+-- end
 
 function update_day()
     day_t -= 1
@@ -305,6 +305,8 @@ function update_postday()
         clock:stop()
 
         mailboxes = {}
+        all_particles = {}
+        letters = {}
         advance_day()
 
     end
@@ -420,24 +422,22 @@ end
 
 function draw_postday()
     cls(0)
-    map(16, 0)
+    map(0, map_y)
     p1:draw()
     draw_particles()
     draw_letters()
     draw_gui()
     --rectfill(17, 10, 17 + flr(bouns_timer / 10) * 3, 13, 3)
     --rect(17, 9, 109, 14, 7)
-    print("bonus", 50, 3, 7)
     -- print("bonus: " .. flr(bouns_timer/30), 20, 20, 5)
 
     --cls(0)
 
-    all_particles = {}
-    letters = {}
+    
 
-    -- print("deliveries: " .. (deliveries[1] + deliveries[2]), 20, 40, 7)
-    -- print("customers: " .. deliveries[1], 20, 48, 7)
-    -- print("non-customers: " .. deliveries[2], 20, 48 + 8, 7)
+    print("deliveries: " .. (deliveries[1] + deliveries[2]), 20, 40, 7)
+    print("customers: " .. deliveries[1], 20, 48, 7)
+    print("non-customers: " .. deliveries[2], 20, 48 + 8, 7)
 
     --draw_skip()
 end
@@ -525,7 +525,7 @@ function advance_day()
     day_t = 30 * 3
     post_t = 30 * 6
     p1 = init_player()
-    deliveries_left = deliveries_needed
+    --deliveries_left = deliveries_needed
     g_state = gamestates.day_title
     init_wind()
 end
@@ -710,3 +710,7 @@ function spr_r(s,x,y,a,w,h)
     end
    end
    
+
+function update_score(val)
+    score = mid(0, score + val, 32000)
+end
