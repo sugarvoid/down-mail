@@ -2,7 +2,7 @@
 [Play in browser](https://sugarvoid.itch.io/down-mail)
 
 ## Project Status
-- Work in progress 
+- Trying to get to a "playable" state. (progress slowing down. getting bored.) 
 
 ## Gameplay
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)
