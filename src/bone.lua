@@ -17,10 +17,6 @@ function spawn_bone(x,y, p,face_r)
     add(objects.front, _d)
 end
 
---function bone:set_target(obj)
---    self.target=obj
---end
-
 function bone:update()
     self.x += self.dx * self.speed
     self.y += self.dy * self.speed

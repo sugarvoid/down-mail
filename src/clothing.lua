@@ -1,11 +1,6 @@
 clothing={}
 clothing.__index=clothing
 
--- function clothing:new(s_idx)
---     local _c=setmetatable({},clothing)
---     return _c
--- end
-
 function clothing:draw()
     spr(self.img,self.x,self.y)
 end

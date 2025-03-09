@@ -1,23 +1,3 @@
-is_debug = false
-map_y = 0
-damaged_mb = 0
-game_over_x = -10
-score = 0
-post_day_timer = 0
-deliveries = { 0, 0, 0 }
-goto_postday_tmr = 0
-offset = 0
-level_length = 10 --TODO: Put back 30
-post_day_length = 5 --TODO: Put back 10
-ending = 0
-end_spr = { 64, 68, 72, 76, 140 }
-objects = { back = {}, front = {} }
-day = 1
-days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
-
-
-
-local good_score = 1000 --TODO: Replace
 
 local clock = {
     seconds = 0,
@@ -48,32 +28,6 @@ local clock = {
     end
 }
 
-intro_t = 30 * 6
-day_t = 30 * 6
-post_t = 30 * 8
-gamestates = {
-    title = 0,
-    how_to = 1,
-    day_title = 2,
-    game = 3,
-    gameover = 5,
-    post_day = 6,
-}
-g_state = nil
---deliveries_needed = 6
---deliveries_left = 12 --deliveries_needed
-
-end_text_l1 = ""
-end_text_l2 = ""
-ending_idx = 0
-
-endings = {
-    { "city mourns",       "loss of mailman" },
-    { "local mailman",     "goes missing" },
-    { "mailman fired",     "" },
-    { "mailman quits,",    "buys city" },
-    { "mediocre mailman,", "does job" },
-}
 
 function update_objects()
     for o in all(objects.front) do
@@ -92,7 +46,6 @@ end
 
 function restart_game()
     day = 1
-    --deliveries_left = deliveries_needed
     deliveries = { 0, 0, 0 }
     intro_t = 30 * 6
     day_t = 30 * 3
@@ -102,15 +55,61 @@ function restart_game()
     --set_customers()
     score = 0
     init_wind()
+    deliveries_total = 0
+    missed_mb_total=0
+    damaged_mb_total=0
     p1 = init_player()
-    mb_tracker = {0,0}
     change_state(gamestates.title)
 end
 
 function _init()
     poke(0x5f5c, 255)
+    intro_t = 30 * 6
+    day_t = 30 * 6
+    post_t = 30 * 8
+    gamestates = {
+        title = 0,
+        how_to = 1,
+        day_title = 2,
+        game = 3,
+        gameover = 5,
+        post_day = 6,
+    }
+    g_state = nil
 
-    
+    end_text_l1 = ""
+    end_text_l2 = ""
+    ending_idx = 0
+
+    endings = {
+        { "city mourns",       "loss of mailman" },
+        { "local mailman",     "goes missing" },
+        { "mailman fired",     "" },
+        { "mailman quits,",    "buys city" },
+        { "mediocre mailman,", "does job" },
+    }
+
+    is_debug = false
+    map_y = 0
+    game_over_x = -10
+    score = 0
+    post_day_timer = 0
+    deliveries = { 0, 0, 0 }
+    goto_postday_tmr = 0
+    offset = 0
+    level_length = 30 --TODO: Put back 30
+    post_day_length = 5 --TODO: Put back 10
+    ending = 0
+    end_spr = { 64, 68, 72, 76, 140 }
+    objects = { back = {}, front = {} }
+    day = 1
+    days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
+
+
+
+    deliveries_total = 0
+    missed_mb_total=0
+    damaged_mb_total=0
     
 
 
@@ -217,6 +216,7 @@ function check_input()
             change_state(gamestates.title)
         elseif g_state == gamestates.day_title then
         elseif g_state == gamestates.game then
+            p1:swap_color()
             --clock.seconds = level_length
         elseif g_state == gamestates.gameover then
 
@@ -272,22 +272,6 @@ function update_play()
     end
 end
 
--- function update_intro()
---     intro_t -= 1
---     if intro_t <= 0 then
---         spawner:start()
---         start_level()
---         change_state(gamestates.game)
---     end
--- end
-
--- function update_postday()
---     post_t -= 1
---     if post_t <= 0 then
---         change_state(gamestates.game)
---         --deliveries = { 0, 0, 0 }
---     end
--- end
 
 function update_day()
     day_t -= 1
@@ -393,33 +377,8 @@ end
 
 function draw_howto()
     cls()
-
-    print("customers", hcenter("customers"), 22, 7)
-    pal(6, 12)
-    
-    sspr(56, 8, 8, 8, 55, 27, 16, 16)
-    pal()
-
-
-    print("non-customers", hcenter("non-customers"), 52, 7)
-
- 
-    --pal(6, 2)
-
-    
-    
-    
-    sspr(56, 8, 8, 8, 55, 57, 16, 16)
-    pal()
-
-    print("bonus", hcenter("bonus"), 82, 7)
-    pal(6, 10)
-    sspr(56, 8, 8, 8, 55, 87, 16, 16)
-    pal()
-
-
-    print("bonus", hcenter("bonus"), 82, 7)
-
+    print("🅾️ throw", hcenter("🅾️ throw"), 60, 7)
+    print("❎ swap", hcenter("❎ swap"), 68, 7)
     print("❎ back", 8, 120, 7)
 end
 
@@ -430,9 +389,20 @@ function draw_postday()
     draw_particles()
     draw_letters()
     draw_gui()
-    print("deliveries: " .. (deliveries[1] + deliveries[2]), 20, 40, 7)
-    print("customers: " .. deliveries[1], 20, 48, 7)
-    print("non-customers: " .. deliveries[2], 20, 48 + 8, 7)
+
+
+
+
+    print("deliveries:", 20, 40, 7)
+    print(p1.deliveries, 80, 40, 7)
+
+    print("missed:", 20, 48, 7)
+    print(p1.missed_mb, 80, 48, 7)
+
+    print("crashed:", 20, 48 + 8, 7)
+    print(p1.damaged_mb, 80, 48 + 8, 7)
+
+    line(16, 70, 16+70, 70, 7)
 
     --draw_skip()
 end
@@ -472,8 +442,8 @@ end
 
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
-    print("score:" .. score, 3, 123, 7)
-    print("hp", 103, 123, 7)
+    print("score:" .. score, 3, 123, p1.colors[1])
+    print("hp", 103, 123, p1.colors[1])
 
 
 
@@ -486,11 +456,11 @@ function draw_gui()
     end
 
     for i = 1, p1.life, 1 do
-        pset(110 + (2 * i), 123, 7)
-        pset(110 + (2 * i), 124, 7)
-        pset(110 + (2 * i), 125, 7)
-        pset(110 + (2 * i), 126, 7)
-        pset(110 + (2 * i), 127, 7)
+        pset(110 + (2 * i), 123, p1.colors[1])
+        pset(110 + (2 * i), 124, p1.colors[1])
+        pset(110 + (2 * i), 125, p1.colors[1])
+        pset(110 + (2 * i), 126, p1.colors[1])
+        pset(110 + (2 * i), 127, p1.colors[1])
     end
 
 
@@ -500,7 +470,7 @@ function draw_gui()
     --  pal()
     --end
 
-    print(days[day], hcenter(days[day]), 123, 7)
+    print(days[day], hcenter(days[day]), 123, p1.colors[1])
 
 
 
@@ -519,7 +489,12 @@ function advance_day()
     intro_t = 30 * 6
     day_t = 30 * 3
     post_t = 30 * 6
+
+    deliveries_total += p1.deliveries
+    missed_mb_total += p1.missed_mb
+    damaged_mb_total += p1.damaged_mb
     p1 = init_player()
+    
     --deliveries_left = deliveries_needed
     g_state = gamestates.day_title
     init_wind()
@@ -608,28 +583,24 @@ end
 
 function goto_gameover(reason)
     spawner:reset()
+    clock:reset()
     --[[
         1=death
         2=missing
         3=fired
-        4=3days
     ]] --
-    if reason == 1 then
-        end_text = endings[1]
-        ending_idx = 1
-    elseif reason == 2 then
-        end_text = endings[2]
-        ending_idx = 2
-    elseif reason == 3 then
-    elseif reason == 4 then
-        if score >= good_score then
-            end_text = endings[4]
-            ending_idx = 4
-        else
-            end_text = endings[5]
-            ending_idx = 5
-        end
-    end
+    -- if reason == 1 then
+    --     end_text = endings[1]
+    --     ending_idx = 1
+    -- elseif reason == 2 then
+    --     end_text = endings[2]
+    --     ending_idx = 2
+    -- elseif reason == 3 then
+    --     end_text = endings[3]
+    --     ending_idx = 3
+    -- end
+    end_text = endings[reason]
+    ending_idx = reason
     sfx(19)
     change_state(gamestates.gameover)
 end

@@ -2,12 +2,12 @@ letter = {}
 letter.__index = letter
 letters = {}
 
-
-function spawn_letter(_dir)
+function spawn_letter(_dir, col)
     local _l = setmetatable({}, letter)
     _l.t = 0
     _l.w = 8
     _l.h = 8
+    _l.color = col
     _l.score_mul = 1
     _l.tossed = true
     _l.img = 32
@@ -37,15 +37,13 @@ function letter:update()
             if is_colliding(self, mb) and not mb.damaged and mb.empty then
                 if self.x < mb.x then
                     if mb.facing_l then
-                        --sfx(8)
-                        mb:on_good_letter(self.score_mul)
+                        mb:on_good_letter(self.score_mul, self)
                     else
                         explode(self.x, self.y, 2, 2, 7, 10)
                     end
                 else
                     if not mb.facing_l then
-                        --sfx(8)
-                        mb:on_good_letter(self.score_mul)
+                        mb:on_good_letter(self.score_mul, self)
                     else
                         explode(self.x, self.y, 2, 2, 7, 10)
                     end
@@ -74,7 +72,9 @@ function letter:update()
 end
 
 function letter:draw()
+    pal(7, self.color)
     spr(self.img, self.x, self.y)
+    pal()
 end
 
 function update_letters()
