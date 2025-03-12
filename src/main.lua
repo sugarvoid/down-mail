@@ -45,6 +45,7 @@ function draw_objects()
 end
 
 function restart_game()
+    misses_gui_x = 70
     day = 1
     deliveries = { 0, 0, 0 }
     intro_t = 30 * 6
@@ -63,6 +64,7 @@ function restart_game()
 end
 
 function _init()
+    max_misses = 6
     poke(0x5f5c, 255)
     intro_t = 30 * 6
     day_t = 30 * 6
@@ -464,13 +466,35 @@ function draw_gui()
     end
 
 
+
+    print("miss", 55, 123, p1.colors[1])
+
+
+
+    for i = 1, max_misses, 1 do
+        pset(misses_gui_x + (2 * i), 123, 5)
+        pset(misses_gui_x + (2 * i), 124, 5)
+        pset(misses_gui_x + (2 * i), 125, 5)
+        pset(misses_gui_x + (2 * i), 126, 5)
+        pset(misses_gui_x + (2 * i), 127, 5)
+    end
+
+    for i = 1, max_misses - p1.missed_mb, 1 do
+        pset(misses_gui_x + (2 * i), 123, p1.colors[1])
+        pset(misses_gui_x + (2 * i), 124, p1.colors[1])
+        pset(misses_gui_x + (2 * i), 125, p1.colors[1])
+        pset(misses_gui_x + (2 * i), 126, p1.colors[1])
+        pset(misses_gui_x + (2 * i), 127, p1.colors[1])
+    end
+
+
     -- for k, v in pairs(customers) do
     --  pal(6, v)
     --  spr(16, 38 + (8 * k), 122)
     --  pal()
     --end
 
-    print(days[day], hcenter(days[day]), 123, p1.colors[1])
+    --print(days[day], hcenter(days[day]), 123, p1.colors[1])
 
 
 

@@ -12,7 +12,6 @@ function init_player()
     _p.w = 8
     _p.h = 8
     _p.colors={12,10}
-    print_debug(_p.colors[1])
     _p.selected_letter = 0
     _p.is_alive = true
     _p.sprite_a = 5

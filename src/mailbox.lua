@@ -50,7 +50,8 @@ function mailbox:update()
     end
 
     if self.y <= -16 then
-        if self.empty then
+        if self.empty and self.b_col ~= 11 then
+            print_debug("in update")
             self:on_miss()
         end
         del(mailboxes, self)
@@ -63,6 +64,7 @@ function mailbox:update()
 end
 
 function mailbox:on_miss()
+    print_debug("on missed called")
     p1.missed_mb += 1 
     if p1.missed_mb == 5 then
         goto_gameover(3)
