@@ -41,7 +41,7 @@ end
 function spawn_dancer()
     if p1.letters < p1.max_letter / 2 then
         new_dancer = dancer:new()
-        new_dancer.x = randi_rang(20, 100)  --rnd(avil_yx)
+        new_dancer.x = randi_rang(20, 100)
         add(objects.front, new_dancer)
     end
 
@@ -49,5 +49,5 @@ function spawn_dancer()
 end
 
 function reset_dancer_timer()
-    next_dancer = randsec_rang(2, 8) --70 + rnd(10)
+    next_dancer = randsec_rang(2, 8)
 end

@@ -20,8 +20,6 @@ function spawn_dog()
     d.time_on_screen = 0
     d.tmr_throw = throw_times[d.agro]
     d.damaged = false
-    --d.dir = 0
-    --d.dx = 1.3
     d.dst_y = randi_rang(20, 80)
     d.start_y = -10
     d.is_moving = false
@@ -31,14 +29,10 @@ function spawn_dog()
     d.y_low = 0
     
     if not d.facing_l then
-        --d.x = 113
-        --d.facing_r = true
         d.shield_x = -8
         d.shield_y_mid = -2
         d.bone_x=114
     else
-        --d.x = 5
-       -- d.facing_r = false
        d.shield_y_out = 6
         d.shield_y_mid = 2
         d.shield_x = 8
@@ -50,7 +44,6 @@ function spawn_dog()
 end
 
 function dog:update()
-    --print_debug(self.y)
     self.anmi_t+=1
 
     if self.y <= self.dst_y and not self.in_play then
@@ -58,10 +51,8 @@ function dog:update()
     else
         sfx(-2, 3)
         self.in_play = true
-        --self.y = self.dst_y
         self.y_high =  self.dst_y - 2
         self.y_low = self.dst_y + 2
-        --self.curr_y = self.dst_y --- 2
     end
 
     if self.in_play then
@@ -77,15 +68,11 @@ function dog:update()
 
         if self.y <= self.y_low then 
             self.bob *=-1 
-            --print_debug("less that low")
-            --self.y += self.bob
         end
         if self.y >= self.y_high then
             self.bob *=-1
-            --self.y -= self.bob
         end
 
-        
         if self.time_on_screen == 30*4 then
             self.time_on_screen = 0
             self.agro = mid(1, self.agro + 1, #throw_times)
