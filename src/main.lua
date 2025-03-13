@@ -1,4 +1,3 @@
-
 local clock = {
     seconds = 0,
     t = 0,
@@ -57,8 +56,8 @@ function restart_game()
     score = 0
     init_wind()
     deliveries_total = 0
-    missed_mb_total=0
-    damaged_mb_total=0
+    missed_mb_total = 0
+    damaged_mb_total = 0
     p1 = init_player()
     change_state(gamestates.title)
 end
@@ -99,7 +98,7 @@ function _init()
     deliveries = { 0, 0, 0 }
     goto_postday_tmr = 0
     offset = 0
-    level_length = 30 --TODO: Put back 30
+    level_length = 30   --TODO: Put back 30
     post_day_length = 5 --TODO: Put back 10
     ending = 0
     end_spr = { 64, 68, 72, 76, 140 }
@@ -110,9 +109,9 @@ function _init()
 
 
     deliveries_total = 0
-    missed_mb_total=0
-    damaged_mb_total=0
-    
+    missed_mb_total = 0
+    damaged_mb_total = 0
+
 
 
     restart_game()
@@ -134,7 +133,7 @@ function _update()
 
 
     if g_state == gamestates.title then
-    --elseif g_state == gamestates.how_to then
+        --elseif g_state == gamestates.how_to then
         --update_intro()
     elseif g_state == gamestates.day_title then
         update_day()
@@ -148,7 +147,6 @@ function _update()
 end
 
 function _draw()
-    
     if g_state == gamestates.title then
         draw_title()
     elseif g_state == gamestates.how_to then
@@ -167,12 +165,9 @@ function _draw()
     if is_debug then
         print("mem: " .. flr(stat(0)) .. "kb", 10, 0, 8)
         print("cpu: " .. stat(1) * 100 .. "%", 10, 8, 8)
+
+        print(clock.seconds, 8, 0)
     end
-
-    
-    
-
-    print(clock.seconds, 8, 0)
 end
 
 function check_input()
@@ -188,7 +183,6 @@ function check_input()
             p1:throw()
         elseif g_state == gamestates.game then
             p1:throw()
-
         elseif g_state == gamestates.gameover then
             restart_game()
         end
@@ -254,7 +248,7 @@ function update_play()
         d:update()
     end
 
-    
+
 
 
 
@@ -274,7 +268,6 @@ function update_play()
     end
 end
 
-
 function update_day()
     day_t -= 1
     if day_t <= 0 then
@@ -287,7 +280,6 @@ function update_day()
 end
 
 function update_postday()
-
     clock:update()
 
     if clock.seconds >= post_day_length then
@@ -297,7 +289,6 @@ function update_postday()
         all_particles = {}
         letters = {}
         advance_day()
-
     end
 
 
@@ -367,14 +358,13 @@ end
 
 function draw_title()
     cls()
-    sspr(64, 96, 32, 16, 36, 20, 32*2, 16*2)
-    sspr(64, 112, 32, 16, 36, 20+22, 32*2, 16*2)
+    sspr(64, 96, 32, 16, 36, 20, 32 * 2, 16 * 2)
+    sspr(64, 112, 32, 16, 36, 20 + 22, 32 * 2, 16 * 2)
     --spr(200, 48, 34, 4, 2)
     --spr(232, 48, 34 + 10, 4, 2)
     --print("down mail", hcenter("down mail"), 50, 0)
     print("🅾️ play", hcenter("🅾️ play"), 75, 7)
     print("❎ info", hcenter("❎ info"), 83, 7)
-
 end
 
 function draw_howto()
@@ -392,9 +382,6 @@ function draw_postday()
     draw_letters()
     draw_gui()
 
-
-
-
     print("deliveries:", 20, 40, 7)
     print(p1.deliveries, 80, 40, 7)
 
@@ -404,15 +391,14 @@ function draw_postday()
     print("crashed:", 20, 48 + 8, 7)
     print(p1.damaged_mb, 80, 48 + 8, 7)
 
-    line(16, 70, 16+70, 70, 7)
+    line(16, 70, 16 + 70, 70, 7)
 
     --draw_skip()
 end
 
-
 function draw_day()
     cls(0)
-    print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), vcenter( "\^w\^t" .. days[day]), 7)
+    print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), vcenter("\^w\^t" .. days[day]), 7)
     draw_skip()
 end
 
@@ -509,7 +495,17 @@ end
 
 function advance_day()
     day += 1
-    if day == 8 then day = 1 end
+
+    -- if day == 5 then
+    --     if 1 == 1 then
+    --         end_text = endings[4]
+    --         ending_idx = 4
+    --     else
+    --         end_text = endings[5]
+    --         ending_idx = 5
+    --     end
+    --     goto_gameover(4)
+    -- else
     intro_t = 30 * 6
     day_t = 30 * 3
     post_t = 30 * 6
@@ -518,13 +514,16 @@ function advance_day()
     missed_mb_total += p1.missed_mb
     damaged_mb_total += p1.damaged_mb
     p1 = init_player()
-    
+
     --deliveries_left = deliveries_needed
     g_state = gamestates.day_title
     init_wind()
+    --end
+
+
+
+    --if day == 8 then day = 1 end
 end
-
-
 
 function change_state(new_state)
     offset = 0
@@ -579,18 +578,17 @@ function shuffle(t)
     end
 end
 
-
 function randf_rang(l, h)
     local _h = h - l
     return l + rnd(_h + 0.0001) -- Small offset to include h
 end
 
 function randi_rang(l, h)
-    return flr(rnd(h - l +1 )) + l
+    return flr(rnd(h - l + 1)) + l
 end
 
 function randsec_rang(l, h)
-    return (flr(rnd(h - l +1 )) + l) * 30
+    return (flr(rnd(h - l + 1)) + l) * 30
 end
 
 function draw_hitbox(o)
@@ -634,14 +632,14 @@ function draw_gameover()
     spr(192, 32, 8, 8, 2)
     print("$0.25", 6, 10, 5)
     print("score: " .. score, 10, 32, 5)
-    print("acc: " .. p1:get_acc().."%", 10, 38, 5)
+    print("acc: " .. p1:get_acc() .. "%", 10, 38, 5)
     rect(4, 30, 124, 120, 5)
     pal(14, 0)
     spr(end_spr[ending_idx], 80, 34, 4, 4)
     pal()
     print("game over", game_over_x, 1, 0)
-    print(end_text[1], 10, 40 + 5, 0)
-    print(end_text[2], 10, 48 + 5, 0)
+    print(end_text[1], 10, 46 + 5, 0)
+    print(end_text[2], 10, 54 + 5, 0)
     fillp(▤)
     rectfill(10, 70, 76, 95, 0)
     rectfill(10, 100, 90, 110, 0)
@@ -676,31 +674,29 @@ function dist(a, b)
     return abs(a.x - b.x) + abs(a.y - b.y)
 end
 
-
 -- from https://www.lexaloffle.com/bbs/?tid=3593
-function spr_r(s,x,y,a,w,h)
-    sw=(w or 1)*8
-    sh=(h or 1)*8
-    sx=(s%8)*8
-    sy=flr(s/8)*8
-    x0=flr(0.5*sw)
-    y0=flr(0.5*sh)
-    a=a/360
-    sa=sin(a)
-    ca=cos(a)
-    for ix=0,sw-1 do
-     for iy=0,sh-1 do
-      dx=ix-x0
-      dy=iy-y0
-      xx=flr(dx*ca-dy*sa+x0)
-      yy=flr(dx*sa+dy*ca+y0)
-      if (xx>=0 and xx<sw and yy>=0 and yy<=sh) then
-       pset(x+ix,y+iy,sget(sx+xx,sy+yy))
-      end
-     end
+function spr_r(s, x, y, a, w, h)
+    sw = (w or 1) * 8
+    sh = (h or 1) * 8
+    sx = (s % 8) * 8
+    sy = flr(s / 8) * 8
+    x0 = flr(0.5 * sw)
+    y0 = flr(0.5 * sh)
+    a = a / 360
+    sa = sin(a)
+    ca = cos(a)
+    for ix = 0, sw - 1 do
+        for iy = 0, sh - 1 do
+            dx = ix - x0
+            dy = iy - y0
+            xx = flr(dx * ca - dy * sa + x0)
+            yy = flr(dx * sa + dy * ca + y0)
+            if (xx >= 0 and xx < sw and yy >= 0 and yy <= sh) then
+                pset(x + ix, y + iy, sget(sx + xx, sy + yy))
+            end
+        end
     end
-   end
-   
+end
 
 function update_score(val)
     score = mid(0, score + val, 32000)

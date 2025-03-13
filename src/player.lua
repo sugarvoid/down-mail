@@ -156,6 +156,11 @@ function player:update()
         end
     end
 
+    if test_wormhole then
+        self.x = test_wormhole.x - 4
+        self.y = test_wormhole.y - 4
+    end
+
     
 end
 
@@ -193,7 +198,7 @@ function player:get_acc()
     if self.throws == 0 then
         return 0
     else
-        return ((self.throws - self.misses) / self.throws) * 100
+        return ceil(((self.throws - self.misses) / self.throws) * 100)
     end
 end
 
