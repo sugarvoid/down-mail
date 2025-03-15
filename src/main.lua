@@ -98,7 +98,7 @@ function _init()
     deliveries = { 0, 0, 0 }
     goto_postday_tmr = 0
     offset = 0
-    level_length = 30   --TODO: Put back 30
+    level_length = 20   --TODO: Put back 30
     post_day_length = 5 --TODO: Put back 10
     ending = 0
     end_spr = { 64, 68, 72, 76, 140 }
