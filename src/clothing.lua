@@ -2,9 +2,7 @@ clothing={}
 clothing.__index=clothing
 
 function clothing:draw()
-    pal(14, self.col)
     spr(self.img,self.x,self.y)
-    pal()
 end
 
 function clothing:update()
@@ -20,6 +18,5 @@ function spawn_clothing(sprite)
     _c.x=p1.x
     _c.y=p1.y
     _c.fall_speed=2
-    _c.col = p1.colors[1]
     add(objects.front,_c)
 end

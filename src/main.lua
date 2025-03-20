@@ -98,21 +98,17 @@ function _init()
     deliveries = { 0, 0, 0 }
     goto_postday_tmr = 0
     offset = 0
-    level_length = 20   --TODO: Put back 30
-    post_day_length = 5 --TODO: Put back 10
+    level_length = 20
+    post_day_length = 5
     ending = 0
     end_spr = { 64, 68, 72, 76, 140 }
     objects = { back = {}, front = {} }
     day = 1
     days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
 
-
-
     deliveries_total = 0
     missed_mb_total = 0
     damaged_mb_total = 0
-
-
 
     restart_game()
 end
@@ -130,11 +126,7 @@ function _update()
         test_wormhole:update()
     end
 
-
-
     if g_state == gamestates.title then
-        --elseif g_state == gamestates.how_to then
-        --update_intro()
     elseif g_state == gamestates.day_title then
         update_day()
     elseif g_state == gamestates.game then
@@ -174,8 +166,6 @@ function check_input()
     if btnp(🅾️) then
         if g_state == gamestates.title then
             g_state = gamestates.day_title
-            -- elseif g_state == gamestates.how_to then
-            --     intro_t = 0
         elseif g_state == gamestates.day_title then
             day_t = 0
         elseif g_state == gamestates.post_day then
@@ -194,15 +184,12 @@ function check_input()
         p1:move("l")
     end
 
+    
 
     if btnp(⬆️) then
         p1:update_chute(true)
-        --p1.is_chute_open = true
-        --p1.speed = 1
     elseif btnp(⬇️) then
         p1:update_chute(false)
-        --p1.is_chute_open = false
-        --p1.speed = 2
     end
 
     if btnp(❎) then
@@ -212,10 +199,7 @@ function check_input()
             change_state(gamestates.title)
         elseif g_state == gamestates.day_title then
         elseif g_state == gamestates.game then
-            p1:swap_color()
-            --clock.seconds = level_length
         elseif g_state == gamestates.gameover then
-
         end
     end
 end
@@ -234,9 +218,6 @@ function update_play()
         clock:start()
     end
 
-
-
-
     p1:update()
     update_particles()
     update_objects()
@@ -247,10 +228,6 @@ function update_play()
     for d in all(dogs) do
         d:update()
     end
-
-
-
-
 
     spawner:update()
 
@@ -291,23 +268,6 @@ function update_postday()
         advance_day()
     end
 
-
-
-    -- post_day_timer -= 1
-    -- if post_day_timer <= 0 then
-    --     mailboxes = {}
-    --     advance_day()
-    --         --if day == 3 then
-    --         -- if deliveries[1] == (deliveries_needed * (days_needed)) then
-    --         --     end_text = endings[4]
-    --         --     ending_idx = 4
-    --         -- else
-    --         --     end_text = endings[5]
-    --         --     ending_idx = 5
-    --         -- end
-    --         --goto_gameover(4)
-    --         --end
-    -- end
     p1:update()
     update_letters()
     update_particles()
@@ -360,17 +320,16 @@ function draw_title()
     cls()
     sspr(64, 96, 32, 16, 36, 20, 32 * 2, 16 * 2)
     sspr(64, 112, 32, 16, 36, 20 + 22, 32 * 2, 16 * 2)
-    --spr(200, 48, 34, 4, 2)
-    --spr(232, 48, 34 + 10, 4, 2)
-    --print("down mail", hcenter("down mail"), 50, 0)
     print("🅾️ play", hcenter("🅾️ play"), 75, 7)
     print("❎ info", hcenter("❎ info"), 83, 7)
 end
 
 function draw_howto()
     cls()
+    print("⬅️➡️ move", hcenter("⬅️➡️ move"), 60-8-8, 7)
+    print("⬆️⬇️ adjust chute", hcenter("⬆️⬇️ adjust chute"), 60-8, 7)
     print("🅾️ throw", hcenter("🅾️ throw"), 60, 7)
-    print("❎ swap", hcenter("❎ swap"), 68, 7)
+    --print("❎ swap", hcenter("❎ swap"), 68, 7)
     print("❎ back", 8, 120, 7)
 end
 
@@ -393,7 +352,6 @@ function draw_postday()
 
     line(16, 70, 16 + 70, 70, 7)
 
-    --draw_skip()
 end
 
 function draw_day()
@@ -430,10 +388,8 @@ end
 
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
-    print("score:" .. score, 3, 123, p1.colors[1])
-    print("hp", 103, 123, p1.colors[1])
-
-
+    print("score:" .. score, 3, 123, 7)
+    print("hp", 103, 123, 7)
 
     for i = 1, p1.max_health, 1 do
         pset(110 + (2 * i), 123, 5)
@@ -444,18 +400,14 @@ function draw_gui()
     end
 
     for i = 1, p1.life, 1 do
-        pset(110 + (2 * i), 123, p1.colors[1])
-        pset(110 + (2 * i), 124, p1.colors[1])
-        pset(110 + (2 * i), 125, p1.colors[1])
-        pset(110 + (2 * i), 126, p1.colors[1])
-        pset(110 + (2 * i), 127, p1.colors[1])
+        pset(110 + (2 * i), 123, 7)
+        pset(110 + (2 * i), 124, 7)
+        pset(110 + (2 * i), 125, 7)
+        pset(110 + (2 * i), 126, 7)
+        pset(110 + (2 * i), 127, 7)
     end
 
-
-
-    print("miss", 55, 123, p1.colors[1])
-
-
+    print("miss", 55, 123, 7)
 
     for i = 1, max_misses, 1 do
         pset(misses_gui_x + (2 * i), 123, 5)
@@ -466,27 +418,12 @@ function draw_gui()
     end
 
     for i = 1, max_misses - p1.missed_mb, 1 do
-        pset(misses_gui_x + (2 * i), 123, p1.colors[1])
-        pset(misses_gui_x + (2 * i), 124, p1.colors[1])
-        pset(misses_gui_x + (2 * i), 125, p1.colors[1])
-        pset(misses_gui_x + (2 * i), 126, p1.colors[1])
-        pset(misses_gui_x + (2 * i), 127, p1.colors[1])
+        pset(misses_gui_x + (2 * i), 123, 7)
+        pset(misses_gui_x + (2 * i), 124, 7)
+        pset(misses_gui_x + (2 * i), 125, 7)
+        pset(misses_gui_x + (2 * i), 126, 7)
+        pset(misses_gui_x + (2 * i), 127, 7)
     end
-
-
-    -- for k, v in pairs(customers) do
-    --  pal(6, v)
-    --  spr(16, 38 + (8 * k), 122)
-    --  pal()
-    --end
-
-    --print(days[day], hcenter(days[day]), 123, p1.colors[1])
-
-
-
-    --rectfill(48, 124, 50, 126, customers[1])
-    -- rectfill(52, 124, 54, 126, customers[2])
-    --rectfill(56, 124, 58, 126, customers[3])
 end
 
 function start_level()
@@ -496,16 +433,6 @@ end
 function advance_day()
     day += 1
 
-    -- if day == 5 then
-    --     if 1 == 1 then
-    --         end_text = endings[4]
-    --         ending_idx = 4
-    --     else
-    --         end_text = endings[5]
-    --         ending_idx = 5
-    --     end
-    --     goto_gameover(4)
-    -- else
     intro_t = 30 * 6
     day_t = 30 * 3
     post_t = 30 * 6
@@ -515,26 +442,14 @@ function advance_day()
     damaged_mb_total += p1.damaged_mb
     p1 = init_player()
 
-    --deliveries_left = deliveries_needed
     g_state = gamestates.day_title
     init_wind()
-    --end
-
-
-
-    --if day == 8 then day = 1 end
 end
 
 function change_state(new_state)
     offset = 0
     g_state = new_state
 end
-
--- function set_customers()
---     shuffle(cols)
---     customers = { cols[1], cols[2] }
---     non_customers = { cols[3], cols[4] }
--- end
 
 function angle_lerp(angle1, angle2, t)
     angle1 = angle1 % 1

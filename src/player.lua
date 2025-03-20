@@ -1,8 +1,6 @@
 player = {}
 player.__index = player
 
-font_col={12,14}
-
 
 function init_player()
     local _p = setmetatable({}, player)
@@ -11,7 +9,6 @@ function init_player()
     _p.y = 54
     _p.w = 8
     _p.h = 8
-    _p.colors={12,10}
     _p.selected_letter = 0
     _p.is_alive = true
     _p.sprite_a = 5
@@ -49,11 +46,9 @@ end
 
 function player:draw()
 
-    if self.ring<=15 then
-        circ(self.x+4,self.y,self.ring,self.colors[1])
-    end
+    
 
-    pal(14, self.colors[1])
+
     if self.is_alive then
 
         --spr_r(self.img, self.x, self.y, self.a, 1, 1)
@@ -76,7 +71,7 @@ function player:draw()
         
     end
 
-    pal()
+
 end
 
 function player:update_chute(open)
@@ -188,11 +183,6 @@ function player:take_damage()
     end
 end
 
-function player:swap_color()
-   -- print_debug(self.colors[1])
-    self.colors[1],self.colors[2]=self.colors[2],self.colors[1]
-    self.ring =0
-end
 
 function player:get_acc()
     if self.throws == 0 then
@@ -209,9 +199,9 @@ function player:throw()
     --self.img=02
     self.thr_anmi = 10
     if self.facing_l then
-        spawn_letter(-1, self.colors[1])
+        spawn_letter(-1)
     else
-        spawn_letter(1, self.colors[1])
+        spawn_letter(1)
     end
     sfx(6)
     

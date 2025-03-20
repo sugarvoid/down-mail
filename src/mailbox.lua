@@ -114,7 +114,7 @@ end
 --     end
 -- end
 
-function mailbox:on_good_letter(_score, l)
+function mailbox:on_good_letter(_score)
     self.empty = false
 
     if self.b_col == 11 then
@@ -125,7 +125,7 @@ function mailbox:on_good_letter(_score, l)
         self.speed = 4
         explode(self.x, self.y, 2, 6, self.b_col, 10)
         sfx(21)
-    elseif self.b_col == l.color then
+    else
         p1.deliveries += 1
         sfx(4)
         update_score(10 * flr(_score))
@@ -133,9 +133,9 @@ function mailbox:on_good_letter(_score, l)
         self.img = 20
         explode(self.x, self.y, 2, 6, self.b_col, 10)
         self.speed = 4
-    else
+    --else
         --TODO: Make explode instead
-        self:take_damage()
+        --self:take_damage()
     end
     
     
