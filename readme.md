@@ -1,13 +1,8 @@
 # Down Mail
-[Play in browser](https://sugarvoid.itch.io/down-mail)
 
-## Project Status
-- Trying to get to a "playable" state. (progress slowing down. getting bored.) 
-
-## Gameplay
 ![gameplay](https://github.com/sugarvoid/down-mail/blob/master/gameplay.gif)
 <br>
-
+[Play in browser](https://sugarvoid.itch.io/down-mail)
 
 ## Goal :dart:
 -   Deliver letters to correct customers
