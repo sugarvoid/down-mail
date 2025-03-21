@@ -25,10 +25,9 @@
 |   O    | Throw Letter |
 
 
-Dogs will shot bones at player.
-Rocks will fall from the top.
-Missing a letter will cause a twister to spawn, lower player mobility for a short time.
-Spawning three twister are a bad thing
+Dogs will shot bones at player.<br>
+Rocks will fall from the top.<br>
+Missing a letter will cause a twister to spawn, lower player mobility for a short time.<br>
 
 
 ## Progress
