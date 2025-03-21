@@ -35,9 +35,6 @@ Spawning three twister are a bad thing
 
 ### Todo
 - [ ] Add player death animation 
-- [ ] Reset crashed mailboxes at start of day
-- [ ] Make rings move
-- [ ] Finish log for dog class
 - [ ] Prevent mailboxes and rocks spwaning at the same time
 - [ ] Add invincibility frames from player
-- [ ] Make game endless/hi score game
+- [ ] Make the game harder over time?
