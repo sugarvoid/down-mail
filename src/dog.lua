@@ -47,7 +47,7 @@ function dog:update()
     self.anmi_t+=1
 
     if self.y <= self.dst_y and not self.in_play then
-        self.y += 1
+        self.y += 2
     else
         sfx(-2, 3)
         self.in_play = true

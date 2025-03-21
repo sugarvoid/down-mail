@@ -8,7 +8,7 @@ function spawn_bone(x,y, p,face_r)
     _d.target={x=p.x, y=p.y}
     _d.facing_r=face_r
     _d.img=2
-    _d.speed=5
+    _d.speed=4
     _d.dx = p.x - _d.x
     _d.dy = p.y - _d.y
     local len = sqrt(_d.dx^2 + _d.dy^2)
