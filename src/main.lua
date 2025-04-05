@@ -160,6 +160,8 @@ function _draw()
 
         print(clock.seconds, 8, 0)
     end
+
+    print(object_count(), 5, 0, 7)
 end
 
 function check_input()
@@ -207,7 +209,7 @@ end
 function update_play()
     clock:update()
 
-    if clock.seconds >= level_length then
+    if clock.seconds >= level_length and object_count() == 0 then
         clock:stop()
         print_debug("level over")
         goto_postday_tmr = 60

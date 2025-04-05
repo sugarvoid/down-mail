@@ -7,7 +7,7 @@ function init_player()
     _p.in_vortex = false
     _p.x = 54
     _p.y = 54
-    _p.w = 8
+    _p.w = 6
     _p.h = 8
     _p.selected_letter = 0
     _p.is_alive = true
@@ -70,6 +70,8 @@ function player:draw()
         spr(17, self.x, self.y, 1, 1, self.facing_l)
         
     end
+
+    draw_hitbox(self)
 
 
 end
