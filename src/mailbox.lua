@@ -21,7 +21,7 @@ function spawn_mbox(lane)
         --mb_tracker[1] += 1
 	elseif rand <= 0.90 then -- 40% non_customer
 		_mb.m_type = 2
-        _mb.b_col = 10
+        _mb.b_col = 2
         --mb_tracker[2] += 1
 	else                 -- 10% bonus
 		_mb.m_type = 3

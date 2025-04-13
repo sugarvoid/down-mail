@@ -7,9 +7,10 @@ function spawn_twister(x, y)
     local _t = setmetatable({}, twister)
     _t.x = x
     _t.y = y
+    _t.position = nil
+    _t.next_position = nil
     _t.timer = 120
     _t.target = p1
-    _t.facing_l = nil
     _t.anim = { 51, 52, 53 }
     _t.tick = 0
     _t.frame = 1
@@ -20,6 +21,7 @@ function spawn_twister(x, y)
     _t.angle = 0
     _t.speed = 2
     _t.prox = 0.2
+    _t.hitbox = hitbox.new(_t, 15, 15)
     add(twisters, _t)
 end
 
@@ -63,6 +65,9 @@ function twister:update()
 
     
     --print_debug(self.dis)
+    --self.hitbox:update()
+    self.hitbox.x = self.x - 4
+    self.hitbox.y = self.y - 4
 end
 
 function twister:draw()
@@ -70,5 +75,11 @@ function twister:draw()
        print(self.dis, self.x, self.y - 8) 
     end
     
-    spr(self.anim[self.frame], self.x, self.y, 1, 1, self.facing_l)
+    spr(self.anim[self.frame], self.x, self.y, 1, 1)
+
+    draw_hb(self.hitbox)
+end
+
+function twister:move()
+    
 end

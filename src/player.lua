@@ -31,6 +31,7 @@ function init_player()
     _p.damaged_mb = 0
     _p.missed_mb = 0
     _p.deliveries = 0
+    _p.hitbox = hitbox.new(_p, _p.w, _p.h)
     return _p
 end
 
@@ -71,7 +72,9 @@ function player:draw()
         
     end
 
-    draw_hitbox(self)
+    --draw_hitbox(self)
+
+    draw_hb(self.hitbox)
 
 
 end
@@ -158,6 +161,7 @@ function player:update()
         self.y = test_wormhole.y - 4
     end
 
+    self.hitbox:update()
     
 end
 
@@ -186,13 +190,13 @@ function player:take_damage()
 end
 
 
-function player:get_acc()
-    if self.throws == 0 then
-        return 0
-    else
-        return ceil(((self.throws - self.misses) / self.throws) * 100)
-    end
-end
+-- function player:get_acc()
+--     if self.throws == 0 then
+--         return 0
+--     else
+--         return ceil(((self.throws - self.misses) / self.throws) * 100)
+--     end
+-- end
 
 function player:throw()
     if g_state == gamestates.game then

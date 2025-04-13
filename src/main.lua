@@ -1,31 +1,3 @@
-local clock = {
-    seconds = 0,
-    t = 0,
-    is_running = false,
-    update = function(self)
-        if self.is_running then
-            self.t += 1
-            if self.t >= 30 then
-                self:tick()
-            end
-        end
-    end,
-    tick = function(self)
-        self.seconds += 1
-        self.t = 0
-    end,
-    reset = function(self)
-        self.is_running = false
-        self.t = 0
-        self.seconds = 0
-    end,
-    stop = function(self)
-        self:reset()
-    end,
-    start = function(self)
-        self.is_running = true
-    end
-}
 
 
 function update_objects()
@@ -51,7 +23,7 @@ function restart_game()
     day_t = 30 * 3
     post_t = 30 * 8
     spawner:reset()
-    clock:reset()
+    game_clock:restart()
     --set_customers()
     score = 0
     init_wind()
@@ -63,6 +35,7 @@ function restart_game()
 end
 
 function _init()
+    game_clock = clock.new()
     max_misses = 6
     poke(0x5f5c, 255)
     intro_t = 30 * 6
@@ -122,9 +95,9 @@ function _update()
         map_y = 0
     end
 
-    if test_wormhole then
-        test_wormhole:update()
-    end
+    -- if test_wormhole then
+    --     test_wormhole:update()
+    -- end
 
     if g_state == gamestates.title then
     elseif g_state == gamestates.day_title then
@@ -158,7 +131,7 @@ function _draw()
         print("mem: " .. flr(stat(0)) .. "kb", 10, 0, 8)
         print("cpu: " .. stat(1) * 100 .. "%", 10, 8, 8)
 
-        print(clock.seconds, 8, 0)
+        print(game_clock.seconds, 8, 0)
     end
 
     print(object_count(), 5, 0, 7)
@@ -207,17 +180,17 @@ function check_input()
 end
 
 function update_play()
-    clock:update()
+    game_clock:update()
 
-    if clock.seconds >= level_length and object_count() == 0 then
-        clock:stop()
+    if game_clock.seconds >= level_length and object_count() == 0 then
+        game_clock:stop()
         print_debug("level over")
         goto_postday_tmr = 60
         sfx(22)
         clear_objs()
         spawner.running = false
-        clock:reset()
-        clock:start()
+        game_clock:restart()
+        game_clock:start()
     end
 
     p1:update()
@@ -259,10 +232,10 @@ function update_day()
 end
 
 function update_postday()
-    clock:update()
+    game_clock:update()
 
-    if clock.seconds >= post_day_length then
-        clock:stop()
+    if game_clock.seconds >= post_day_length then
+        game_clock:stop()
 
         mailboxes = {}
         all_particles = {}
@@ -282,9 +255,9 @@ function draw_play()
     for o in all(objects.back) do
         o:draw()
     end
-    if test_wormhole then
-        test_wormhole:draw()
-    end
+    -- if test_wormhole then
+    --     test_wormhole:draw()
+    -- end
 
     p1:draw()
     draw_particles()
@@ -358,7 +331,7 @@ end
 
 function draw_day()
     cls(0)
-    print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), vcenter("\^w\^t" .. days[day]), 7)
+    print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), 61, 7)
     draw_skip()
 end
 
@@ -429,7 +402,7 @@ function draw_gui()
 end
 
 function start_level()
-    clock.is_running = true
+    game_clock.is_running = true
 end
 
 function advance_day()
@@ -480,13 +453,6 @@ function hcenter(s)
     return 64 - #s * 2
 end
 
-function vcenter(s)
-    -- screen center minus the
-    -- string height in pixels,
-    -- cut in half
-    return 61
-end
-
 function shuffle(t)
     -- do a fisher-yates shuffle
     for i = #t, 1, -1 do
@@ -522,7 +488,7 @@ end
 
 function goto_gameover(reason)
     spawner:reset()
-    clock:reset()
+    game_clock:reset()
     --[[
         1=death
         2=missing
@@ -549,7 +515,7 @@ function draw_gameover()
     spr(192, 32, 8, 8, 2)
     print("$0.25", 6, 10, 5)
     print("score: " .. score, 10, 32, 5)
-    print("acc: " .. p1:get_acc() .. "%", 10, 38, 5)
+    --print("acc: " .. p1:get_acc() .. "%", 10, 38, 5)
     rect(4, 30, 124, 120, 5)
     pal(14, 0)
     spr(end_spr[ending_idx], 80, 34, 4, 4)
@@ -589,30 +555,6 @@ end
 
 function dist(a, b)
     return abs(a.x - b.x) + abs(a.y - b.y)
-end
-
--- from https://www.lexaloffle.com/bbs/?tid=3593
-function spr_r(s, x, y, a, w, h)
-    sw = (w or 1) * 8
-    sh = (h or 1) * 8
-    sx = (s % 8) * 8
-    sy = flr(s / 8) * 8
-    x0 = flr(0.5 * sw)
-    y0 = flr(0.5 * sh)
-    a = a / 360
-    sa = sin(a)
-    ca = cos(a)
-    for ix = 0, sw - 1 do
-        for iy = 0, sh - 1 do
-            dx = ix - x0
-            dy = iy - y0
-            xx = flr(dx * ca - dy * sa + x0)
-            yy = flr(dx * sa + dy * ca + y0)
-            if (xx >= 0 and xx < sw and yy >= 0 and yy <= sh) then
-                pset(x + ix, y + iy, sget(sx + xx, sy + yy))
-            end
-        end
-    end
 end
 
 function update_score(val)
