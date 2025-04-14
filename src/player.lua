@@ -45,30 +45,17 @@ function player:move(dir)
 end
 
 function player:draw()
-
-    
-
-
-    if self.is_alive then
-
-        --spr_r(self.img, self.x, self.y, self.a, 1, 1)
+    --if self.is_alive then
         spr(self.img, self.x, self.y, 1, 1, self.facing_l)
-
-        
         spr(self.chute_spr, self.x, self.y - 8)
-        --pal()
-    else
-        spr(49, self.x, self.y)
-    end
-    
-    
+    --else
+      --  spr(49, self.x, self.y)
+    --end
     if self.life >= 2 then
         spr(18, self.x, self.y, 1, 1, self.facing_l)
     end
     if self.life == 3 then
-        --pal(7, self.colors[1])
         spr(17, self.x, self.y, 1, 1, self.facing_l)
-        
     end
 
     --draw_hitbox(self)
@@ -79,7 +66,6 @@ function player:draw()
 end
 
 function player:update_chute(open)
-    
     self.is_chute_open = open
     if open then
         self.speed = 1
@@ -89,11 +75,6 @@ function player:update_chute(open)
 end
 
 function player:update()
-
-    self.a-=10
-
-    self.a = self.a%360 
-
     if self:check_for_twisters() then
         self.move_speed = 0.5
         self.speed = 0.5
@@ -128,11 +109,8 @@ function player:update()
     end
     --TODO: user goto_gameover funciton
     if self.y <= -30 or self.y >= 140 then
-        
-            self.is_alive = false
-            goto_gameover(2)
-            --change_state(gamestates.gameover)
-        
+        self.is_alive = false
+        goto_gameover(2)        
     end
 
     -- if self.y <= -30 then
@@ -157,11 +135,6 @@ function player:update()
         end
     end
 
-    if test_wormhole then
-        self.x = test_wormhole.x - 4
-        self.y = test_wormhole.y - 4
-    end
-
     self.hitbox:update()
     
 end
@@ -176,8 +149,8 @@ function player:check_for_twisters()
   end
 
 function player:take_damage()
-    if (self.life == 3) then spawn_clothing(17) end
-    if (self.life == 2) then spawn_clothing(18) end
+    if self.life == 3 then spawn_clothing(17) end
+    if self.life == 2 then spawn_clothing(18) end
     self.life -= 1
     self.chute_open_spr += 1
     sfx(16)
@@ -203,7 +176,6 @@ function player:throw()
     if g_state == gamestates.game then
         self.throws += 1
     end
-    --self.img=02
     self.thr_anmi = 10
     if self.facing_l then
         spawn_letter(-1)
@@ -211,5 +183,4 @@ function player:throw()
         spawn_letter(1)
     end
     sfx(6)
-    
 end

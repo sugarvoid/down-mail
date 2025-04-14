@@ -10,7 +10,6 @@ function clock.new()
     return c
 end
 
-
 function clock:tick()
     self.seconds += 1
     self.t = 0

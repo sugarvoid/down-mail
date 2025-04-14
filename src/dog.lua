@@ -13,7 +13,7 @@ function spawn_dog()
     d.h = 14
     d.facing_l = d.x < 128 / 2
     d.col = rnd({4,7})
-    d.img = 19
+    d.img = 61
     d.agro=1
     d.anmi_t = 0
     d.tmr_move = randsec_rang(6, 7)
@@ -112,7 +112,7 @@ end
 function dog:throw_bone()
     sfx(1)
     self.tmr_throw = throw_times[self.agro]
-    spawn_bone(self.bone_x, self.y+4, p1, self.facing_r)
+    spawn_bone(self.bone_x, self.y+4, p1)
 end
 
 function dog:exit()

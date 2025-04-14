@@ -4,27 +4,26 @@ twister.__index = twister
 twisters = {}
 
 function spawn_twister(x, y)
-    local _t = setmetatable({}, twister)
-    _t.x = x
-    _t.y = y
+    local t = setmetatable({}, twister)
+    t.x = x
+    t.y = y
     --_t.position = nil
     --_t.next_position = nil
-    _t.life_timer = 120
-    _t.move_timer = 60
+    t.life_timer = 120
+    t.move_timer = 60
     --_t.target = p1
-    _t.anim = { 51, 52, 53 }
-    _t.tick = 0
-    _t.frame = 1
-    _t.step = 3
-    _t.img = 19
-    _t.img = 51
-    _t.dis = 0
-    _t.angle = 0
-    _t.speed = 0.05
-    _t.prox = 0.2
-    _t.hitbox = hitbox.new(_t, 15, 15)
-    _t:move()
-    add(twisters, _t)
+    t.anim = { 51, 52, 53 }
+    t.tick = 0
+    t.frame = 1
+    t.step = 3
+    t.img = 51
+    --_t.dis = 0
+    --_t.angle = 0
+    t.speed = 0.04
+    --_t.prox = 0.2
+    t.hitbox = hitbox.new(t, 15, 15)
+    t:move()
+    add(twisters, t)
 end
 
 function twister:set_target(obj)

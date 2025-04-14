@@ -13,10 +13,10 @@ function clothing:update()
 end
 
 function spawn_clothing(sprite)
-    local _c=setmetatable({},clothing)
-    _c.img=sprite
-    _c.x=p1.x
-    _c.y=p1.y
-    _c.fall_speed=2
+    local c=setmetatable({},clothing)
+    c.img=sprite
+    c.x=p1.x
+    c.y=p1.y
+    c.fall_speed=2
     add(objects.front,_c)
 end

@@ -1,20 +1,19 @@
 bone={}
 bone.__index=bone
 
-function spawn_bone(x,y, p,face_r)
+function spawn_bone(x,y,p)
     local _d=setmetatable({},bone)
-    _d.x=x
-    _d.y=y
-    _d.target={x=p.x, y=p.y}
-    _d.facing_r=face_r
-    _d.img=2
-    _d.speed=4
-    _d.dx = p.x - _d.x
-    _d.dy = p.y - _d.y
-    local len = sqrt(_d.dx^2 + _d.dy^2)
-    _d.dx /= len
-    _d.dy /= len
-    add(objects.front, _d)
+    b.x=x
+    b.y=y
+    b.target={x=p.x, y=p.y}
+    b.img=2
+    b.speed=4
+    b.dx = p.x - b.x
+    b.dy = p.y - b.y
+    local len = sqrt(b.dx^2 + b.dy^2)
+    b.dx /= len
+    b.dy /= len
+    add(objects.front, b)
 end
 
 function bone:update()
@@ -35,7 +34,5 @@ function bone:update()
 end
 
 function bone:draw()
-    spr(self.img,self.x,self.y,1,1,self.facing_r)
+    spr(self.img,self.x,self.y)
 end
-
-

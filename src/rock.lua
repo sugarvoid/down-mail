@@ -1,19 +1,17 @@
 
-danger_y = 10
-
 rock = {}
 rock.__index = rock
 
 function spawn_rock(lane)
-    local _r = setmetatable({}, rock)
-    _r.x = lanes[lane][1]
-    _r.y = -40
-    _r.img = rnd({26, 27})
-    _r.speed = rnd({3, 4, 5})
-    _r.danger_time = 20
-    _r.lane = lane
+    local r = setmetatable({}, rock)
+    r.x = lanes[lane][1]
+    r.y = -40
+    r.img = rnd({26, 27})
+    r.speed = rnd({3, 4, 5})
+    r.danger_time = 20
+    r.lane = lane
     update_lane(lane, true)
-    add(objects.front, _r)
+    add(objects.front, r)
 end
 
 function rock:update()
@@ -35,6 +33,6 @@ end
 function rock:draw()
     spr(self.img, self.x, self.y)
     if self.danger_time >= 0 then
-        spr(25, self.x, danger_y)
+        spr(25, self.x, 10)
     end
 end

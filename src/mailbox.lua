@@ -131,6 +131,5 @@ end
 function mailbox:unsubscribe(reason)
     -- Change mailbox to a non-customer (red one)
     residents[self.r_id][1] = false
-    
 end
 
