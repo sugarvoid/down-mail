@@ -488,7 +488,7 @@ end
 
 function goto_gameover(reason)
     spawner:reset()
-    game_clock:reset()
+    game_clock:restart()
     --[[
         1=death
         2=missing

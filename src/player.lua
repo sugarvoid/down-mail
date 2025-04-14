@@ -97,8 +97,10 @@ function player:update()
 
     if self:check_for_twisters() then
         self.move_speed = 0.5
+        self.speed = 0.5
       else
         self.move_speed = 1.5
+        self.speed = 2
       end
 
     if self.is_chute_open then
@@ -167,7 +169,7 @@ end
 
 function player:check_for_twisters()
     for t in all(twisters) do
-      if t.dis < 30 then
+        if is_colliding_pro(self.hitbox, t.hitbox) then
         return true
       end
     end
