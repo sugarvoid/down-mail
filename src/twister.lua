@@ -11,7 +11,7 @@ function spawn_twister(x, y)
     --_t.next_position = nil
     _t.life_timer = 120
     _t.move_timer = 60
-    _t.target = p1
+    --_t.target = p1
     _t.anim = { 51, 52, 53 }
     _t.tick = 0
     _t.frame = 1
@@ -47,7 +47,6 @@ function twister:update()
         --self.target = nil --{ x = randi_rang(10,100), y = 125, type = "exit" }
         self.speed = 3
        -- self.prox = 0.8
-        p1.move_speed = 1.5
     end
     self.move_timer -= 1
     if self.move_timer <= 0 then
@@ -82,9 +81,7 @@ function twister:update()
 end
 
 function twister:draw()
-    if debug then
-       print(self.dis, self.x, self.y - 8) 
-    end
+
     
     spr(self.anim[self.frame], self.x, self.y, 1, 1)
 

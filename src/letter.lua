@@ -54,12 +54,9 @@ function letter:update()
         if self.x <= 0 or self.x >= 120 then
             if g_state == gamestates.game then
                 p1.misses += 1
-                if #twisters < 3 then
+                if #twisters < 10 then
                    spawn_twister(self.x, self.y) 
                    sfx(14)
-                elseif #twisters == 3 then
-                    --test_wormhole = worm_hole.new(p1.x, p1.y)
-                    --twisters = {}
                 end
                 explode(self.x, self.y, 3, 4, 4, 10)
             end

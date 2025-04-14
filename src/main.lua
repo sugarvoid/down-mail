@@ -1,4 +1,20 @@
 
+is_debug = false
+
+all_clocks = {
+    __clocks ={},
+    update=function(self)
+        for c in all(self.__clocks) do
+            c:update()
+        end
+    end,
+    add=function(self, c)
+        add(self.__clocks, c)
+    end,
+}
+
+
+
 
 function update_objects()
     for o in all(objects.front) do
@@ -18,7 +34,7 @@ end
 function restart_game()
     misses_gui_x = 70
     day = 1
-    deliveries = { 0, 0, 0 }
+    --deliveries = { 0, 0, 0 }
     intro_t = 30 * 6
     day_t = 30 * 3
     post_t = 30 * 8
@@ -27,16 +43,22 @@ function restart_game()
     --set_customers()
     score = 0
     init_wind()
-    deliveries_total = 0
-    missed_mb_total = 0
-    damaged_mb_total = 0
+    --deliveries_total = 0
+    --missed_mb_total = 0
+    --damaged_mb_total = 0
     p1 = init_player()
     change_state(gamestates.title)
 end
 
 function _init()
     game_clock = clock.new()
-    max_misses = 6
+    results_clock = clock.new()
+
+    all_clocks:add(game_clock)
+    all_clocks:add(results_clock)
+
+
+    --max_misses = 6
     poke(0x5f5c, 255)
     intro_t = 30 * 6
     day_t = 30 * 6
@@ -63,7 +85,7 @@ function _init()
         { "mediocre mailman,", "does job" },
     }
 
-    is_debug = false
+    
     map_y = 0
     game_over_x = -10
     score = 0
@@ -82,6 +104,16 @@ function _init()
     deliveries_total = 0
     missed_mb_total = 0
     damaged_mb_total = 0
+
+    customer_count = 10
+    noncustomer_count = 5
+    new_customers = 0
+
+    mailbox_num = 1
+
+
+    residents = {}
+    setup_residents()
 
     restart_game()
 end
@@ -133,8 +165,6 @@ function _draw()
 
         print(game_clock.seconds, 8, 0)
     end
-
-    print(object_count(), 5, 0, 7)
 end
 
 function check_input()
@@ -180,11 +210,11 @@ function check_input()
 end
 
 function update_play()
-    game_clock:update()
+
+    all_clocks:update()
 
     if game_clock.seconds >= level_length and object_count() == 0 then
         game_clock:stop()
-        print_debug("level over")
         goto_postday_tmr = 60
         sfx(22)
         clear_objs()
@@ -232,7 +262,7 @@ function update_day()
 end
 
 function update_postday()
-    game_clock:update()
+    all_clocks:update()
 
     if game_clock.seconds >= post_day_length then
         game_clock:stop()
@@ -246,7 +276,6 @@ function update_postday()
     p1:update()
     update_letters()
     update_particles()
-    --update_rings()
     spawner:update()
 end
 
@@ -255,13 +284,8 @@ function draw_play()
     for o in all(objects.back) do
         o:draw()
     end
-    -- if test_wormhole then
-    --     test_wormhole:draw()
-    -- end
-
     p1:draw()
     draw_particles()
-
     for o in all(objects.front) do
         o:draw()
     end
@@ -282,13 +306,13 @@ function draw_play()
     map(0, map_y)
     draw_gui()
 
-    if debug then
-        for k, v in ipairs(lanes) do
-            if lanes[k][2] == true then
-                circfill(lanes[k][1] + 4, 119, 2, 10)
-            end
-        end
-    end
+    -- if debug then
+    --     for k, v in ipairs(lanes) do
+    --         if lanes[k][2] == true then
+    --             circfill(lanes[k][1] + 4, 119, 2, 10)
+    --         end
+    --     end
+    -- end
 end
 
 function draw_title()
@@ -364,45 +388,31 @@ end
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
     print("score:" .. score, 3, 123, 7)
-    print("hp", 103, 123, 7)
+    -- print("hp", 103, 123, 7)
 
-    for i = 1, p1.max_health, 1 do
-        pset(110 + (2 * i), 123, 5)
-        pset(110 + (2 * i), 124, 5)
-        pset(110 + (2 * i), 125, 5)
-        pset(110 + (2 * i), 126, 5)
-        pset(110 + (2 * i), 127, 5)
-    end
+    -- for i = 1, p1.max_health, 1 do
+    --     pset(110 + (2 * i), 123, 5)
+    --     pset(110 + (2 * i), 124, 5)
+    --     pset(110 + (2 * i), 125, 5)
+    --     pset(110 + (2 * i), 126, 5)
+    --     pset(110 + (2 * i), 127, 5)
+    -- end
 
-    for i = 1, p1.life, 1 do
-        pset(110 + (2 * i), 123, 7)
-        pset(110 + (2 * i), 124, 7)
-        pset(110 + (2 * i), 125, 7)
-        pset(110 + (2 * i), 126, 7)
-        pset(110 + (2 * i), 127, 7)
-    end
+    -- for i = 1, p1.life, 1 do
+    --     pset(110 + (2 * i), 123, 7)
+    --     pset(110 + (2 * i), 124, 7)
+    --     pset(110 + (2 * i), 125, 7)
+    --     pset(110 + (2 * i), 126, 7)
+    --     pset(110 + (2 * i), 127, 7)
+    -- end
 
-    print("miss", 55, 123, 7)
+    print("mail: "  .. 23, 55, 123, 7)
 
-    for i = 1, max_misses, 1 do
-        pset(misses_gui_x + (2 * i), 123, 5)
-        pset(misses_gui_x + (2 * i), 124, 5)
-        pset(misses_gui_x + (2 * i), 125, 5)
-        pset(misses_gui_x + (2 * i), 126, 5)
-        pset(misses_gui_x + (2 * i), 127, 5)
-    end
-
-    for i = 1, max_misses - p1.missed_mb, 1 do
-        pset(misses_gui_x + (2 * i), 123, 7)
-        pset(misses_gui_x + (2 * i), 124, 7)
-        pset(misses_gui_x + (2 * i), 125, 7)
-        pset(misses_gui_x + (2 * i), 126, 7)
-        pset(misses_gui_x + (2 * i), 127, 7)
-    end
+    
 end
 
 function start_level()
-    game_clock.is_running = true
+    game_clock:start()
 end
 
 function advance_day()
@@ -412,9 +422,9 @@ function advance_day()
     day_t = 30 * 3
     post_t = 30 * 6
 
-    deliveries_total += p1.deliveries
-    missed_mb_total += p1.missed_mb
-    damaged_mb_total += p1.damaged_mb
+    --deliveries_total += p1.deliveries
+    --missed_mb_total += p1.missed_mb
+    --damaged_mb_total += p1.damaged_mb
     p1 = init_player()
 
     g_state = gamestates.day_title
@@ -426,20 +436,20 @@ function change_state(new_state)
     g_state = new_state
 end
 
-function angle_lerp(angle1, angle2, t)
-    angle1 = angle1 % 1
-    angle2 = angle2 % 1
+-- function angle_lerp(angle1, angle2, t)
+--     angle1 = angle1 % 1
+--     angle2 = angle2 % 1
 
-    if abs(angle1 - angle2) > 0.5 then
-        if angle1 > angle2 then
-            angle2 += 1
-        else
-            angle1 += 1
-        end
-    end
+--     if abs(angle1 - angle2) > 0.5 then
+--         if angle1 > angle2 then
+--             angle2 += 1
+--         else
+--             angle1 += 1
+--         end
+--     end
 
-    return ((1 - t) * angle1 + t * angle2) % 1
-end
+--     return ((1 - t) * angle1 + t * angle2) % 1
+-- end
 
 function print_debug(str)
     printh("debug: " .. str, 'debug.txt')
@@ -494,16 +504,6 @@ function goto_gameover(reason)
         2=missing
         3=fired
     ]] --
-    -- if reason == 1 then
-    --     end_text = endings[1]
-    --     ending_idx = 1
-    -- elseif reason == 2 then
-    --     end_text = endings[2]
-    --     ending_idx = 2
-    -- elseif reason == 3 then
-    --     end_text = endings[3]
-    --     ending_idx = 3
-    -- end
     end_text = endings[reason]
     ending_idx = reason
     sfx(19)
@@ -559,4 +559,16 @@ end
 
 function update_score(val)
     score = mid(0, score + val, 32000)
+end
+
+
+function setup_residents()
+    for _ = 1, customer_count do
+        add(residents, {true})
+    end
+    for _ = 1, noncustomer_count do
+        add(residents, {false})
+    end
+    shuffle(residents)
+    add(residents, {}) --Hacky way to handle spawning all mailboxes. 
 end

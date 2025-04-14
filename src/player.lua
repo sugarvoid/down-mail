@@ -28,8 +28,7 @@ function init_player()
     _p.throws = 0
     _p.misses = 0
     _p.a = 0
-    _p.damaged_mb = 0
-    _p.missed_mb = 0
+    --_p.damaged_mb = 0
     _p.deliveries = 0
     _p.hitbox = hitbox.new(_p, _p.w, _p.h)
     return _p
@@ -74,7 +73,7 @@ function player:draw()
 
     --draw_hitbox(self)
 
-    draw_hb(self.hitbox)
+    --draw_hb(self.hitbox)
 
 
 end

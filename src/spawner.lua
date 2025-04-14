@@ -1,3 +1,13 @@
+
+local function __spawn_mailbox(resident_id)
+    if mailbox_num < #residents then
+        local lane = get_available_lane()
+        spawn_mbox(lane, mailbox_num)
+        mailbox_num = mid(0,mailbox_num+1,#residents)
+    end
+end
+
+
 lanes = {
     { 16,  false },
     { 25,  false },
@@ -62,14 +72,12 @@ spawner = {
                 end
 
                 if self.mail_box <= 0 then
-                    local lane = get_available_lane()
-                    spawn_mbox(lane)
+                    __spawn_mailbox(mailbox_num)
                     self.mail_box = randsec_rang(1, 4)
                 end
 
                 if self.mail_box_2 <= 0 then
-                    local lane = get_available_lane()
-                    spawn_mbox(lane)
+                    __spawn_mailbox(mailbox_num)
                     self.mail_box_2 = randsec_rang(2, 5)
                 end
 
@@ -87,8 +95,6 @@ spawner = {
                 for r in all(rocks) do
                     r:update()
                 end
-            elseif g_state == gamestates.bonus then
-
             end
         end
     end,
