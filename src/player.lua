@@ -27,9 +27,9 @@ function init_player()
     _p.accel = 0.1
     _p.throws = 0
     _p.misses = 0
-    _p.a = 0
-    --_p.damaged_mb = 0
+    _p.letters = 20
     _p.deliveries = 0
+    _p.a = 0
     _p.hitbox = hitbox.new(_p, _p.w, _p.h)
     return _p
 end

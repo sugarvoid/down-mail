@@ -43,9 +43,6 @@ function restart_game()
     --set_customers()
     score = 0
     init_wind()
-    --deliveries_total = 0
-    --missed_mb_total = 0
-    --damaged_mb_total = 0
     p1 = init_player()
     change_state(gamestates.title)
 end
@@ -58,7 +55,6 @@ function _init()
     all_clocks:add(results_clock)
 
 
-    --max_misses = 6
     poke(0x5f5c, 255)
     intro_t = 30 * 6
     day_t = 30 * 6
@@ -95,7 +91,7 @@ function _init()
     offset = 0
     level_length = 20
     post_day_length = 5
-    ending = 0
+   -- ending = 0
     end_spr = { 64, 68, 72, 76, 140 }
     objects = { back = {}, front = {} }
     day = 1
@@ -406,9 +402,7 @@ function draw_gui()
     --     pset(110 + (2 * i), 127, 7)
     -- end
 
-    print("mail: "  .. 23, 55, 123, 7)
-
-    
+    print("mail:"  .. p1.letters, 55, 123, 7)
 end
 
 function start_level()
@@ -416,8 +410,14 @@ function start_level()
 end
 
 function advance_day()
+    resident_count = 0
+        for r in all(residents) do
+            if r[1] == true then
+                resident_count = resident_count + 1
+            end
+        end
     day += 1
-
+    mailbox_num=1
     intro_t = 30 * 6
     day_t = 30 * 3
     post_t = 30 * 6

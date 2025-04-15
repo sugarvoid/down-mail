@@ -2,7 +2,7 @@ bone={}
 bone.__index=bone
 
 function spawn_bone(x,y,p)
-    local _d=setmetatable({},bone)
+    local b=setmetatable({},bone)
     b.x=x
     b.y=y
     b.target={x=p.x, y=p.y}

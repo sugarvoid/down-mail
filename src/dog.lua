@@ -27,6 +27,9 @@ function spawn_dog()
     d.bob = 0.2
     d.y_high = 0
     d.y_low = 0
+    d.firerate = 2
+    d.bone_clock = clock.new()
+    d.bone_clock:start()
     
     if not d.facing_l then
         d.shield_x = -8
@@ -44,6 +47,7 @@ function spawn_dog()
 end
 
 function dog:update()
+
     self.anmi_t+=1
 
     if self.y <= self.dst_y and not self.in_play then
@@ -56,6 +60,7 @@ function dog:update()
     end
 
     if self.in_play then
+        self.bone_clock:update()
         self.time_on_screen+=1
         self.tmr_move -= 1
         self.tmr_throw -= 1
@@ -79,7 +84,9 @@ function dog:update()
             self.tmr_throw=throw_times[self.agro]
         end
 
-        if self.tmr_throw == 0 then
+        if self.bone_clock.seconds == self.firerate then
+        --if self.tmr_throw == 0 then
+            self.bone_clock:restart()
             self:throw_bone()
         end
 

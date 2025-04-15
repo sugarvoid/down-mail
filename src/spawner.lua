@@ -53,9 +53,6 @@ spawner = {
 
                 if day >= 2 then
                     self.rock_2 -= 1
-                end
-
-                if day >= 3 then
                     self.dog -= 1
                 end
 

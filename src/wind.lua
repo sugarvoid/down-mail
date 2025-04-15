@@ -11,8 +11,8 @@ end
 
 function wind_line:update()
     self.t=(self.t+1)%3
-    move=self.t==0
-    if move then
+    --move=self.t==0
+    if self.t==0 then
         self.sy-=self.speed
         self.ey-=self.speed
     end
