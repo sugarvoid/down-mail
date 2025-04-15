@@ -11,10 +11,12 @@ function spawn_letter(_dir)
     l.tossed = true
     l.img = 32
     l.dir = _dir
+    print_debug(_dir)
     l.speed = 1
     l.accel = 0.5
     l.x = p1.x
     l.y = p1.y
+    l.hitbox = hitbox.new(l, 8, 8)
     add(letters, l)
 end
 
@@ -33,20 +35,24 @@ function letter:update()
         end
 
         for mb in all(mailboxes) do
-            if is_colliding(self, mb) and not mb.damaged and mb.empty then
-                if self.x < mb.x then
-                    if mb.facing_l then
+            if is_colliding_pro(self.hitbox, mb.hitbox) and not mb.damaged and mb.empty then
+                if mb.facing_l and self.dir == 1 then
+                --if self.x <= mb.x then
+                    --if mb.facing_l and self.dir == 1 then
+                    mb:on_good_letter(self.score_mul)
+                --else
+                  --  explode(self.x, self.y, 2, 2, 7, 10)
+                --end
+                
+                elseif not mb.facing_l and self.dir == -1 then
+                    --if not mb.facing_l then
                         mb:on_good_letter(self.score_mul)
-                    else
-                        explode(self.x, self.y, 2, 2, 7, 10)
-                    end
-                else
-                    if not mb.facing_l then
-                        mb:on_good_letter(self.score_mul)
-                    else
-                        explode(self.x, self.y, 2, 2, 7, 10)
-                    end
+                    --else
+                        
+                else explode(self.x, self.y, 2, 2, 7, 10)
+                    
                 end
+                --end
                 del(letters, self)
             end
         end
@@ -65,10 +71,12 @@ function letter:update()
     else
         self.y -= 2
     end
+    self.hitbox:update()
 end
 
 function letter:draw()
     spr(self.img, self.x, self.y)
+    draw_hb(self.hitbox)
 end
 
 function update_letters()

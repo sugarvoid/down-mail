@@ -32,6 +32,8 @@ function draw_objects()
 end
 
 function restart_game()
+    residents = {}
+    setup_residents()
     misses_gui_x = 70
     day = 1
     --deliveries = { 0, 0, 0 }
@@ -108,8 +110,8 @@ function _init()
     mailbox_num = 1
 
 
-    residents = {}
-    setup_residents()
+    --residents = {}
+    --setup_residents()
 
     restart_game()
 end

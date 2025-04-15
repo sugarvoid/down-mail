@@ -11,6 +11,7 @@ function spawn_dog()
     d.y = d.curr_y
     d.w = 8
     d.h = 14
+    d.hitbox = hitbox.new(d, 8, 14)
     d.facing_l = d.x < 128 / 2
     d.col = rnd({4,7})
     d.img = 61
@@ -91,13 +92,14 @@ function dog:update()
         end
 
         for l in all(letters) do
-            if is_colliding_pro(l, self) then
+            if is_colliding_pro(l.hitbox, self.hitbox) then
                 sfx(10)
                 del(letters, l)
                 self:exit()
             end
         end
     end
+    self.hitbox:update()
 end
 
 function dog:take_damage()
@@ -134,6 +136,7 @@ function dog:draw()
     if not self.in_play then
         self:draw_shield()
     end
+    draw_hb(self.hitbox)
 end
 
 function dog:draw_shield()

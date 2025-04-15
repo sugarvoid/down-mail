@@ -13,6 +13,7 @@ function spawn_bone(x,y,p)
     local len = sqrt(b.dx^2 + b.dy^2)
     b.dx /= len
     b.dy /= len
+    b.hitbox = hitbox.new(b, 6, 5)
     add(objects.front, b)
 end
 
@@ -20,7 +21,7 @@ function bone:update()
     self.x += self.dx * self.speed
     self.y += self.dy * self.speed
 
-    if is_colliding(p1, self) then
+    if is_colliding_pro(p1.hitbox, self.hitbox) then
         offset =0.1
         del(objects.front, self)
         p1:take_damage()
@@ -31,8 +32,10 @@ function bone:update()
         sfx(18)
         del(objects.front,self)
     end
+    self.hitbox:update()
 end
 
 function bone:draw()
     spr(self.img,self.x,self.y)
+    draw_hb(self.hitbox)
 end

@@ -20,6 +20,7 @@ function spawn_mbox(lane, id)
     _mb.img = 21
     _mb.empty = true
     _mb.damaged = false
+    _mb.hitbox = hitbox.new(_mb, 7, 12)
     add(mailboxes, _mb)
     update_lane(lane, true)
 end
@@ -41,9 +42,10 @@ function mailbox:update()
         update_lane(self.lane, false)
     end
 
-    if is_colliding(p1, self) and not self.damaged then
+    if is_colliding_pro(p1.hitbox, self.hitbox) and not self.damaged then
         self:take_damage()
     end
+    self.hitbox:update()
 end
 
 function mailbox:take_damage()
@@ -64,6 +66,7 @@ function mailbox:draw()
     spr(self.img, self.x, self.y, 1, 1, self.facing_l)
     pal()
     spr(37, self.x, self.y + 8)
+    draw_hb(self.hitbox)
 end
 
 function mailbox:on_good_letter(_score)
