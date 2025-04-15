@@ -361,17 +361,8 @@ function draw_skip()
     print("🅾️ to skip", 80, 2)
 end
 
-function is_colliding(a, b)
-    if b.x >= a.x + 8
-        or b.x + 8 <= a.x
-        or b.y >= a.y + 8
-        or b.y + 8 <= a.y then
-        return false
-    else
-        return true
-    end
-end
 
+--TODO: rename. remove "pro"
 function is_colliding_pro(a, b)
     if a.x < b.x + b.w and
         a.x + a.w > b.x and
@@ -435,8 +426,13 @@ end
 
 function change_state(new_state)
     offset = 0
+    --shake(0)
     g_state = new_state
 end
+
+-- function shake(n)
+--     offset = n
+-- end
 
 -- function angle_lerp(angle1, angle2, t)
 --     angle1 = angle1 % 1

@@ -37,29 +37,18 @@ function letter:update()
         for mb in all(mailboxes) do
             if is_colliding_pro(self.hitbox, mb.hitbox) and not mb.damaged and mb.empty then
                 if mb.facing_l and self.dir == 1 then
-                --if self.x <= mb.x then
-                    --if mb.facing_l and self.dir == 1 then
                     mb:on_good_letter(self.score_mul)
-                --else
-                  --  explode(self.x, self.y, 2, 2, 7, 10)
-                --end
-                
                 elseif not mb.facing_l and self.dir == -1 then
-                    --if not mb.facing_l then
-                        mb:on_good_letter(self.score_mul)
-                    --else
-                        
-                else explode(self.x, self.y, 2, 2, 7, 10)
-                    
+                    mb:on_good_letter(self.score_mul)
+                else 
+                    explode(self.x, self.y, 2, 2, 7, 10)
                 end
-                --end
                 del(letters, self)
             end
         end
 
         if self.x <= 0 or self.x >= 120 then
             if g_state == gamestates.game then
-                p1.misses += 1
                 if #twisters < 10 then
                    spawn_twister(self.x, self.y) 
                    sfx(14)

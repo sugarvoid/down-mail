@@ -10,6 +10,7 @@ function spawn_rock(lane)
     r.speed = rnd({3, 4, 5})
     r.danger_time = 20
     r.lane = lane
+    r.hitbox = hitbox.new(r, 6, 6)
     update_lane(lane, true)
     add(objects.front, r)
 end
@@ -21,13 +22,15 @@ function rock:update()
         del(objects.front, self)
         update_lane(self.lane, false)
     end
-    if is_colliding(p1, self) then
+    if is_colliding_pro(p1.hitbox, self.hitbox) then
         offset = 0.1
+        --shake(0.1)
         explode(self.x, self.y, 2, 5, 4)
         update_lane(self.lane, false)
         del(objects.front, self)
         p1:take_damage()
     end
+    self.hitbox:update()
 end
 
 function rock:draw()
@@ -35,4 +38,5 @@ function rock:draw()
     if self.danger_time >= 0 then
         spr(25, self.x, 10)
     end
+    draw_hb(self.hitbox)
 end

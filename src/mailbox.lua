@@ -50,6 +50,7 @@ end
 
 function mailbox:take_damage()
     if self.empty then
+        --shake()
        offset = 0.1
         sfx(3)
         if self.empty and self.is_customer then
