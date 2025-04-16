@@ -5,14 +5,14 @@ mailboxes = {}
 function spawn_mbox(lane, id)
     local _mb = setmetatable({}, mailbox)
     _mb.r_id = id
-    _mb.is_customer = residents[id][1]
+    _mb.is_customer = residents[id]
     if _mb.is_customer then
         _mb.b_col = 12
     else
         _mb.b_col = 2
     end
 
-    _mb.speed = rnd({0.7, 0.9, 1.3})
+    _mb.speed = rnd({ 0.7, 0.9, 1.3 })
     _mb.lane = lane
     _mb.x = lanes[lane][1]
     _mb.y = 128
@@ -33,7 +33,7 @@ function mailbox:update()
         update_lane(self.lane, false)
     end
 
-    if self.y <= -16 then
+    if self.y <= -20 then
         if self.empty and self.is_customer then
             print_debug("in update")
             self:unsubscribe("miss")
@@ -50,10 +50,9 @@ end
 
 function mailbox:take_damage()
     if self.empty then
-        --shake()
-       offset = 0.1
+        offset = 0.1
         sfx(3)
-        if self.empty and self.is_customer then
+        if self.is_customer then
             self:unsubscribe("crash")
         end
         self.damaged = true
@@ -79,13 +78,26 @@ function mailbox:on_good_letter(_score)
 
     if self.is_customer then
         update_score(10 * flr(_score))
-        p1.deliveries += 1
+        --p1.deliveries += 1
+        day_deliveries += 1
     end
-    
 end
 
 function mailbox:unsubscribe(reason)
     -- Change mailbox to a non-customer (red one)
-    residents[self.r_id][1] = false
+    residents[self.r_id] = false
+    --customer_count -= 1
 end
 
+function resubscribe()
+    -- Change mailbox to a non-customer (red one)
+    --residents[self.r_id] = false
+    for i, value in ipairs(residents) do
+        if value == false then
+            got_new_customer = true
+            residents[i] = true -- Change the false to true
+            --customer_count += 1
+            break               -- Stop after changing the first false
+        end
+    end
+end

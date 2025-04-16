@@ -1,14 +1,13 @@
-
 local function __spawn_mailbox(resident_id)
     if mailbox_num < #residents then
         local lane = get_available_lane()
         spawn_mbox(lane, mailbox_num)
-        mailbox_num = mid(0,mailbox_num+1,#residents)
+        mailbox_num = mid(0, mailbox_num + 1, #residents)
     end
 end
 
-local danger_zone_left = hitbox.new({x=3,y=0}, 10, 120)
-local danger_zone_right = hitbox.new({x=115, y=0}, 10, 120)
+local danger_zone_left = hitbox.new({ x = 3, y = 0 }, 10, 120)
+local danger_zone_right = hitbox.new({ x = 115, y = 0 }, 10, 120)
 
 lanes = {
     { 16,  false },
@@ -36,11 +35,14 @@ spawner = {
         self.tmr_branch_left = 0
         self.tmr_branch_right = 0
     end,
+    stop = function (self)
+        self.running = false
+    end,
 
     --spawn_obj =function(self, kind, lane)
-      --  if kind == 1 then spawn_mbox(lane)
-       -- elseif kind == 2 then spawn_rock(lane)
-        --else spawn_dog() end
+    --  if kind == 1 then spawn_mbox(lane)
+    -- elseif kind == 2 then spawn_rock(lane)
+    --else spawn_dog() end
     --end,
 
     update = function(self)
@@ -84,37 +86,30 @@ spawner = {
                     end
                 end
 
-                -- update objects
-                for mb in all(mailboxes) do
-                    mb:update()
-                end
-                for r in all(rocks) do
-                    r:update()
-                end
+               
 
 
                 if is_colliding_pro(p1.hitbox, danger_zone_left) then
-                self.tmr_branch_left += 1
-                if self.tmr_branch_left >= 20 then
-                    --logger.debug("Spawn tree branch left")
-                    spawn_branch("left")
+                    self.tmr_branch_left += 1
+                    if self.tmr_branch_left >= 20 then
+                        --logger.debug("Spawn tree branch left")
+                        spawn_branch("left")
+                        self.tmr_branch_left = 0
+                    end
+                else
                     self.tmr_branch_left = 0
                 end
-            else
-                self.tmr_branch_left = 0
-            end
 
-            if is_colliding_pro(p1.hitbox, danger_zone_right) then
-                self.tmr_branch_right += 1
-                print_debug(self.tmr_branch_right)
-                if self.tmr_branch_right >= 20 then
-                    spawn_branch("right")
+                if is_colliding_pro(p1.hitbox, danger_zone_right) then
+                    self.tmr_branch_right += 1
+                    print_debug(self.tmr_branch_right)
+                    if self.tmr_branch_right >= 20 then
+                        spawn_branch("right")
+                        self.tmr_branch_right = 0
+                    end
+                else
                     self.tmr_branch_right = 0
                 end
-            else
-                self.tmr_branch_right = 0
-            end
-
             end
         end
     end,
@@ -157,5 +152,3 @@ function clear_objs()
     objects.back = {}
     all_particles = {}
 end
-
-

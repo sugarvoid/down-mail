@@ -1,20 +1,16 @@
-
 is_debug = false
 
 all_clocks = {
-    __clocks ={},
-    update=function(self)
+    __clocks = {},
+    update = function(self)
         for c in all(self.__clocks) do
             c:update()
         end
     end,
-    add=function(self, c)
+    add = function(self, c)
         add(self.__clocks, c)
     end,
 }
-
-
-
 
 function update_objects()
     for o in all(objects.front) do
@@ -32,17 +28,16 @@ function draw_objects()
 end
 
 function restart_game()
+    new_score = 0
     residents = {}
     setup_residents()
     misses_gui_x = 70
     day = 1
-    --deliveries = { 0, 0, 0 }
     intro_t = 30 * 6
     day_t = 30 * 3
     post_t = 30 * 8
     spawner:reset()
     game_clock:restart()
-    --set_customers()
     score = 0
     init_wind()
     p1 = init_player()
@@ -50,12 +45,14 @@ function restart_game()
 end
 
 function _init()
+    hud = { tic = 0 }
     game_clock = clock.new()
     results_clock = clock.new()
 
+    got_new_customer = false
+
     all_clocks:add(game_clock)
     all_clocks:add(results_clock)
-
 
     poke(0x5f5c, 255)
     intro_t = 30 * 6
@@ -83,31 +80,36 @@ function _init()
         { "mediocre mailman,", "does job" },
     }
 
-    
     map_y = 0
     game_over_x = -10
     score = 0
     post_day_timer = 0
-    deliveries = { 0, 0, 0 }
-    goto_postday_tmr = 0
+    --deliveries = { 0, 0, 0 }
+    --goto_postday_tmr = 0
     offset = 0
     level_length = 20
     post_day_length = 5
-   -- ending = 0
+    -- ending = 0
     end_spr = { 64, 68, 72, 76, 140 }
     objects = { back = {}, front = {} }
     day = 1
     days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
 
-    deliveries_total = 0
-    missed_mb_total = 0
-    damaged_mb_total = 0
+    --deliveries_total = 0
+    --missed_mb_total = 0
+    --damaged_mb_total = 0
 
+    day_deliveries = 0
     customer_count = 10
     noncustomer_count = 5
     new_customers = 0
 
     mailbox_num = 1
+
+    customer_count = 3
+    noncustomer_count = 1
+
+    show_results = false
 
 
     --residents = {}
@@ -163,6 +165,8 @@ function _draw()
 
         print(game_clock.seconds, 8, 0)
     end
+
+    print(customer_count .. " " .. day_deliveries, 10, 0, 4)
 end
 
 function check_input()
@@ -187,7 +191,7 @@ function check_input()
         p1:move("l")
     end
 
-    
+
 
     if btnp(⬆️) then
         p1:update_chute(true)
@@ -208,17 +212,33 @@ function check_input()
 end
 
 function update_play()
-
     all_clocks:update()
 
-    if game_clock.seconds >= level_length and object_count() == 0 then
+    if mailbox_num == #residents then
         game_clock:stop()
-        goto_postday_tmr = 60
-        sfx(22)
-        clear_objs()
-        spawner.running = false
-        game_clock:restart()
-        game_clock:start()
+        spawner:stop()
+        if object_count() == 0 and not show_results then
+            --goto_postday_tmr = 60
+            sfx(22)
+            clear_objs()
+            show_results = true
+            game_clock:restart()
+            game_clock:start()
+            results_clock:start()
+            if day_deliveries == customer_count then
+                resubscribe()
+            end
+        end
+    end
+
+
+    if results_clock.seconds >= 6 and results_clock.is_running then
+        results_clock:stop()
+        show_results = false
+        results_clock:restart()
+        p1.move_speed = 1.5
+        spawner.reset()
+        advance_day()
     end
 
     p1:update()
@@ -232,20 +252,14 @@ function update_play()
         d:update()
     end
 
-    spawner:update()
-
-    if goto_postday_tmr > 0 then
-        goto_postday_tmr -= 1
-        if goto_postday_tmr == 0 then
-            --goto_bonus()
-            change_state(gamestates.post_day)
-            p1.move_speed = 1.5
-            spawner.reset()
-            post_day_timer = post_day_length
-            --change_state(gamestates.bonus)
-            --spawner.running = true
-        end
+    for mb in all(mailboxes) do
+        mb:update()
     end
+    for r in all(rocks) do
+        r:update()
+    end
+
+    spawner:update()
 end
 
 function update_day()
@@ -304,6 +318,10 @@ function draw_play()
     map(0, map_y)
     draw_gui()
 
+    if show_results then
+        draw_results()
+    end
+
     -- if debug then
     --     for k, v in ipairs(lanes) do
     --         if lanes[k][2] == true then
@@ -323,44 +341,37 @@ end
 
 function draw_howto()
     cls()
-    print("⬅️➡️ move", hcenter("⬅️➡️ move"), 60-8-8, 7)
-    print("⬆️⬇️ adjust chute", hcenter("⬆️⬇️ adjust chute"), 60-8, 7)
+    print("⬅️➡️ move", hcenter("⬅️➡️ move"), 60 - 8 - 8, 7)
+    print("⬆️⬇️ adjust chute", hcenter("⬆️⬇️ adjust chute"), 60 - 8, 7)
     print("🅾️ throw", hcenter("🅾️ throw"), 60, 7)
     --print("❎ swap", hcenter("❎ swap"), 68, 7)
     print("❎ back", 8, 120, 7)
 end
 
-function draw_postday()
-    cls(0)
-    map(0, map_y)
-    p1:draw()
-    draw_particles()
-    draw_letters()
-    draw_gui()
+function draw_results()
+    -- print("deliveries:", 20, 40, 7)
+    -- print(p1.deliveries, 80, 40, 7)
 
-    print("deliveries:", 20, 40, 7)
-    print(p1.deliveries, 80, 40, 7)
+    if got_new_customer then
+        print("1 customer resubscribed", 10, 48, 7)
+    end
 
-    print("missed:", 20, 48, 7)
-    print(p1.missed_mb, 80, 48, 7)
-
-    print("crashed:", 20, 48 + 8, 7)
-    print(p1.damaged_mb, 80, 48 + 8, 7)
+    -- print("crashed:", 20, 48 + 8, 7)
+    -- print(p1.damaged_mb, 80, 48 + 8, 7)
 
     line(16, 70, 16 + 70, 70, 7)
-
 end
 
 function draw_day()
     cls(0)
     print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), 61, 7)
+    print("customers left:" .. customer_count)
     draw_skip()
 end
 
 function draw_skip()
     print("🅾️ to skip", 80, 2)
 end
-
 
 --TODO: rename. remove "pro"
 function is_colliding_pro(a, b)
@@ -376,6 +387,15 @@ end
 
 function draw_gui()
     rectfill(0, 121, 128, 128, 0)
+
+    hud.tic += 1
+    if hud.tic >= 1 then
+        if score < new_score then
+            score += 1
+        end
+        hud.tic = 0
+    end
+
     print("score:" .. score, 3, 123, 7)
     -- print("hp", 103, 123, 7)
 
@@ -395,7 +415,7 @@ function draw_gui()
     --     pset(110 + (2 * i), 127, 7)
     -- end
 
-    print("mail:"  .. p1.letters, 55, 123, 7)
+    print("mail:" .. p1.letters, 55, 123, 7)
 end
 
 function start_level()
@@ -403,14 +423,16 @@ function start_level()
 end
 
 function advance_day()
-    resident_count = 0
-        for r in all(residents) do
-            if r[1] == true then
-                resident_count = resident_count + 1
-            end
+    got_new_customer = false
+    customer_count = 0
+    for r in all(residents) do
+        if r == true then
+            customer_count += 1
         end
+    end
     day += 1
-    mailbox_num=1
+    day_deliveries = 0
+    mailbox_num = 1
     intro_t = 30 * 6
     day_t = 30 * 3
     post_t = 30 * 6
@@ -556,17 +578,17 @@ function dist(a, b)
 end
 
 function update_score(val)
-    score = mid(0, score + val, 32000)
+    --score = mid(0, score + val, 32000)
+    new_score = mid(0, score + val, 32000)
 end
-
 
 function setup_residents()
     for _ = 1, customer_count do
-        add(residents, {true})
+        add(residents, true)
     end
     for _ = 1, noncustomer_count do
-        add(residents, {false})
+        add(residents, false)
     end
     shuffle(residents)
-    add(residents, {}) --Hacky way to handle spawning all mailboxes. 
+    add(residents, {}) --Hacky way to handle spawning all mailboxes.
 end
