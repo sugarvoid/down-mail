@@ -9,8 +9,8 @@ function spawn_dog()
     d.x = rnd({113, 7})
     d.curr_y = -10
     d.y = d.curr_y
-    d.w = 8
-    d.h = 14
+    --d.w = 8
+    --d.h = 14
     d.hitbox = hitbox.new(d, 8, 14)
     d.facing_l = d.x < 128 / 2
     d.col = rnd({4,7})

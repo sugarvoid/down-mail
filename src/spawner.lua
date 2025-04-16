@@ -7,6 +7,8 @@ local function __spawn_mailbox(resident_id)
     end
 end
 
+local danger_zone_left = hitbox.new({x=3,y=0}, 10, 120)
+local danger_zone_right = hitbox.new({x=115, y=0}, 10, 120)
 
 lanes = {
     { 16,  false },
@@ -24,30 +26,27 @@ lanes = {
 
 spawner = {
     start = function(self)
-        print_debug("today is " .. days[day])
+        --print_debug("today is " .. days[day])
         self.rock_1 = randsec_rang(3, 10)
         self.rock_2 = randsec_rang(3, 10)
-        self.mail_box = 60 --randsec_rang(3, 10)
+        self.mail_box = 60
         self.mail_box_2 = randsec_rang(3, 10)
-
-        --if day >= 3 then
-            self.dog = randsec_rang(5, 10)
-        --end
-        
+        self.dog = randsec_rang(5, 10)
         self.running = true
+        self.tmr_branch_left = 0
+        self.tmr_branch_right = 0
     end,
 
-    spawn_obj =function(self, kind, lane)
-        if kind == 1 then spawn_mbox(lane)
-        elseif kind == 2 then spawn_rock(lane)
-        else spawn_dog() end
-    end,
+    --spawn_obj =function(self, kind, lane)
+      --  if kind == 1 then spawn_mbox(lane)
+       -- elseif kind == 2 then spawn_rock(lane)
+        --else spawn_dog() end
+    --end,
 
     update = function(self)
         if self.running then
             if g_state == gamestates.game then
                 self.rock_1 -= 1
-                
                 self.mail_box -= 1
                 self.mail_box_2 -= 1
 
@@ -92,6 +91,30 @@ spawner = {
                 for r in all(rocks) do
                     r:update()
                 end
+
+
+                if is_colliding_pro(p1.hitbox, danger_zone_left) then
+                self.tmr_branch_left += 1
+                if self.tmr_branch_left >= 20 then
+                    --logger.debug("Spawn tree branch left")
+                    spawn_branch("left")
+                    self.tmr_branch_left = 0
+                end
+            else
+                self.tmr_branch_left = 0
+            end
+
+            if is_colliding_pro(p1.hitbox, danger_zone_right) then
+                self.tmr_branch_right += 1
+                print_debug(self.tmr_branch_right)
+                if self.tmr_branch_right >= 20 then
+                    spawn_branch("right")
+                    self.tmr_branch_right = 0
+                end
+            else
+                self.tmr_branch_right = 0
+            end
+
             end
         end
     end,

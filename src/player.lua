@@ -4,17 +4,17 @@ player.__index = player
 
 function init_player()
     local _p = setmetatable({}, player)
-    _p.in_vortex = false
+    --_p.in_vortex = false
     _p.x = 54
     _p.y = 54
-    _p.w = 6
-    _p.h = 8
+    --_p.w = 6
+    --_p.h = 8
     _p.selected_letter = 0
     _p.is_alive = true
     _p.sprite_a = 5
     _p.sprite_b = 6
     _p.img = 0
-    _p.ring=16
+    --_p.ring=16
     _p.facing_l = false
     _p.is_chute_open = true
     _p.chute_spr = nil
@@ -30,16 +30,18 @@ function init_player()
     _p.letters = 20
     _p.deliveries = 0
     _p.a = 0
-    _p.hitbox = hitbox.new(_p, _p.w, _p.h)
+    _p.hitbox = hitbox.new(_p, 6, 8)
     return _p
 end
 
 function player:move(dir)
     if dir == "l" then
-        self.x -= self.move_speed
+        --self.x -= self.move_speed
+        self.x = mid(6, self.x - self.move_speed, 115)
         self.facing_l = true
     elseif dir == "r" then
-        self.x += self.move_speed
+        --self.x += self.move_speed
+        self.x = mid(6, self.x + self.move_speed, 115)
         self.facing_l = false
     end
 end
@@ -60,7 +62,7 @@ function player:draw()
 
     --draw_hitbox(self)
 
-    --draw_hb(self.hitbox)
+    draw_hb(self.hitbox)
 
 
 end
@@ -97,28 +99,10 @@ function player:update()
         self.y += self.speed
     end
 
-    if self.x <= 4 or self.x >= 118 then
-
-        self.is_alive = false
-        goto_gameover(1)
-        
-        --change_state(gamestates.gameover)
-        --self.img = 49
-        -- TODO: add blood particales
-        -- then go to game overload
-    end
-    --TODO: user goto_gameover funciton
     if self.y <= -30 or self.y >= 140 then
         self.is_alive = false
         goto_gameover(2)        
     end
-
-    -- if self.y <= -30 then
-    --     self.is_alive = false
-    --     end_text = endings[2]
-    --     ending_idx = 2
-    --     change_state(gamestates.gameover)
-    -- end
 
     if self.is_alive then
         if self.thr_anmi > 0 then
@@ -157,20 +141,8 @@ function player:take_damage()
     if p1.life == 0 then
         --sfx(11)
         goto_gameover(1)
-        --end_text = endings[2]
-        --ending_idx = 1
-        --change_state(gamestates.gameover)
     end
 end
-
-
--- function player:get_acc()
---     if self.throws == 0 then
---         return 0
---     else
---         return ceil(((self.throws - self.misses) / self.throws) * 100)
---     end
--- end
 
 function player:throw()
     if g_state == gamestates.game then
