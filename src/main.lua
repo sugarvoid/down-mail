@@ -64,7 +64,6 @@ function _init()
         day_title = 2,
         game = 3,
         gameover = 5,
-        post_day = 6,
     }
     g_state = nil
 
@@ -103,6 +102,7 @@ function _init()
     customer_count = 10
     noncustomer_count = 5
     new_customers = 0
+    unsubscribers = 0
 
     mailbox_num = 1
 
@@ -155,18 +155,14 @@ function _draw()
         draw_play()
     elseif g_state == gamestates.gameover then
         draw_gameover()
-    elseif g_state == gamestates.post_day then
-        draw_postday()
+    -- elseif g_state == gamestates.post_day then
+    --     draw_postday()
     end
 
     if is_debug then
         print("mem: " .. flr(stat(0)) .. "kb", 10, 0, 8)
         print("cpu: " .. stat(1) * 100 .. "%", 10, 8, 8)
-
-        print(game_clock.seconds, 8, 0)
     end
-
-    print(customer_count .. " " .. day_deliveries, 10, 0, 4)
 end
 
 function check_input()
@@ -273,24 +269,6 @@ function update_day()
     end
 end
 
-function update_postday()
-    all_clocks:update()
-
-    if game_clock.seconds >= post_day_length then
-        game_clock:stop()
-
-        mailboxes = {}
-        all_particles = {}
-        letters = {}
-        advance_day()
-    end
-
-    p1:update()
-    update_letters()
-    update_particles()
-    spawner:update()
-end
-
 function draw_play()
     cls(0)
     for o in all(objects.back) do
@@ -321,14 +299,6 @@ function draw_play()
     if show_results then
         draw_results()
     end
-
-    -- if debug then
-    --     for k, v in ipairs(lanes) do
-    --         if lanes[k][2] == true then
-    --             circfill(lanes[k][1] + 4, 119, 2, 10)
-    --         end
-    --     end
-    -- end
 end
 
 function draw_title()
@@ -344,7 +314,6 @@ function draw_howto()
     print("⬅️➡️ move", hcenter("⬅️➡️ move"), 60 - 8 - 8, 7)
     print("⬆️⬇️ adjust chute", hcenter("⬆️⬇️ adjust chute"), 60 - 8, 7)
     print("🅾️ throw", hcenter("🅾️ throw"), 60, 7)
-    --print("❎ swap", hcenter("❎ swap"), 68, 7)
     print("❎ back", 8, 120, 7)
 end
 
@@ -353,19 +322,20 @@ function draw_results()
     -- print(p1.deliveries, 80, 40, 7)
 
     if got_new_customer then
-        print("1 customer resubscribed", 10, 48, 7)
+        print("resubscribers: 1", 10, 48, 7)
+    else
+        print("customers lost: " .. unsubscribers, 10, 48, 7)
     end
 
     -- print("crashed:", 20, 48 + 8, 7)
     -- print(p1.damaged_mb, 80, 48 + 8, 7)
 
-    line(16, 70, 16 + 70, 70, 7)
 end
 
 function draw_day()
     cls(0)
     print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), 61, 7)
-    print("customers left:" .. customer_count)
+    print("customers left:" .. customer_count, hcenter("customers left:" .. customer_count), 75, 7)
     draw_skip()
 end
 
@@ -397,24 +367,6 @@ function draw_gui()
     end
 
     print("score:" .. score, 3, 123, 7)
-    -- print("hp", 103, 123, 7)
-
-    -- for i = 1, p1.max_health, 1 do
-    --     pset(110 + (2 * i), 123, 5)
-    --     pset(110 + (2 * i), 124, 5)
-    --     pset(110 + (2 * i), 125, 5)
-    --     pset(110 + (2 * i), 126, 5)
-    --     pset(110 + (2 * i), 127, 5)
-    -- end
-
-    -- for i = 1, p1.life, 1 do
-    --     pset(110 + (2 * i), 123, 7)
-    --     pset(110 + (2 * i), 124, 7)
-    --     pset(110 + (2 * i), 125, 7)
-    --     pset(110 + (2 * i), 126, 7)
-    --     pset(110 + (2 * i), 127, 7)
-    -- end
-
     print("mail:" .. p1.letters, 55, 123, 7)
 end
 
@@ -425,6 +377,7 @@ end
 function advance_day()
     got_new_customer = false
     customer_count = 0
+    unsubscribers = 0
     for r in all(residents) do
         if r == true then
             customer_count += 1
@@ -433,9 +386,9 @@ function advance_day()
     day += 1
     day_deliveries = 0
     mailbox_num = 1
-    intro_t = 30 * 6
-    day_t = 30 * 3
-    post_t = 30 * 6
+    intro_t = 180
+    day_t = 90
+    post_t = 180
 
     --deliveries_total += p1.deliveries
     --missed_mb_total += p1.missed_mb
@@ -504,9 +457,9 @@ function randsec_rang(l, h)
     return (flr(rnd(h - l + 1)) + l) * 30
 end
 
-function draw_hitbox(o)
-    rect(o.x, o.y, (o.x + o.w), (o.y + o.h), 8)
-end
+-- function draw_hitbox(o)
+--     rect(o.x, o.y, (o.x + o.w), (o.y + o.h), 8)
+-- end
 
 function goto_bonus()
     p1.move_speed = 1.5
@@ -517,8 +470,8 @@ function goto_bonus()
 end
 
 function goto_gameover(reason)
-    spawner:reset()
-    game_clock:restart()
+    --spawner:reset()
+    --game_clock:restart()
     --[[
         1=death
         2=missing
@@ -535,7 +488,6 @@ function draw_gameover()
     spr(192, 32, 8, 8, 2)
     print("$0.25", 6, 10, 5)
     print("score: " .. score, 10, 32, 5)
-    --print("acc: " .. p1:get_acc() .. "%", 10, 38, 5)
     rect(4, 30, 124, 120, 5)
     pal(14, 0)
     spr(end_spr[ending_idx], 80, 34, 4, 4)

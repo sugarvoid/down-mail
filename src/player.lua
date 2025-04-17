@@ -138,14 +138,15 @@ function player:take_damage()
 end
 
 function player:throw()
-    if g_state == gamestates.game and self.letters > 0 then
+    sfx(6)
+    if g_state == gamestates.game and self.letters > 0 and not show_results then
         self.letters -= 1
         if self.facing_l then
             spawn_letter(-1)
         else
             spawn_letter(1)
         end
-        sfx(6)
+        
     end
     self.thr_anmi = 10
     

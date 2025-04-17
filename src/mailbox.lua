@@ -36,7 +36,7 @@ function mailbox:update()
     if self.y <= -20 then
         if self.empty and self.is_customer then
             print_debug("in update")
-            self:unsubscribe("miss")
+            self:unsubscribe()
         end
         del(mailboxes, self)
         update_lane(self.lane, false)
@@ -53,7 +53,7 @@ function mailbox:take_damage()
         offset = 0.1
         sfx(3)
         if self.is_customer then
-            self:unsubscribe("crash")
+            self:unsubscribe()
         end
         self.damaged = true
         self.img = 22
@@ -83,21 +83,19 @@ function mailbox:on_good_letter(_score)
     end
 end
 
-function mailbox:unsubscribe(reason)
+function mailbox:unsubscribe()
     -- Change mailbox to a non-customer (red one)
     residents[self.r_id] = false
-    --customer_count -= 1
+    unsubscribers += 1
 end
 
 function resubscribe()
     -- Change mailbox to a non-customer (red one)
-    --residents[self.r_id] = false
     for i, value in ipairs(residents) do
         if value == false then
             got_new_customer = true
-            residents[i] = true -- Change the false to true
-            --customer_count += 1
-            break               -- Stop after changing the first false
+            residents[i] = true
+            break
         end
     end
 end
