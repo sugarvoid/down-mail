@@ -89,7 +89,7 @@ spawner = {
                
 
 
-                if is_colliding_pro(p1.hitbox, danger_zone_left) then
+                if is_colliding(p1.hitbox, danger_zone_left) then
                     self.tmr_branch_left += 1
                     if self.tmr_branch_left >= 20 then
                         --logger.debug("Spawn tree branch left")
@@ -100,7 +100,7 @@ spawner = {
                     self.tmr_branch_left = 0
                 end
 
-                if is_colliding_pro(p1.hitbox, danger_zone_right) then
+                if is_colliding(p1.hitbox, danger_zone_right) then
                     self.tmr_branch_right += 1
                     print_debug(self.tmr_branch_right)
                     if self.tmr_branch_right >= 20 then
@@ -148,7 +148,7 @@ function clear_objs()
     rocks = {}
     twisters = {}
     dogs = {}
-    objects.front = {}
-    objects.back = {}
+    --objects.front = {}
+    --objects.back = {}
     all_particles = {}
 end

@@ -21,7 +21,7 @@ function bone:update()
     self.x += self.dx * self.speed
     self.y += self.dy * self.speed
 
-    if is_colliding_pro(p1.hitbox, self.hitbox) then
+    if is_colliding(p1.hitbox, self.hitbox) then
         offset =0.1
         del(objects.front, self)
         p1:take_damage()

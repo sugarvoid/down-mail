@@ -3,35 +3,27 @@ player.__index = player
 
 
 function init_player()
-    local _p = setmetatable({}, player)
-    --_p.in_vortex = false
-    _p.x = 54
-    _p.y = 54
-    --_p.w = 6
-    --_p.h = 8
-    _p.selected_letter = 0
-    _p.is_alive = true
-    _p.sprite_a = 5
-    _p.sprite_b = 6
-    _p.img = 0
-    --_p.ring=16
-    _p.facing_l = false
-    _p.is_chute_open = true
-    _p.chute_spr = nil
-    _p.chute_open_spr = 7
-    --_p.max_health = 3
-    _p.life = 3--_p.max_health
-    _p.thr_anmi = 0
-    _p.move_speed = 1.5
-    _p.speed = 1
-    _p.accel = 0.1
-    _p.throws = 0
-    _p.misses = 0
-    _p.letters = 20
-    --_p.deliveries = 0
-    _p.a = 0
-    _p.hitbox = hitbox.new(_p, 6, 8)
-    return _p
+    local p = setmetatable({}, player)
+    p.x = 54
+    p.y = 54
+    p.is_alive = true
+    p.sprite_a = 5
+    p.sprite_b = 6
+    p.img = 0
+    p.facing_l = false
+    p.is_chute_open = true
+    p.chute_spr = nil
+    p.chute_open_spr = 7
+    p.life = 3
+    p.thr_anmi = 0
+    p.move_speed = 1.5
+    p.speed = 1
+    p.accel = 0.1
+    p.throws = 0
+    p.misses = 0
+    p.letters = 20
+    p.hitbox = hitbox.new(p, 6, 8)
+    return p
 end
 
 function player:move(dir)
@@ -98,7 +90,7 @@ function player:update()
     end
 
     if self.y <= -30 or self.y >= 140 then
-        self.is_alive = false
+        --self.is_alive = false
         goto_gameover(2)
     end
 
@@ -118,7 +110,7 @@ end
 
 function player:check_for_twisters()
     for t in all(twisters) do
-        if is_colliding_pro(self.hitbox, t.hitbox) then
+        if is_colliding(self.hitbox, t.hitbox) then
             return true
         end
     end

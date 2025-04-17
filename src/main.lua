@@ -214,9 +214,8 @@ function update_play()
         game_clock:stop()
         spawner:stop()
         if object_count() == 0 and not show_results then
-            --goto_postday_tmr = 60
             sfx(22)
-            clear_objs()
+            --clear_objs()
             show_results = true
             game_clock:restart()
             game_clock:start()
@@ -231,8 +230,9 @@ function update_play()
     if results_clock.seconds >= 6 and results_clock.is_running then
         results_clock:stop()
         show_results = false
+
         results_clock:restart()
-        p1.move_speed = 1.5
+        --p1.move_speed = 1.5
         spawner.reset()
         advance_day()
     end
@@ -344,7 +344,7 @@ function draw_skip()
 end
 
 --TODO: rename. remove "pro"
-function is_colliding_pro(a, b)
+function is_colliding(a, b)
     if a.x < b.x + b.w and
         a.x + a.w > b.x and
         a.y < b.y + b.h and
@@ -396,7 +396,7 @@ function advance_day()
     p1 = init_player()
 
     g_state = gamestates.day_title
-    init_wind()
+    --init_wind()
 end
 
 function change_state(new_state)

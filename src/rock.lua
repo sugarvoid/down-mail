@@ -22,7 +22,7 @@ function rock:update()
         del(objects.front, self)
         update_lane(self.lane, false)
     end
-    if is_colliding_pro(p1.hitbox, self.hitbox) then
+    if is_colliding(p1.hitbox, self.hitbox) then
         offset = 0.1
         --shake(0.1)
         explode(self.x, self.y, 2, 5, 4)

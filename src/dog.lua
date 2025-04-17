@@ -92,7 +92,7 @@ function dog:update()
         end
 
         for l in all(letters) do
-            if is_colliding_pro(l.hitbox, self.hitbox) then
+            if is_colliding(l.hitbox, self.hitbox) then
                 sfx(10)
                 del(letters, l)
                 self:exit()

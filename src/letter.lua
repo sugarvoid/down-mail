@@ -35,7 +35,7 @@ function letter:update()
         end
 
         for mb in all(mailboxes) do
-            if is_colliding_pro(self.hitbox, mb.hitbox) and not mb.damaged and mb.empty then
+            if is_colliding(self.hitbox, mb.hitbox) and not mb.damaged and mb.empty then
                 if mb.facing_l and self.dir == 1 then
                     mb:on_good_letter(self.score_mul)
                 elseif not mb.facing_l and self.dir == -1 then

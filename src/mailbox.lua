@@ -3,25 +3,25 @@ mailbox.__index = mailbox
 mailboxes = {}
 
 function spawn_mbox(lane, id)
-    local _mb = setmetatable({}, mailbox)
-    _mb.r_id = id
-    _mb.is_customer = residents[id]
-    if _mb.is_customer then
-        _mb.b_col = 12
+    local mb = setmetatable({}, mailbox)
+    mb.r_id = id
+    mb.is_customer = residents[id]
+    if mb.is_customer then
+        mb.b_col = 12
     else
-        _mb.b_col = 2
+        mb.b_col = 2
     end
 
-    _mb.speed = rnd({ 0.7, 0.9, 1.3 })
-    _mb.lane = lane
-    _mb.x = lanes[lane][1]
-    _mb.y = 128
-    _mb.facing_l = _mb.x > 128 / 2
-    _mb.img = 21
-    _mb.empty = true
-    _mb.damaged = false
-    _mb.hitbox = hitbox.new(_mb, 7, 12)
-    add(mailboxes, _mb)
+    mb.speed = rnd({ 0.7, 0.9, 1.3 })
+    mb.lane = lane
+    mb.x = lanes[lane][1]
+    mb.y = 128
+    mb.facing_l = mb.x > 128 / 2
+    mb.img = 21
+    mb.empty = true
+    mb.damaged = false
+    mb.hitbox = hitbox.new(mb, 7, 8)
+    add(mailboxes, mb)
     update_lane(lane, true)
 end
 
@@ -42,7 +42,7 @@ function mailbox:update()
         update_lane(self.lane, false)
     end
 
-    if is_colliding_pro(p1.hitbox, self.hitbox) and not self.damaged then
+    if is_colliding(p1.hitbox, self.hitbox) and not self.damaged then
         self:take_damage()
     end
     self.hitbox:update()

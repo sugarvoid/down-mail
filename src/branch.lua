@@ -23,7 +23,7 @@ end
 function branch:update()
     self.y -= self.speed
 
-    if is_colliding_pro(p1.hitbox, self.hitbox) then
+    if is_colliding(p1.hitbox, self.hitbox) then
         offset = 0.1
         del(objects.front, self)
         p1:take_damage()
