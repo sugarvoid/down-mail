@@ -396,7 +396,7 @@ function advance_day()
     p1.letters = 20
 
     g_state = gamestates.day_title
-    --init_wind()
+    init_wind()
 end
 
 function change_state(new_state)

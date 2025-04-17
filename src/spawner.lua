@@ -148,7 +148,7 @@ function clear_objs()
     rocks = {}
     twisters = {}
     dogs = {}
-    --objects.front = {}
-    --objects.back = {}
+    objects.front = {}
+    objects.back = {}
     all_particles = {}
 end
