@@ -66,7 +66,6 @@ function mailbox:draw()
     spr(self.img, self.x, self.y, 1, 1, self.facing_l)
     pal()
     spr(37, self.x, self.y + 8)
-    draw_hb(self.hitbox)
 end
 
 function mailbox:on_good_letter(_score)
@@ -78,7 +77,6 @@ function mailbox:on_good_letter(_score)
 
     if self.is_customer then
         update_score(10 * flr(_score))
-        --p1.deliveries += 1
         day_deliveries += 1
     end
 end
@@ -90,7 +88,7 @@ function mailbox:unsubscribe()
 end
 
 function resubscribe()
-    -- Change mailbox to a non-customer (red one)
+    -- Change mailbox to a customer (blue one)
     for i, value in ipairs(residents) do
         if value == false then
             got_new_customer = true

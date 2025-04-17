@@ -105,10 +105,6 @@ function _init()
     unsubscribers = 0
 
     mailbox_num = 1
-
-    customer_count = 3
-    noncustomer_count = 1
-
     show_results = false
 
 
@@ -227,7 +223,7 @@ function update_play()
     end
 
 
-    if results_clock.seconds >= 6 and results_clock.is_running then
+    if results_clock.seconds >= 3 and results_clock.is_running then
         results_clock:stop()
         show_results = false
 
@@ -322,7 +318,7 @@ function draw_results()
     -- print(p1.deliveries, 80, 40, 7)
 
     if got_new_customer then
-        print("resubscribers: 1", 10, 48, 7)
+        print("customers gained: 1", 10, 48, 7)
     else
         print("customers lost: " .. unsubscribers, 10, 48, 7)
     end
@@ -335,7 +331,7 @@ end
 function draw_day()
     cls(0)
     print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), 61, 7)
-    print("customers left:" .. customer_count, hcenter("customers left:" .. customer_count), 75, 7)
+    print("customers: " .. customer_count, hcenter("customers: " .. customer_count), 75, 7)
     draw_skip()
 end
 
@@ -393,7 +389,11 @@ function advance_day()
     --deliveries_total += p1.deliveries
     --missed_mb_total += p1.missed_mb
     --damaged_mb_total += p1.damaged_mb
-    p1 = init_player()
+    --p1 = init_player()
+
+    p1.x = 54
+    p1.y = 54
+    p1.letters = 20
 
     g_state = gamestates.day_title
     --init_wind()

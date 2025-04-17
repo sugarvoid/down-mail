@@ -38,5 +38,4 @@ function rock:draw()
     if self.danger_time >= 0 then
         spr(25, self.x, 10)
     end
-    draw_hb(self.hitbox)
 end

@@ -9,8 +9,6 @@ function spawn_dog()
     d.x = rnd({113, 7})
     d.curr_y = -10
     d.y = d.curr_y
-    --d.w = 8
-    --d.h = 14
     d.hitbox = hitbox.new(d, 8, 14)
     d.facing_l = d.x < 128 / 2
     d.col = rnd({4,7})
@@ -86,7 +84,6 @@ function dog:update()
         end
 
         if self.bone_clock.seconds == self.firerate then
-        --if self.tmr_throw == 0 then
             self.bone_clock:restart()
             self:throw_bone()
         end
@@ -100,14 +97,6 @@ function dog:update()
         end
     end
     self.hitbox:update()
-end
-
-function dog:take_damage()
-    
-end
-
-function dog:enter()
-    
 end
 
 function dog:move(new_y)
@@ -136,7 +125,6 @@ function dog:draw()
     if not self.in_play then
         self:draw_shield()
     end
-    draw_hb(self.hitbox)
 end
 
 function dog:draw_shield()

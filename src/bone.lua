@@ -37,5 +37,4 @@ end
 
 function bone:draw()
     spr(self.img,self.x,self.y)
-    draw_hb(self.hitbox)
 end

@@ -18,5 +18,5 @@ function spawn_clothing(sprite)
     c.x=p1.x
     c.y=p1.y
     c.fall_speed=2
-    add(objects.front,_c)
+    add(objects.front,c)
 end

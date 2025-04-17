@@ -11,7 +11,6 @@ function spawn_letter(_dir)
     l.tossed = true
     l.img = 32
     l.dir = _dir
-    print_debug(_dir)
     l.speed = 1
     l.accel = 0.5
     l.x = p1.x
@@ -65,7 +64,6 @@ end
 
 function letter:draw()
     spr(self.img, self.x, self.y)
-    draw_hb(self.hitbox)
 end
 
 function update_letters()

@@ -12,7 +12,7 @@ function spawn_branch(side)
         b.spr_1=14
         b.spr_3=15
     end
-    
+
     b.y=130
     b.speed=7
     b.img = 14
@@ -40,5 +40,4 @@ function branch:draw()
     spr(self.spr_1,self.x,self.y)
     spr(15,self.x+8,self.y)
     spr(self.spr_3,self.x+16,self.y)
-    draw_hb(self.hitbox)
 end
