@@ -12,7 +12,7 @@ function spawn_mbox(lane, id)
         mb.b_col = 2
     end
 
-    mb.speed = rnd({ 0.7, 0.9, 1.3 })
+    mb.speed = rnd({ 1, 1.3, 1.6 })
     mb.lane = lane
     mb.x = lanes[lane][1]
     mb.y = 128

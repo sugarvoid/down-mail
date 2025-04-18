@@ -352,7 +352,7 @@ function is_colliding(a, b)
 end
 
 function draw_gui()
-    rectfill(0, 121, 128, 128, 0)
+    rectfill(10, 121, 118, 128, 0)
 
     hud.tic += 1
     if hud.tic >= 1 then
@@ -362,8 +362,8 @@ function draw_gui()
         hud.tic = 0
     end
 
-    print("score:" .. score, 3, 123, 7)
-    print("mail:" .. p1.letters, 55, 123, 7)
+    print("score:" .. score, 10, 123, 7)
+    print("mail:" .. p1.letters, 85, 123, 7)
 end
 
 function start_level()

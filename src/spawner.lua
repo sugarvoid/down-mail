@@ -49,11 +49,12 @@ spawner = {
         if self.running then
             if g_state == gamestates.game then
                 self.rock_1 -= 1
+                self.rock_2 -= 1
                 self.mail_box -= 1
                 self.mail_box_2 -= 1
 
                 if day >= 2 then
-                    self.rock_2 -= 1
+                    
                     self.dog -= 1
                 end
 
