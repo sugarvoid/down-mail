@@ -28,6 +28,7 @@ spawner = {
         --print_debug("today is " .. days[day])
         self.rock_1 = randsec_rang(3, 10)
         self.rock_2 = randsec_rang(3, 10)
+        self.rock_3 = randsec_rang(3, 10)
         self.mail_box = 60
         self.mail_box_2 = randsec_rang(3, 10)
         self.dog = randsec_rang(5, 10)
@@ -54,8 +55,10 @@ spawner = {
                 self.mail_box_2 -= 1
 
                 if day >= 2 then
-                    
                     self.dog -= 1
+                end
+                if day >= 3 then
+                    self.rock_3 -= 1
                 end
 
                 if self.rock_1 <= 0 then
@@ -68,6 +71,12 @@ spawner = {
                     local lane = get_available_lane()
                     spawn_rock(lane)
                     self.rock_2 = randsec_rang(3, 10)
+                end
+
+                if self.rock_3 <= 0 then
+                    local lane = get_available_lane()
+                    spawn_rock(lane)
+                    self.rock_3 = randsec_rang(3, 10)
                 end
 
                 if self.mail_box <= 0 then

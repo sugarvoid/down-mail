@@ -33,6 +33,7 @@ function clock:start()
 end
 
 function clock:restart()
+    self:stop()
     self.t = 0
     self.seconds = 0
 end

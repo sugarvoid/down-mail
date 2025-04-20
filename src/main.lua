@@ -28,9 +28,9 @@ function draw_objects()
 end
 
 function restart_game()
+    got_new_customer = false
     new_score = 0
-    residents = {}
-    setup_residents()
+    
     misses_gui_x = 70
     day = 1
     intro_t = 30 * 6
@@ -39,22 +39,31 @@ function restart_game()
     spawner:reset()
     game_clock:restart()
     score = 0
+    post_day_timer = 0
+    offset = 0
+    day_deliveries = 0
+    customer_count = 10
+    noncustomer_count = 5
+    new_customers = 0
+    unsubscribers = 0
+    mailbox_num = 1
+    show_results = false
+    residents = {}
+    setup_residents()
     init_wind()
     p1 = init_player()
     change_state(gamestates.title)
 end
 
 function _init()
+    poke(0x5f5c, 255)
     hud = { tic = 0 }
     game_clock = clock.new()
     results_clock = clock.new()
 
-    got_new_customer = false
-
     all_clocks:add(game_clock)
     all_clocks:add(results_clock)
 
-    poke(0x5f5c, 255)
     intro_t = 30 * 6
     day_t = 30 * 6
     post_t = 30 * 8
@@ -81,35 +90,13 @@ function _init()
 
     map_y = 0
     game_over_x = -10
-    score = 0
-    post_day_timer = 0
-    --deliveries = { 0, 0, 0 }
-    --goto_postday_tmr = 0
-    offset = 0
+    
     level_length = 20
     post_day_length = 5
-    -- ending = 0
     end_spr = { 64, 68, 72, 76, 140 }
     objects = { back = {}, front = {} }
-    day = 1
+
     days = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" }
-
-    --deliveries_total = 0
-    --missed_mb_total = 0
-    --damaged_mb_total = 0
-
-    day_deliveries = 0
-    customer_count = 10
-    noncustomer_count = 5
-    new_customers = 0
-    unsubscribers = 0
-
-    mailbox_num = 1
-    show_results = false
-
-
-    --residents = {}
-    --setup_residents()
 
     restart_game()
 end
@@ -471,7 +458,8 @@ end
 
 function goto_gameover(reason)
     --spawner:reset()
-    --game_clock:restart()
+    game_clock:restart()
+    results_clock:restart()
     --[[
         1=death
         2=missing
