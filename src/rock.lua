@@ -7,7 +7,7 @@ function spawn_rock(lane)
     r.x = lanes[lane][1]
     r.y = -40
     r.img = rnd({26, 27})
-    r.speed = rnd({3, 4, 5})
+    r.speed = randf_rang(3, 5) --rnd({3, 4, 5})
     r.danger_time = 20
     r.lane = lane
     r.hitbox = hitbox.new(r, 6, 6)
