@@ -294,9 +294,9 @@ end
 
 function draw_howto()
     cls()
-    print("⬅️➡️ move", hcenter("⬅️➡️ move"), 60 - 8 - 8, 7)
-    print("⬆️⬇️ adjust chute", hcenter("⬆️⬇️ adjust chute"), 60 - 8, 7)
-    print("🅾️ throw", hcenter("🅾️ throw"), 60, 7)
+    print("⬅️➡️ move", 35, 45, 7)
+    print("⬆️⬇️ adjust chute", 35, 55, 7)
+    print(" 🅾️  throw", 35, 65, 7)
     print("❎ back", 8, 120, 7)
 end
 
