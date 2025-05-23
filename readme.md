@@ -18,12 +18,3 @@
 | :----: | :--------: |
 | Arrows |    Move    |
 |   O    | Throw Letter |
-
-
-## Progress
-
-### Todo
-- [ ] Add player death animation 
-- [ ] Prevent mailboxes and rocks spwaning at the same time
-- [ ] Add invincibility frames from player
-- [ ] Make the game harder over time?
