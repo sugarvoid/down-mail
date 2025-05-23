@@ -382,8 +382,12 @@ function advance_day()
     p1.y = 54
     p1.letters = 20
 
-    g_state = gamestates.day_title
-    init_wind()
+    if customer_count == 0 then
+        goto_gameover(3)
+    else
+        g_state = gamestates.day_title
+        init_wind()
+    end
 end
 
 function change_state(new_state)
