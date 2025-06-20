@@ -87,7 +87,6 @@ function player:update()
             goto_gameover(2)
         end
 
-
         if self.thr_anmi > 0 then
             self.thr_anmi -= 1
         end
@@ -139,7 +138,6 @@ function player:throw()
 end
 
 function player:die()
-    -- body
     self.is_alive = false
     explode(self.x + 2, self.y - 1, 3, 4, 8, 10)
     explode(self.x - 1, self.y + 2, 3, 4, 8, 10)

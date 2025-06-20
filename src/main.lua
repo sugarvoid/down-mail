@@ -30,7 +30,7 @@ end
 function restart_game()
     got_new_customer = false
     new_score = 0
-    
+
     misses_gui_x = 70
     day = 1
     intro_t = 30 * 6
@@ -90,7 +90,7 @@ function _init()
 
     map_y = 0
     game_over_x = -10
-    
+
     level_length = 20
     post_day_length = 5
     end_spr = { 64, 68, 72, 76, 140 }
@@ -138,8 +138,8 @@ function _draw()
         draw_play()
     elseif g_state == gamestates.gameover then
         draw_gameover()
-    -- elseif g_state == gamestates.post_day then
-    --     draw_postday()
+        -- elseif g_state == gamestates.post_day then
+        --     draw_postday()
     end
 
     if is_debug then
@@ -312,7 +312,6 @@ function draw_results()
 
     -- print("crashed:", 20, 48 + 8, 7)
     -- print(p1.damaged_mb, 80, 48 + 8, 7)
-
 end
 
 function draw_day()
@@ -326,7 +325,6 @@ function draw_skip()
     print("🅾️ to skip", 80, 2)
 end
 
---TODO: rename. remove "pro"
 function is_colliding(a, b)
     if a.x < b.x + b.w and
         a.x + a.w > b.x and
@@ -400,21 +398,6 @@ end
 --     offset = n
 -- end
 
--- function angle_lerp(angle1, angle2, t)
---     angle1 = angle1 % 1
---     angle2 = angle2 % 1
-
---     if abs(angle1 - angle2) > 0.5 then
---         if angle1 > angle2 then
---             angle2 += 1
---         else
---             angle1 += 1
---         end
---     end
-
---     return ((1 - t) * angle1 + t * angle2) % 1
--- end
-
 function print_debug(str)
     printh("debug: " .. str, 'debug.txt')
 end
@@ -468,7 +451,8 @@ function goto_gameover(reason)
         1=death
         2=missing
         3=fired
-    ]] --
+    ]]
+    --
     end_text = endings[reason]
     ending_idx = reason
     sfx(19)
