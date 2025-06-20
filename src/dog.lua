@@ -18,7 +18,7 @@ function spawn_dog()
     d.tmr_move = randsec_rang(6, 7)
     d.time_on_screen = 0
     d.tmr_throw = throw_times[d.agro]
-    d.damaged = false
+    d.is_alive = true
     d.dst_y = randi_rang(20, 80)
     d.start_y = -10
     d.is_moving = false
@@ -46,57 +46,64 @@ function spawn_dog()
 end
 
 function dog:update()
+    if self.is_alive then
+        self.anmi_t+=1
 
-    self.anmi_t+=1
-
-    if self.y <= self.dst_y and not self.in_play then
-        self.y += 2
-    else
-        sfx(-2, 3)
-        self.in_play = true
-        self.y_high =  self.dst_y - 2
-        self.y_low = self.dst_y + 2
-    end
-
-    if self.in_play then
-        self.bone_clock:update()
-        self.time_on_screen+=1
-        self.tmr_move -= 1
-        self.tmr_throw -= 1
-
-        if self.tmr_move <= 0 and self.agro < 3 then
-            --self:move( randi_rang(y_range[1], y_range[2]))
+        if self.y <= self.dst_y and not self.in_play then
+            self.y += 2
+        else
+            sfx(-2, 3)
+            self.in_play = true
+            self.y_high =  self.dst_y - 2
+            self.y_low = self.dst_y + 2
         end
 
-        self.y += self.bob
+        if self.in_play then
+            self.bone_clock:update()
+            self.time_on_screen+=1
+            self.tmr_move -= 1
+            self.tmr_throw -= 1
 
-        if self.y <= self.y_low then 
-            self.bob *=-1 
-        end
-        if self.y >= self.y_high then
-            self.bob *=-1
-        end
+            if self.tmr_move <= 0 and self.agro < 3 then
+                --self:move( randi_rang(y_range[1], y_range[2]))
+            end
 
-        if self.time_on_screen == 30*4 then
-            self.time_on_screen = 0
-            self.agro = mid(1, self.agro + 1, #throw_times)
-            self.tmr_throw=throw_times[self.agro]
-        end
+            self.y += self.bob
 
-        if self.bone_clock.seconds == self.firerate then
-            self.bone_clock:restart()
-            self:throw_bone()
-        end
+            if self.y <= self.y_low then 
+                self.bob *=-1 
+            end
+            if self.y >= self.y_high then
+                self.bob *=-1
+            end
 
-        for l in all(letters) do
-            if is_colliding(l.hitbox, self.hitbox) then
-                sfx(10)
-                del(letters, l)
-                self:exit()
+            if self.time_on_screen == 30*4 then
+                self.time_on_screen = 0
+                self.agro = mid(1, self.agro + 1, #throw_times)
+                self.tmr_throw=throw_times[self.agro]
+            end
+
+            if self.bone_clock.seconds == self.firerate then
+                self.bone_clock:restart()
+                self:throw_bone()
+            end
+
+            for l in all(letters) do
+                if is_colliding(l.hitbox, self.hitbox) then
+
+                    sfx(10)
+                    del(letters, l)
+                    self:exit()
+                end
             end
         end
+        self.hitbox:update()
+    else
+        self.y += 2
+        if self.y >= 130 then
+            del(dogs, self)
+        end
     end
-    self.hitbox:update()
 end
 
 function dog:move(new_y)
@@ -114,16 +121,26 @@ function dog:throw_bone()
 end
 
 function dog:exit()
-    del(dogs, self)
+    explode(self.x, self.y+2, 3, 3, 5, 8)
+    explode(self.x, self.y+2, 3, 2, 6, 8)
+    self.is_alive = false
+    
 end
 
 function dog:draw()
     pal(14, self.col)
-    spr(self.img, self.x, self.y, 1, 1, self.facing_l)
-    pal()
-    spr(3+self.anmi_t%15\7.5, self.x, self.y + 7, 1, 1, self.facing_l)
-    if not self.in_play then
-        self:draw_shield()
+
+    if self.is_alive then
+        spr(self.img, self.x, self.y, 1, 1, self.facing_l)
+        pal()
+
+
+        spr(3+self.anmi_t%15\7.5, self.x, self.y + 7, 1, 1, self.facing_l)
+        if not self.in_play then
+            self:draw_shield()
+        end
+    else
+        spr(19, self.x, self.y, 1, 1, self.facing_l)
     end
 end
 

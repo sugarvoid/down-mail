@@ -1,4 +1,3 @@
-
 clock = {}
 clock.__index = clock
 
@@ -36,4 +35,5 @@ function clock:restart()
     self:stop()
     self.t = 0
     self.seconds = 0
+    self:start()
 end

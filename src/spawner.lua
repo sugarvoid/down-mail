@@ -36,7 +36,7 @@ spawner = {
         self.tmr_branch_left = 0
         self.tmr_branch_right = 0
     end,
-    stop = function (self)
+    stop = function(self)
         self.running = false
     end,
 
@@ -96,10 +96,10 @@ spawner = {
                     end
                 end
 
-               
 
 
-                if is_colliding(p1.hitbox, danger_zone_left) then
+
+                if is_colliding(p1.hitbox, danger_zone_left) and p1.is_alive then
                     self.tmr_branch_left += 1
                     if self.tmr_branch_left >= 20 then
                         --logger.debug("Spawn tree branch left")
@@ -110,7 +110,7 @@ spawner = {
                     self.tmr_branch_left = 0
                 end
 
-                if is_colliding(p1.hitbox, danger_zone_right) then
+                if is_colliding(p1.hitbox, danger_zone_right) and p1.is_alive then
                     self.tmr_branch_right += 1
                     print_debug(self.tmr_branch_right)
                     if self.tmr_branch_right >= 20 then
