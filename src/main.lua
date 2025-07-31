@@ -37,7 +37,7 @@ function restart_game()
     day_t = 30 * 3
     post_t = 30 * 8
     spawner:reset()
-    game_clock:restart()
+    game_clock:reset()
     score = 0
     post_day_timer = 0
     offset = 0
@@ -200,7 +200,7 @@ function update_play()
             sfx(22)
             --clear_objs()
             show_results = true
-            game_clock:restart()
+            game_clock:reset()
             game_clock:start()
             results_clock:start()
             if day_deliveries == customer_count then
@@ -214,7 +214,7 @@ function update_play()
         results_clock:stop()
         show_results = false
 
-        results_clock:restart()
+        results_clock:reset()
         --p1.move_speed = 1.5
         spawner.reset()
         advance_day()
@@ -282,6 +282,7 @@ function draw_play()
     if show_results then
         draw_results()
     end
+
 end
 
 function draw_title()
@@ -445,8 +446,8 @@ end
 
 function goto_gameover(reason)
     --spawner:reset()
-    game_clock:restart()
-    results_clock:restart()
+    game_clock:reset()
+    results_clock:reset()
     --[[
         1=death
         2=missing

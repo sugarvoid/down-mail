@@ -31,9 +31,9 @@ function clock:start()
     self.is_running = true
 end
 
-function clock:restart()
+function clock:reset()
     self:stop()
     self.t = 0
     self.seconds = 0
-    self:start()
+    --self:start()
 end

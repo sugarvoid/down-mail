@@ -84,7 +84,7 @@ function dog:update()
             end
 
             if self.bone_clock.seconds == self.firerate then
-                self.bone_clock:restart()
+                self.bone_clock:reset()
                 self:throw_bone()
             end
 
@@ -118,6 +118,7 @@ function dog:throw_bone()
     sfx(1)
     self.tmr_throw = throw_times[self.agro]
     spawn_bone(self.bone_x, self.y+4, p1)
+    self.bone_clock:start()
 end
 
 function dog:exit()
