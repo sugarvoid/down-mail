@@ -282,7 +282,6 @@ function draw_play()
     if show_results then
         draw_results()
     end
-
 end
 
 function draw_title()
@@ -317,8 +316,11 @@ end
 
 function draw_day()
     cls(0)
-    print("\^w\^t" .. days[day], hcenter("\^w\^t" .. days[day]), 61, 7)
-    print("customers: " .. customer_count, hcenter("customers: " .. customer_count), 75, 7)
+    local title = "\^w\^t" .. days[day]
+    local cust = "customers: " .. customer_count
+
+    print(title, hcenter(title), 61, 7)
+    print(cust, hcenter(cust), 75, 7)
     draw_skip()
 end
 
@@ -403,12 +405,8 @@ function print_debug(str)
     printh("debug: " .. str, 'debug.txt')
 end
 
-function hcenter(s)
-    -- screen center minus the
-    -- string length times the
-    -- pixels in a char's width,
-    -- cut in half
-    return 64 - #s * 2
+function hcenter(str)
+    return 64 - print(str, 0, -1000) / 2
 end
 
 function shuffle(t)
